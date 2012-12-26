@@ -1,4 +1,4 @@
-TEMPLATE = subdir 
+TEMPLATE = subdirs
 
-SUBDIRS = ./Admin\
-  ./unitTests
+SUBDIRS = \
+	Admin/MainManager

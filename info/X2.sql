@@ -1,5 +1,5 @@
 ﻿
-CREATE TABLE marrkets
+CREATE TABLE Markets
 (
 	id                   INTEGER AUTO_INCREMENT,
 	address              TEXT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE marrkets
 
 
 
-CREATE TABLE users
+CREATE TABLE Users
 (
 	id                   INTEGER AUTO_INCREMENT,
 	login                TEXT NULL,
