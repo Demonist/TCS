@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QtGui>
+#include "cabstractcommonwidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -10,7 +11,11 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    
+
+private:
+    Ui::MainWindow *ui;
+    QString mConnectionName;
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -18,8 +23,7 @@ public:
 private slots:
     void connected(QString connectionName);
 
-private:
-    Ui::MainWindow *ui;
+    void on_lwSettings_currentRowChanged(int currentRow);
 };
 
 #endif // MAINWINDOW_H

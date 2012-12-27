@@ -21,7 +21,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_7">
@@ -37,15 +37,41 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="childrenCollapsible">
+           <bool>false</bool>
+          </property>
           <widget class="QListWidget" name="lwSettings">
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::NoSelection</enum>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectItems</enum>
+           </property>
            <item>
             <property name="text">
              <string>Пользователи</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>Категории</string>
+            </property>
+           </item>
           </widget>
           <widget class="QStackedWidget" name="swSettings">
-           <widget class="QWidget" name="page_3"/>
+           <widget class="QWidget" name="page_users">
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="CUsersWidget" name="wUsers" native="true"/>
+             </item>
+            </layout>
+           </widget>
            <widget class="QWidget" name="page_4"/>
           </widget>
          </widget>
@@ -63,6 +89,12 @@
    <class>CDataBaseConnectionWidget</class>
    <extends>QWidget</extends>
    <header location="global">cdatabaseconnectionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CUsersWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">cuserswidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

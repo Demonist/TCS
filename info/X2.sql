@@ -1,5 +1,5 @@
 ﻿
-CREATE TABLE Markets
+CREATE TABLE IF NOT EXISTS Markets
 (
 	id                   INTEGER AUTO_INCREMENT,
 	address              TEXT NULL,
@@ -8,18 +8,17 @@ CREATE TABLE Markets
 
 
 
-CREATE TABLE Users
+CREATE TABLE IF NOT EXISTS Users
 (
-	id                   INTEGER AUTO_INCREMENT,
+	id                   INTEGER AUTO_INCREMENT PRIMARY KEY,
 	login                TEXT NULL,
-	passwordHash         TEXT NULL,
-	name                 TEXT NULL,
-	PRIMARY KEY (id)
+	passwordCrypt        TEXT NULL,
+	name                 TEXT NULL
 );
 
 
 
-CREATE TABLE Clients
+CREATE TABLE IF NOT EXISTS Clients
 (
 	id                   INTEGER AUTO_INCREMENT,
 	name                 TEXT NULL,
@@ -31,7 +30,7 @@ CREATE TABLE Clients
 
 
 
-CREATE TABLE ReturnedTickets
+CREATE TABLE IF NOT EXISTS ReturnedTickets
 (
 	id                   INTEGER AUTO_INCREMENT,
 	id_client            INTEGER NULL,
@@ -42,7 +41,7 @@ CREATE TABLE ReturnedTickets
 
 
 
-CREATE TABLE ClientIdentifier
+CREATE TABLE IF NOT EXISTS ClientIdentifier
 (
 	id                   INTEGER AUTO_INCREMENT,
 	id_client            INTEGER NULL,
@@ -52,16 +51,15 @@ CREATE TABLE ClientIdentifier
 
 
 
-CREATE TABLE Categories
+CREATE TABLE IF NOT EXISTS Categories
 (
-	id                   INTEGER AUTO_INCREMENT,
-	name                 TEXT NULL,
-	PRIMARY KEY (id)
+	id                   INTEGER AUTO_INCREMENT PRIMARY KEY ,
+	name                 TEXT NULL
 );
 
 
 
-CREATE TABLE Places
+CREATE TABLE IF NOT EXISTS Places
 (
 	id                   INTEGER AUTO_INCREMENT,
 	title                TEXT NULL,
@@ -71,7 +69,7 @@ CREATE TABLE Places
 
 
 
-CREATE TABLE Images
+CREATE TABLE IF NOT EXISTS Images
 (
 	id                   INTEGER AUTO_INCREMENT,
 	path                 TEXT NULL,
@@ -80,7 +78,7 @@ CREATE TABLE Images
 
 
 
-CREATE TABLE Actions
+CREATE TABLE IF NOT EXISTS Actions
 (
 	id                   INTEGER AUTO_INCREMENT,
 	title                TEXT NULL,
@@ -95,7 +93,7 @@ CREATE TABLE Actions
 
 
 
-CREATE TABLE PlaceScheme
+CREATE TABLE IF NOT EXISTS PlaceScheme
 (
 	id                   INTEGER AUTO_INCREMENT,
 	seatNumber           INTEGER NULL,
@@ -107,7 +105,7 @@ CREATE TABLE PlaceScheme
 
 
 
-CREATE TABLE Reservations
+CREATE TABLE IF NOT EXISTS Reservations
 (
 	id                   INTEGER AUTO_INCREMENT,
 	id_client            INTEGER NULL,
@@ -117,7 +115,7 @@ CREATE TABLE Reservations
 
 
 
-CREATE TABLE ActionPriceGroups
+CREATE TABLE IF NOT EXISTS ActionPriceGroups
 (
 	id                   INTEGERAUTO_INCREMENT,
 	name                 TEXT NULL,
@@ -129,7 +127,7 @@ CREATE TABLE ActionPriceGroups
 
 
 
-CREATE TABLE ActionScheme
+CREATE TABLE IF NOT EXISTS ActionScheme
 (
 	id_action            INTEGER AUTO_INCREMENT,
 	id_placeScheme       INTEGER NOT NULL,
@@ -141,7 +139,7 @@ CREATE TABLE ActionScheme
 
 
 
-CREATE TABLE Tickets
+CREATE TABLE IF NOT EXISTS Tickets
 (
 	id                   INTEGER AUTO_INCREMENT,
 	id_action            INTEGER NULL,
@@ -151,7 +149,7 @@ CREATE TABLE Tickets
 
 
 
-CREATE TABLE ClientTickets
+CREATE TABLE IF NOT EXISTS ClientTickets
 (
 	id_client            INTEGER NOT NULL,
 	id_ticket            INTEGER NOT NULL,
@@ -161,7 +159,7 @@ CREATE TABLE ClientTickets
 
 
 
-CREATE TABLE ActionImages
+CREATE TABLE IF NOT EXISTS ActionImages
 (
 	id_action            INTEGER NOT NULL,
 	id_image             INTEGER NOT NULL,
@@ -170,7 +168,7 @@ CREATE TABLE ActionImages
 
 
 
-CREATE TABLE PlaceImages
+CREATE TABLE IF NOT EXISTS PlaceImages
 (
 	id_place             INTEGER NOT NULL,
 	id_image             INTEGER NOT NULL,
@@ -179,7 +177,7 @@ CREATE TABLE PlaceImages
 
 
 
-CREATE TABLE CategoryImage
+CREATE TABLE IF NOT EXISTS CategoryImage
 (
 	id_category          INTEGER NOT NULL,
 	id_image             INTEGER NOT NULL,

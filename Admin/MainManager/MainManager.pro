@@ -9,17 +9,30 @@ QT       += core gui sql
 TARGET = MainManager
 TEMPLATE = app
 
-INCLUDEPATH += ../../common/connectionWidget/
+INCLUDEPATH += ../../common/connectionWidget/ \
+	commonWidget/ \
+	usersWidget/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    ../../common/connectionWidget/cdatabaseconnectionwidget.cpp
+	../../common/connectionWidget/cdatabaseconnectionwidget.cpp \
+	commonWidget/cabstractcommonwidget.cpp \
+	usersWidget/cuserswidget.cpp \
+    usersWidget/cuserdialog.cpp
+
 
 HEADERS  += mainwindow.h \
-    ../../common/connectionWidget/cdatabaseconnectionwidget.h
+	../../common/connectionWidget/cdatabaseconnectionwidget.h \
+	commonWidget/cabstractcommonwidget.h \
+	usersWidget/cuserswidget.h \
+    usersWidget/cuserdialog.h
+
 
 FORMS    += mainwindow.ui \
-    ../../common/connectionWidget/cdatabaseconnectionwidget.ui
+	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
+	usersWidget/cuserswidget.ui \
+    usersWidget/cuserdialog.ui
 
 RESOURCES += \
-    ../../common/connectionWidget/res.qrc
+	../../common/connectionWidget/connectionwidget_res.qrc \
+    main_res.qrc
