@@ -73,7 +73,7 @@
           </widget>
           <widget class="QStackedWidget" name="swSettings">
            <property name="currentIndex">
-            <number>3</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="page_users">
             <layout class="QGridLayout" name="gridLayout_3">

@@ -11,21 +11,21 @@ class CCategoriesWidget;
 
 class CCategoriesWidget : public CAbstractCommonWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 private:
-    Ui::CCategoriesWidget *ui;
+	Ui::CCategoriesWidget *ui;
 
 public:
-    explicit CCategoriesWidget(QWidget *parent = 0);
-    ~CCategoriesWidget();
-    
+	explicit CCategoriesWidget(QWidget *parent = 0);
+	~CCategoriesWidget();
+
 public slots:
-    void updateData();
+	void updateData();
 
 private slots:
-    void on_pbCategoriesAdd_clicked();
-    void on_pbCategoriesEdit_clicked();
-    void on_pbCategoriesDelete_clicked();
+	void on_pbCategoriesAdd_clicked();
+	void on_pbCategoriesEdit_clicked();
+	void on_pbCategoriesDelete_clicked();
 };
 
 #endif // CCATEGORIESWIDGET_H

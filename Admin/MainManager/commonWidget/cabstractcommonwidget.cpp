@@ -1,9 +1,9 @@
 #include "cabstractcommonwidget.h"
 
 CAbstractCommonWidget::CAbstractCommonWidget(QWidget *parent) :
-    QWidget(parent)
+	QWidget(parent)
 {
-    mConnectionName = "common";
+	mConnectionName = "common";
 }
 
 CAbstractCommonWidget::~CAbstractCommonWidget()

@@ -11,21 +11,21 @@ class CUsersWidget;
 
 class CUsersWidget : public CAbstractCommonWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 private:
-    Ui::CUsersWidget *ui;
+	Ui::CUsersWidget *ui;
 
 public:
-    explicit CUsersWidget(QWidget *parent = 0);
-    ~CUsersWidget();
+	explicit CUsersWidget(QWidget *parent = 0);
+	~CUsersWidget();
 
 public slots:
-    void updateData();
+	void updateData();
 
 private slots:
-    void on_tbnAdd_clicked();
-    void on_tbnEdit_clicked();
-    void on_tbnDel_clicked();
+	void on_tbnAdd_clicked();
+	void on_tbnEdit_clicked();
+	void on_tbnDel_clicked();
 };
 
 #endif // CUSERSWIDGET_H

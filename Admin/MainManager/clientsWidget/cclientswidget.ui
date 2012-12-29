@@ -100,11 +100,6 @@
        </layout>
       </item>
      </layout>
-     <zorder>twClients</zorder>
-     <zorder></zorder>
-     <zorder>twClients</zorder>
-     <zorder>twClients</zorder>
-     <zorder></zorder>
     </widget>
    </item>
   </layout>

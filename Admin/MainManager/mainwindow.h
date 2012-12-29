@@ -10,20 +10,19 @@ class MainWindow;
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 private:
-    Ui::MainWindow *ui;
-    QString mConnectionName;
+	Ui::MainWindow *ui;
+	QString mConnectionName;
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+	explicit MainWindow(QWidget *parent = 0);
+	~MainWindow();
 
 private slots:
-    void connected(QString connectionName);
-
-    void on_lwSettings_currentRowChanged(int currentRow);
+	void connected(QString connectionName);
+	void on_lwSettings_currentRowChanged(int currentRow);
 };
 
 #endif // MAINWINDOW_H

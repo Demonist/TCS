@@ -2,7 +2,7 @@
 #define CCATEGORYDIALOG_H
 
 #include <QtGui>
-#include<QtSql>
+#include <QtSql>
 
 namespace Ui {
 class CCategoryDialog;
@@ -10,28 +10,26 @@ class CCategoryDialog;
 
 class CCategoryDialog : public QDialog
 {
-    Q_OBJECT
-    
+	Q_OBJECT
+
 private:
-    Ui::CCategoryDialog *ui;
-    enum Type{Add, Edit};
-    Type mType;
-    int mId;
-    QString mConnectionName;
+	Ui::CCategoryDialog *ui;
+	enum Type{Add, Edit};
+	Type mType;
+	int mId;
+	QString mConnectionName;
 
 public:
-    explicit CCategoryDialog(const QString &connectionName, QWidget *parent = 0);   //Конструктор добавления.
-    explicit CCategoryDialog(const QString &connectionName, const int id, QWidget *parent = 0);
-    ~CCategoryDialog();
+	explicit CCategoryDialog(const QString &connectionName, QWidget *parent = 0);   //Конструктор добавления.
+	explicit CCategoryDialog(const QString &connectionName, const int id, QWidget *parent = 0);
+	~CCategoryDialog();
 
 private slots:
-
-    void on_buttonBox_accepted();
-
-    void on_buttonBox_rejected();
+	void on_buttonBox_accepted();
+	void on_buttonBox_rejected();
 
 signals:
-    void dataWasUpdated();
+	void dataWasUpdated();
 };
 
 #endif // CCATEGORYDIALOG_H

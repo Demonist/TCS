@@ -5,29 +5,29 @@
 
 class CAbstractCommonWidget : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 protected:
-    QString mConnectionName;
+	QString mConnectionName;
 
 public:
-    explicit CAbstractCommonWidget(QWidget *parent = 0);
-    virtual ~CAbstractCommonWidget() = 0;
-    
-    inline QString connectionName() const;
+	explicit CAbstractCommonWidget(QWidget *parent = 0);
+	virtual ~CAbstractCommonWidget() = 0;
+
+	inline QString connectionName() const;
 
 public slots:
-    inline void setConnectionName(const QString &connectionName);
-    virtual void updateData() = 0;
+	inline void setConnectionName(const QString &connectionName);
+	virtual void updateData() = 0;
 };
 
 inline void CAbstractCommonWidget::setConnectionName(const QString &connectionName)
 {
-    mConnectionName = connectionName;
+	mConnectionName = connectionName;
 }
 
 inline QString CAbstractCommonWidget::connectionName() const
 {
-    return mConnectionName;
+	return mConnectionName;
 }
 #endif // CABSTRACTCOMMONWIDGET_H

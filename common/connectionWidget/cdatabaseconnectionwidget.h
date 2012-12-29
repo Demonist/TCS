@@ -16,61 +16,61 @@ class CDataBaseConnectionWidget;
 */
 class CDataBaseConnectionWidget : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-    //types:
+	//types:
 public:
-    enum ConnectionType{ConnectionServer, ConnectionFile};
+	enum ConnectionType{ConnectionServer, ConnectionFile};
 
-    //members:
+	//members:
 private:
-    Ui::CDataBaseConnectionWidget *ui;
-    QSettings *mCache;
+	Ui::CDataBaseConnectionWidget *ui;
+	QSettings *mCache;
 
-    mutable bool mConnected;
-    ConnectionType mConnectionType;
-    QString mConnectionName;    //! Имя соединения с базой данных.
+	mutable bool mConnected;
+	ConnectionType mConnectionType;
+	QString mConnectionName;    //! Имя соединения с базой данных.
 
-    //methods:
+	//methods:
 public:
-    explicit CDataBaseConnectionWidget(QWidget *parent = 0);
-    ~CDataBaseConnectionWidget();
+	explicit CDataBaseConnectionWidget(QWidget *parent = 0);
+	~CDataBaseConnectionWidget();
 
-    inline QString connectionName() const;
-    bool isConnected() const;
-    bool isCloseButtonVisible() const;
-    bool isConnectionChoiceEnable() const;
-    inline ConnectionType connectionType() const;
-    
+	inline QString connectionName() const;
+	bool isConnected() const;
+	bool isCloseButtonVisible() const;
+	bool isConnectionChoiceEnable() const;
+	inline ConnectionType connectionType() const;
+
 private slots:
-    void on_pbnDbExit_clicked();
-    void on_pbnDbConnect_clicked();
-    void on_rbnDbServer_toggled(bool checked);
-    void on_rbnDbFile_toggled(bool checked);
-    void on_tbnDbFile_clicked();
-    void on_cbxDbHost_currentIndexChanged(const QString &arg1);
+	void on_pbnDbExit_clicked();
+	void on_pbnDbConnect_clicked();
+	void on_rbnDbServer_toggled(bool checked);
+	void on_rbnDbFile_toggled(bool checked);
+	void on_tbnDbFile_clicked();
+	void on_cbxDbHost_currentIndexChanged(const QString &arg1);
 
 public slots:
-    void setConnectionName(const QString &connectionName);
-    void setCloseButtonVisible(bool show);
-    void setConnectionChoiceEnable(bool enable);
-    void setConnectionType(const ConnectionType &connectionType);
+	void setConnectionName(const QString &connectionName);
+	void setCloseButtonVisible(bool show);
+	void setConnectionChoiceEnable(bool enable);
+	void setConnectionType(const ConnectionType &connectionType);
 
 signals:
-    void closed();
-    void connectedToDatabase(QString connectionName);
+	void closed();
+	void connectedToDatabase(QString connectionName);
 };
 
 //inline implementation:
 
 inline QString CDataBaseConnectionWidget::connectionName() const
 {
-    return mConnectionName;
+	return mConnectionName;
 }
 
 inline CDataBaseConnectionWidget::ConnectionType CDataBaseConnectionWidget::connectionType() const
 {
-    return mConnectionType;
+	return mConnectionType;
 }
 
 #endif // CDATABASECONNECTIONWIDGET_H

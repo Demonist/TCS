@@ -10,29 +10,29 @@ class CClientDialog;
 
 class CClientDialog : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 private:
-    Ui::CClientDialog *ui;
-    enum Type{Add, Edit};
-    Type mType;
-    int mId;
-    QString mConnectionName;
-    QList<QString> generateLogins(QString name, QString birthDate);
-    QString validateLogin(QString login);
+	Ui::CClientDialog *ui;
+	enum Type{Add, Edit};
+	Type mType;
+	int mId;
+	QString mConnectionName;
+	QList<QString> generateLogins(QString name, QString birthDate);
+	QString validateLogin(QString login);
 
 public:
-    explicit CClientDialog(const QString &connectionName, QWidget *parent = 0);   //Конструктор добавления.
-    explicit CClientDialog(const QString &connectionName, const int id, QWidget *parent = 0);
-    ~CClientDialog();
-    
+	explicit CClientDialog(const QString &connectionName, QWidget *parent = 0);   //Конструктор добавления.
+	explicit CClientDialog(const QString &connectionName, const int id, QWidget *parent = 0);
+	~CClientDialog();
+
 
 private slots:
-    void on_buttonBox_accepted();
-    void on_buttonBox_destroyed();
+	void on_buttonBox_accepted();
+	void on_buttonBox_rejected();
 
 signals:
-    void dataWasUpdated();
+	void dataWasUpdated();
 };
 
 #endif // CCLIENTDIALOG_H
