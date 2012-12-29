@@ -1,9 +1,9 @@
 #ifndef CUSERSWIDGET_H
 #define CUSERSWIDGET_H
 
-#include "cabstractcommonwidget.h"
-#include <QtSql>
+#include <QtGui>
 #include "cuserdialog.h"
+#include "cabstractcommonwidget.h"
 
 namespace Ui {
 class CUsersWidget;

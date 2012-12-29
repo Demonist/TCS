@@ -48,6 +48,9 @@ void MainWindow::connected(QString connectionName)
 {
     mConnectionName = connectionName;
     ui->wUsers->setConnectionName(mConnectionName);
+    ui->wCategories->setConnectionName(mConnectionName);
+    ui->wPlaces->setConnectionName(mConnectionName);
+    ui->wClients->setConnectionName(mConnectionName);
 
     ////for testing only:
     QSqlQuery query(QSqlDatabase::database(mConnectionName));
@@ -64,6 +67,20 @@ void MainWindow::connected(QString connectionName)
                       "name                 TEXT NULL "
                       ");"))
         qDebug(qPrintable(query.lastError().text()));
+    if(!query.exec("CREATE TABLE IF NOT EXISTS Places( "
+                      "id                   INTEGER " + autoincExpr +
+                      "title                 TEXT NULL, "
+                      "address               TEXT NULL  "
+                      ");"))
+        qDebug(qPrintable(query.lastError().text()));
+    if(!query.exec("CREATE TABLE IF NOT EXISTS Clients( "
+                      "id                   INTEGER " + autoincExpr +
+                      "name                 TEXT NULL, "
+                      "birthDate            DATE NULL,  "
+                      "login                TEXT NULL,  "
+                      "passwordHash         TEXT NULL  "
+                      ");"))
+        qDebug(qPrintable(query.lastError().text()));
     ui->stackedWidget->setCurrentIndex(1);
 }
 
@@ -72,7 +89,9 @@ void MainWindow::on_lwSettings_currentRowChanged(int currentRow)
     switch(currentRow)
     {
     case 0: ui->wUsers->updateData(); break;
-
+    case 1: ui->wCategories->updateData(); break;
+    case 2: ui->wPlaces->updateData(); break;
+    case 3: ui->wClients->updateData(); break;
     }
 
     ui->swSettings->setCurrentIndex(currentRow);

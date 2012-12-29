@@ -15,9 +15,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <property name="margin">
-     <number>0</number>
-    </property>
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
@@ -63,8 +60,21 @@
              <string>Категории</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>Концертные площадки</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Клиенты</string>
+            </property>
+           </item>
           </widget>
           <widget class="QStackedWidget" name="swSettings">
+           <property name="currentIndex">
+            <number>3</number>
+           </property>
            <widget class="QWidget" name="page_users">
             <layout class="QGridLayout" name="gridLayout_3">
              <item row="0" column="0">
@@ -72,7 +82,27 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="page_4"/>
+           <widget class="QWidget" name="page_categories">
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="0">
+              <widget class="CCategoriesWidget" name="wCategories" native="true"/>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="page_places">
+            <layout class="QGridLayout" name="gridLayout_5">
+             <item row="0" column="0">
+              <widget class="CPlacesWidget" name="wPlaces" native="true"/>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="page_clients">
+            <layout class="QGridLayout" name="gridLayout_6">
+             <item row="0" column="0">
+              <widget class="CClientsWidget" name="wClients" native="true"/>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </widget>
         </item>
@@ -95,6 +125,24 @@
    <class>CUsersWidget</class>
    <extends>QWidget</extends>
    <header location="global">cuserswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CCategoriesWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">ccategorieswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CPlacesWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">cplaceswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CClientsWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">cclientswidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
