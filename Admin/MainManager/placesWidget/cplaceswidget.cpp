@@ -46,14 +46,14 @@ void CPlacesWidget::updateData()
 }
 
 
-void CPlacesWidget::on_pbPlacesAdd_clicked()
+void CPlacesWidget::on_tbnPlacesAdd_clicked()
 {
 	CPlaceDialog placeDialog(mConnectionName, this);
 	connect(&placeDialog, SIGNAL(dataWasUpdated()), this, SLOT(updateData()));
 	placeDialog.exec();
 }
 
-void CPlacesWidget::on_pbPlacesEdit_clicked()
+void CPlacesWidget::on_tbnPlacesEdit_clicked()
 {
 	QTreeWidgetItem *selectedItem = ui->twPlaces->currentItem();
 	if(selectedItem)
@@ -64,7 +64,7 @@ void CPlacesWidget::on_pbPlacesEdit_clicked()
 	}
 }
 
-void CPlacesWidget::on_pbPlacesDelete_clicked()
+void CPlacesWidget::on_tbnPlacesDelete_clicked()
 {
 	QTreeWidgetItem *selectedItem = ui->twPlaces->currentItem();
 	if(selectedItem)

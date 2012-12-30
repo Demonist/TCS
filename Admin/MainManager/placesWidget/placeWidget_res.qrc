@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/drag.png</file>
+        <file>images/move.png</file>
+        <file>images/zoomDefault.png</file>
+        <file>images/zoomIn.png</file>
+        <file>images/zoomOut.png</file>
+    </qresource>
+</RCC>

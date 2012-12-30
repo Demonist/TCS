@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>100</height>
+    <width>335</width>
+    <height>163</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Адрес концертной площадки</string>
@@ -38,12 +38,12 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
+   <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="pbnEditPlaceScheme">
        <property name="text">
-        <string>Редактировать схему зала</string>
+        <string>Редактировать зал</string>
        </property>
       </widget>
      </item>
@@ -70,6 +70,9 @@
     </layout>
    </item>
   </layout>
+  <zorder>groupBox</zorder>
+  <zorder>groupBox_2</zorder>
+  <zorder>buttonBox</zorder>
  </widget>
  <resources/>
  <connections/>

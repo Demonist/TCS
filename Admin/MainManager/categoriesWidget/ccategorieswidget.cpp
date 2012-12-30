@@ -45,14 +45,14 @@ void CCategoriesWidget::updateData()
 }
 
 
-void CCategoriesWidget::on_pbCategoriesAdd_clicked()
+void CCategoriesWidget::on_tbnCategoriesAdd_clicked()
 {
 	CCategoryDialog categoriesDialog(mConnectionName, this);
 	connect(&categoriesDialog, SIGNAL(dataWasUpdated()), this, SLOT(updateData()));
 	categoriesDialog.exec();
 }
 
-void CCategoriesWidget::on_pbCategoriesEdit_clicked()
+void CCategoriesWidget::on_tbnCategoriesEdit_clicked()
 {
 	QTreeWidgetItem *selectedItem = ui->twCategories->currentItem();
 	if(selectedItem)
@@ -63,7 +63,7 @@ void CCategoriesWidget::on_pbCategoriesEdit_clicked()
 	}
 }
 
-void CCategoriesWidget::on_pbCategoriesDelete_clicked()
+void CCategoriesWidget::on_tbnCategoriesDelete_clicked()
 {
 	QTreeWidgetItem *selectedItem = ui->twCategories->currentItem();
 	if(selectedItem)

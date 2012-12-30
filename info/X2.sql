@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS Images
 (
 	id                   INTEGER AUTO_INCREMENT,
 	path                 TEXT NULL,
+	image                MEDIUMBLOB NULL,
 	PRIMARY KEY (id)
 );
 
@@ -93,7 +94,7 @@ CREATE TABLE IF NOT EXISTS Actions
 
 
 
-CREATE TABLE IF NOT EXISTS PlaceScheme
+CREATE TABLE IF NOT EXISTS PlaceSchemes
 (
 	id                   INTEGER AUTO_INCREMENT,
 	seatNumber           INTEGER NULL,

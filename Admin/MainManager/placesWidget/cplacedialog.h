@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QtSql>
+#include "cplaceschemedialog.h"
 
 namespace Ui {
 class CPlaceDialog;

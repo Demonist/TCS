@@ -52,14 +52,14 @@ void CClientsWidget::updateData()
 	}
 }
 
-void CClientsWidget::on_pbClientsAdd_clicked()
+void CClientsWidget::on_tbnClientsAdd_clicked()
 {
 	CClientDialog clientDialog(mConnectionName, this);
 	connect(&clientDialog, SIGNAL(dataWasUpdated()), this, SLOT(updateData()));
 	clientDialog.exec();
 }
 
-void CClientsWidget::on_pbClientsEdit_clicked()
+void CClientsWidget::on_tbnClientsEdit_clicked()
 {
 	QTreeWidgetItem *selectedItem = ui->twClients->currentItem();
 	if(selectedItem)
@@ -70,7 +70,7 @@ void CClientsWidget::on_pbClientsEdit_clicked()
 	}
 }
 
-void CClientsWidget::on_pbClientsDelete_clicked()
+void CClientsWidget::on_tbnClientsDelete_clicked()
 {
 	QTreeWidgetItem *selectedItem = ui->twClients->currentItem();
 	if(selectedItem)

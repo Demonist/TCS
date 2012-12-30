@@ -21,9 +21,9 @@ public slots:
 	void updateData();
 
 private slots:
-	void on_pbClientsAdd_clicked();
-	void on_pbClientsEdit_clicked();
-	void on_pbClientsDelete_clicked();
+	void on_tbnClientsAdd_clicked();
+	void on_tbnClientsEdit_clicked();
+	void on_tbnClientsDelete_clicked();
 
 private:
 	Ui::CClientsWidget *ui;

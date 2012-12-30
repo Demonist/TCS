@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     placesWidget/cplaceswidget.cpp \
     placesWidget/cplacedialog.cpp \
     clientsWidget/cclientdialog.cpp \
-    clientsWidget/cclientswidget.cpp
+    clientsWidget/cclientswidget.cpp \
+    placesWidget/cplaceschemedialog.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -40,7 +41,8 @@ HEADERS  += mainwindow.h \
     placesWidget/cplaceswidget.h \
     placesWidget/cplacedialog.h \
     clientsWidget/cclientdialog.h \
-    clientsWidget/cclientswidget.h
+    clientsWidget/cclientswidget.h \
+    placesWidget/cplaceschemedialog.h
 
 
 FORMS    += mainwindow.ui \
@@ -52,8 +54,10 @@ FORMS    += mainwindow.ui \
     placesWidget/cplaceswidget.ui \
     placesWidget/cplacedialog.ui \
     clientsWidget/cclientdialog.ui \
-    clientsWidget/cclientswidget.ui
+    clientsWidget/cclientswidget.ui \
+    placesWidget/cplaceschemedialog.ui
 
 RESOURCES += \
 	../../common/connectionWidget/connectionwidget_res.qrc \
-    main_res.qrc
+    main_res.qrc \
+    placesWidget/placeWidget_res.qrc

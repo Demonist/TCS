@@ -6,7 +6,6 @@ CClientDialog::CClientDialog(const QString &connectionName, QWidget *parent) :
 	ui(new Ui::CClientDialog)
 {
 	ui->setupUi(this);
-	ui->cwClientBirthDate->setFirstDayOfWeek(Qt::Monday);
 	mConnectionName = connectionName;
 	setWindowTitle(tr("Добавление категории"));
 	mType = Add;

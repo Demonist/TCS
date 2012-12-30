@@ -23,9 +23,9 @@ public slots:
 	void updateData();
 
 private slots:
-	void on_pbPlacesAdd_clicked();
-	void on_pbPlacesEdit_clicked();
-	void on_pbPlacesDelete_clicked();
+	void on_tbnPlacesAdd_clicked();
+	void on_tbnPlacesEdit_clicked();
+	void on_tbnPlacesDelete_clicked();
 
 
 };

@@ -23,9 +23,9 @@ public slots:
 	void updateData();
 
 private slots:
-	void on_pbCategoriesAdd_clicked();
-	void on_pbCategoriesEdit_clicked();
-	void on_pbCategoriesDelete_clicked();
+	void on_tbnCategoriesAdd_clicked();
+	void on_tbnCategoriesEdit_clicked();
+	void on_tbnCategoriesDelete_clicked();
 };
 
 #endif // CCATEGORIESWIDGET_H

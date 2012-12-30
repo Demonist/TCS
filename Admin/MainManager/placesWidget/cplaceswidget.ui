@@ -42,7 +42,7 @@
       <item row="0" column="1">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QPushButton" name="pbPlacesAdd">
+         <widget class="QToolButton" name="tbnPlacesAdd">
           <property name="text">
            <string/>
           </property>
@@ -53,7 +53,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pbPlacesEdit">
+         <widget class="QToolButton" name="tbnPlacesEdit">
           <property name="text">
            <string/>
           </property>
@@ -64,7 +64,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pbPlacesDelete">
+         <widget class="QToolButton" name="tbnPlacesDelete">
           <property name="text">
            <string/>
           </property>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CPlaceSchemeDialog</class>
+ <widget class="QDialog" name="CPlaceSchemeDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>503</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Редактирование схемы зала</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_4">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lPlaceName">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="hblMain">
+     <item>
+      <widget class="QGraphicsView" name="gvScheme"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetFixedSize</enum>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Место</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetMinimumSize</enum>
+          </property>
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QToolButton" name="tbnAdd">
+              <property name="icon">
+               <iconset resource="../main_res.qrc">
+                <normaloff>:/images/add.png</normaloff>:/images/add.png</iconset>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="tbnMove">
+              <property name="icon">
+               <iconset resource="placeWidget_res.qrc">
+                <normaloff>:/images/move.png</normaloff>:/images/move.png</iconset>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="tbnDel">
+              <property name="icon">
+               <iconset resource="../main_res.qrc">
+                <normaloff>:/images/delete.png</normaloff>:/images/delete.png</iconset>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Номер</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout">
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>2</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLineEdit" name="leSeatNumber"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Вид [100%]</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QToolButton" name="tbnZoomIn">
+            <property name="icon">
+             <iconset resource="placeWidget_res.qrc">
+              <normaloff>:/images/zoomIn.png</normaloff>:/images/zoomIn.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QToolButton" name="tbnDrag">
+            <property name="icon">
+             <iconset resource="placeWidget_res.qrc">
+              <normaloff>:/images/drag.png</normaloff>:/images/drag.png</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QToolButton" name="tbnZoomOut">
+            <property name="icon">
+             <iconset resource="placeWidget_res.qrc">
+              <normaloff>:/images/zoomOut.png</normaloff>:/images/zoomOut.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QToolButton" name="tbnZoomDefault">
+            <property name="icon">
+             <iconset resource="placeWidget_res.qrc">
+              <normaloff>:/images/zoomDefault.png</normaloff>:/images/zoomDefault.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>Информация</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lTotalSeatCount">
+            <property name="text">
+             <string>Максимальное число мест в зале:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMinimumSize</enum>
+         </property>
+         <item>
+          <widget class="QPushButton" name="pbnApply">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Применить</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../main_res.qrc">
+             <normaloff>:/images/apply.png</normaloff>:/images/apply.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbnCancel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Отмена</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../main_res.qrc">
+             <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../main_res.qrc"/>
+  <include location="placeWidget_res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
-    <height>398</height>
+    <width>735</width>
+    <height>433</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,20 +15,26 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
        <number>1</number>
       </property>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="page_connection">
        <layout class="QGridLayout" name="gridLayout_7">
         <item row="0" column="0">
          <widget class="CDataBaseConnectionWidget" name="connectionWidget" native="true"/>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_2">
+      <widget class="QWidget" name="page_settings">
        <layout class="QGridLayout" name="gridLayout_2">
+        <property name="margin">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="QSplitter" name="sSettings">
           <property name="orientation">
@@ -38,6 +44,12 @@
            <bool>false</bool>
           </property>
           <widget class="QListWidget" name="lwSettings">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="maximumSize">
             <size>
              <width>150</width>
@@ -72,11 +84,20 @@
            </item>
           </widget>
           <widget class="QStackedWidget" name="swSettings">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>3</number>
            </property>
            <widget class="QWidget" name="page_users">
             <layout class="QGridLayout" name="gridLayout_3">
+             <property name="margin">
+              <number>0</number>
+             </property>
              <item row="0" column="0">
               <widget class="CUsersWidget" name="wUsers" native="true"/>
              </item>
@@ -84,6 +105,9 @@
            </widget>
            <widget class="QWidget" name="page_categories">
             <layout class="QGridLayout" name="gridLayout_4">
+             <property name="margin">
+              <number>0</number>
+             </property>
              <item row="0" column="0">
               <widget class="CCategoriesWidget" name="wCategories" native="true"/>
              </item>
@@ -91,6 +115,9 @@
            </widget>
            <widget class="QWidget" name="page_places">
             <layout class="QGridLayout" name="gridLayout_5">
+             <property name="margin">
+              <number>0</number>
+             </property>
              <item row="0" column="0">
               <widget class="CPlacesWidget" name="wPlaces" native="true"/>
              </item>
@@ -98,6 +125,9 @@
            </widget>
            <widget class="QWidget" name="page_clients">
             <layout class="QGridLayout" name="gridLayout_6">
+             <property name="margin">
+              <number>0</number>
+             </property>
              <item row="0" column="0">
               <widget class="CClientsWidget" name="wClients" native="true"/>
              </item>

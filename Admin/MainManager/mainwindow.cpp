@@ -3,6 +3,56 @@
 
 //private:
 
+/**
+Функция создает таблицы в базе данных текущего подключения.
+
+Таблицы создаются, только если их нет в базе данных.
+Идентификатор подключения берется из \c mConnectionName.
+*/
+void MainWindow::createTables()
+{
+	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+	QString autoincExpr = ui->connectionWidget->connectionType() == CDataBaseConnectionWidget::ConnectionServer ? "AUTO_INCREMENT PRIMARY KEY, " : "PRIMARY KEY AUTOINCREMENT, ";   //Выражение автоинкремента меняется в зависимости от драйвера базы днных.
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Users( "
+				   "id                   INTEGER " + autoincExpr +
+				   "login                TEXT NULL, "
+				   "passwordCrypt        TEXT NULL, "
+				   "name                 TEXT NULL "
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Categories( "
+				   "id                   INTEGER " + autoincExpr +
+				   "name                 TEXT NULL "
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Places( "
+				   "id                   INTEGER " + autoincExpr +
+				   "title                 TEXT NULL, "
+				   "address               TEXT NULL  "
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS PlaceSchemes( "
+				   "id                   INTEGER " + autoincExpr +
+				   "seatNumber           INTEGER NULL, "
+				   "x                    FLOAT NULL, "
+				   "y                    FLOAT NULL, "
+				   "id_place             INTEGER NOT NULL"
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Clients( "
+				   "id                   INTEGER " + autoincExpr +
+				   "name                 TEXT NULL, "
+				   "birthDate            DATE NULL,  "
+				   "login                TEXT NULL,  "
+				   "passwordHash         TEXT NULL  "
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+}
 
 //public:
 
@@ -21,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	ui->sSettings->setCollapsible(0, true);
 	ui->sSettings->setStretchFactor(0, 1);
-	ui->sSettings->setStretchFactor(2, 3);
+	ui->sSettings->setStretchFactor(1, 100);
 
 	////for testing only:
 	if(QFile::exists("test.db") == false)
@@ -52,35 +102,8 @@ void MainWindow::connected(QString connectionName)
 	ui->wPlaces->setConnectionName(mConnectionName);
 	ui->wClients->setConnectionName(mConnectionName);
 
-	////for testing only:
-	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	QString autoincExpr = ui->connectionWidget->connectionType() == CDataBaseConnectionWidget::ConnectionServer ? "AUTO_INCREMENT PRIMARY KEY, " : "PRIMARY KEY AUTOINCREMENT, ";   //Выражение автоинкремента меняется в зависимости от драйвера базы днных.
-	if(!query.exec("CREATE TABLE IF NOT EXISTS Users( "
-				   "id                   INTEGER " + autoincExpr +
-				   "login                TEXT NULL, "
-				   "passwordCrypt        TEXT NULL, "
-				   "name                 TEXT NULL "
-				   ");"))
-		qDebug(qPrintable(query.lastError().text()));
-	if(!query.exec("CREATE TABLE IF NOT EXISTS Categories( "
-				   "id                   INTEGER " + autoincExpr +
-				   "name                 TEXT NULL "
-				   ");"))
-		qDebug(qPrintable(query.lastError().text()));
-	if(!query.exec("CREATE TABLE IF NOT EXISTS Places( "
-				   "id                   INTEGER " + autoincExpr +
-				   "title                 TEXT NULL, "
-				   "address               TEXT NULL  "
-				   ");"))
-		qDebug(qPrintable(query.lastError().text()));
-	if(!query.exec("CREATE TABLE IF NOT EXISTS Clients( "
-				   "id                   INTEGER " + autoincExpr +
-				   "name                 TEXT NULL, "
-				   "birthDate            DATE NULL,  "
-				   "login                TEXT NULL,  "
-				   "passwordHash         TEXT NULL  "
-				   ");"))
-		qDebug(qPrintable(query.lastError().text()));
+	createTables();
+
 	ui->stackedWidget->setCurrentIndex(1);
 }
 
