@@ -9,6 +9,7 @@ CPlaceDialog::CPlaceDialog(const QString &connectionName, QWidget *parent) :
 	mConnectionName = connectionName;
 	setWindowTitle(tr("Добавление площадки"));
 	mType = Add;
+	ui->pbnEditPlaceScheme->hide();
 }
 
 CPlaceDialog::CPlaceDialog(const QString &connectionName, const int id, QWidget *parent) :
@@ -64,4 +65,12 @@ void CPlaceDialog::on_buttonBox_accepted()
 void CPlaceDialog::on_buttonBox_rejected()
 {
 	close();
+}
+
+void CPlaceDialog::on_pbnEditPlaceScheme_clicked()
+{
+	if(mType == Edit)
+	{
+		QMessageBox::information(this, tr("Упс..."), tr("Данный функционал еще не реализован."));
+	}
 }

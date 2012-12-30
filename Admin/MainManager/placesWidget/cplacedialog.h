@@ -30,6 +30,7 @@ signals:
 private slots:
 	void on_buttonBox_accepted();
 	void on_buttonBox_rejected();
+	void on_pbnEditPlaceScheme_clicked();
 };
 
 #endif // CPLACEDIALOG_H
