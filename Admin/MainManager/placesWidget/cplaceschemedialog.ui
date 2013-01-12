@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>503</width>
-    <height>400</height>
+    <width>640</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Редактирование схемы зала</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4">
+  <layout class="QGridLayout" name="gridLayout_6">
    <item row="0" column="0">
     <widget class="QLabel" name="lPlaceName">
      <property name="sizePolicy">
@@ -36,13 +36,14 @@
    <item row="1" column="0">
     <layout class="QHBoxLayout" name="hblMain">
      <item>
-      <widget class="QGraphicsView" name="gvScheme"/>
+      <widget class="QGraphicsView" name="gvScheme">
+       <property name="renderHints">
+        <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetFixedSize</enum>
-       </property>
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="sizePolicy">
@@ -60,24 +61,21 @@
          <property name="title">
           <string>Место</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <property name="sizeConstraint">
-           <enum>QLayout::SetMinimumSize</enum>
-          </property>
+         <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QToolButton" name="tbnAdd">
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
+             <widget class="QToolButton" name="tbnSelect">
               <property name="icon">
-               <iconset resource="../main_res.qrc">
-                <normaloff>:/images/add.png</normaloff>:/images/add.png</iconset>
+               <iconset resource="placeWidget_res.qrc">
+                <normaloff>:/images/cursor.png</normaloff>:/images/cursor.png</iconset>
               </property>
               <property name="checkable">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="QToolButton" name="tbnMove">
               <property name="icon">
                <iconset resource="placeWidget_res.qrc">
@@ -88,7 +86,18 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="1" column="0">
+             <widget class="QToolButton" name="tbnAdd">
+              <property name="icon">
+               <iconset resource="../main_res.qrc">
+                <normaloff>:/images/add.png</normaloff>:/images/add.png</iconset>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
              <widget class="QToolButton" name="tbnDel">
               <property name="icon">
                <iconset resource="../main_res.qrc">
@@ -102,7 +111,10 @@
            </layout>
           </item>
           <item row="1" column="0">
-           <widget class="QGroupBox" name="groupBox">
+           <widget class="QGroupBox" name="gbxNumber">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="title">
              <string>Номер</string>
             </property>
@@ -123,7 +135,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_3">
+        <widget class="QGroupBox" name="gbxScale">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>

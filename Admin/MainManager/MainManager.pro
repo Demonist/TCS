@@ -9,15 +9,20 @@ QT       += core gui sql
 TARGET = MainManager
 TEMPLATE = app
 
-INCLUDEPATH += ../../common/connectionWidget/ \
+INCLUDEPATH += ../../common/ \
+		../../common/connectionWidget/ \
+		../../common/seatItem/ \
+		../../common/dateDialog/ \
         commonWidget/ \
         usersWidget/ \
         categoriesWidget/ \
         placesWidget/ \
-        clientsWidget/
+		clientsWidget/ \
+		actionsWidget/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
+	../../common/global.cpp \
 	../../common/connectionWidget/cdatabaseconnectionwidget.cpp \
 	commonWidget/cabstractcommonwidget.cpp \
 	usersWidget/cuserswidget.cpp \
@@ -28,10 +33,17 @@ SOURCES += main.cpp\
     placesWidget/cplacedialog.cpp \
     clientsWidget/cclientdialog.cpp \
     clientsWidget/cclientswidget.cpp \
-    placesWidget/cplaceschemedialog.cpp
+    placesWidget/cplaceschemedialog.cpp \
+    ../../common/seatItem/cseatitem.cpp \
+	actionsWidget/cactionswidget.cpp \
+	actionsWidget/cactiondialog.cpp \
+    ../../common/dateDialog/cdatedialog.cpp \
+    actionsWidget/cactionticketsmanagement.cpp \
+    ../../common/seatItem/cactionseatitem.cpp
 
 
 HEADERS  += mainwindow.h \
+	../../common/global.h \
 	../../common/connectionWidget/cdatabaseconnectionwidget.h \
 	commonWidget/cabstractcommonwidget.h \
 	usersWidget/cuserswidget.h \
@@ -42,7 +54,14 @@ HEADERS  += mainwindow.h \
     placesWidget/cplacedialog.h \
     clientsWidget/cclientdialog.h \
     clientsWidget/cclientswidget.h \
-    placesWidget/cplaceschemedialog.h
+    placesWidget/cplaceschemedialog.h \
+    ../../common/seatItem/cseatitem.h \
+	actionsWidget/cactionswidget.h \
+    actionsWidget/cactiondialog.h \
+    ../../common/dateDialog/cdatedialog.h \
+    actionsWidget/cactionticketsmanagement.h \
+    ../../common/parallel.h \
+    ../../common/seatItem/cactionseatitem.h
 
 
 FORMS    += mainwindow.ui \
@@ -55,9 +74,14 @@ FORMS    += mainwindow.ui \
     placesWidget/cplacedialog.ui \
     clientsWidget/cclientdialog.ui \
     clientsWidget/cclientswidget.ui \
-    placesWidget/cplaceschemedialog.ui
+    placesWidget/cplaceschemedialog.ui \
+    actionsWidget/cactionswidget.ui \
+    actionsWidget/cactiondialog.ui \
+    ../../common/dateDialog/cdatedialog.ui \
+    actionsWidget/cactionticketsmanagement.ui
 
 RESOURCES += \
 	../../common/connectionWidget/connectionwidget_res.qrc \
     main_res.qrc \
-    placesWidget/placeWidget_res.qrc
+    placesWidget/placeWidget_res.qrc \
+    actionsWidget/actionWidget_res.qrc
