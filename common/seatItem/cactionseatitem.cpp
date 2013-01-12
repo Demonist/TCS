@@ -37,7 +37,7 @@ QColor CActionSeatItem::brushForSeat() const
 	case Global::SeatReserved: return QColor(200, 50, 50);
 	case Global::SeatHided:
 	default:
-		return QColor(200, 200, 200);
+		return QColor(240, 240, 240);
 	}
 }
 
