@@ -40,7 +40,7 @@ void CCategoriesWidget::updateData()
 				count++;
 			}
 		}
-		ui->groupBox->setTitle(tr("Пользователи системы: %1 шт").arg(count));
+		ui->groupBox->setTitle(tr("Категории: %1 шт").arg(count));
 	}
 }
 

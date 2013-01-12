@@ -73,6 +73,5 @@ void CPlaceDialog::on_pbnEditPlaceScheme_clicked()
 	{
 		CPlaceSchemeDialog schemeDialog(mConnectionName, mId, this);
 		schemeDialog.exec();
-////		QMessageBox::information(this, tr("Упс..."), tr("Данный функционал еще не реализован."));
 	}
 }

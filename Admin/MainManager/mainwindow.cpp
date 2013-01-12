@@ -29,7 +29,7 @@ void MainWindow::createTables()
 		qDebug(qPrintable(query.lastError().text()));
 
 	if(!query.exec("CREATE TABLE IF NOT EXISTS Places( "
-				   "id                   INTEGER " + autoincExpr +
+				   "id                    INTEGER " + autoincExpr +
 				   "title                 TEXT NULL, "
 				   "address               TEXT NULL  "
 				   ");"))
@@ -37,9 +37,9 @@ void MainWindow::createTables()
 
 	if(!query.exec("CREATE TABLE IF NOT EXISTS PlaceSchemes( "
 				   "id                   INTEGER " + autoincExpr +
-				   "seatNumber           INTEGER NULL, "
-				   "x                    FLOAT NULL, "
-				   "y                    FLOAT NULL, "
+				   "seatNumber           TEXT NULL, "
+				   "x                    INTEGER NULL, "
+				   "y                    INTEGER NULL, "
 				   "id_place             INTEGER NOT NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
@@ -50,6 +50,27 @@ void MainWindow::createTables()
 				   "birthDate            DATE NULL,  "
 				   "login                TEXT NULL,  "
 				   "passwordHash         TEXT NULL  "
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Actions( "
+				   "id                   INTEGER " + autoincExpr +
+				   "title                TEXT NULL, "
+				   "description          TEXT NULL, "
+				   "dateTime             DATETIME NULL, "
+				   "state                INTEGER DEFAULT 0, "
+				   "id_place             INTEGER NULL, "
+				   "id_category          INTEGER NULL"
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS ActionScheme( "
+				   "id_action            INTEGER NOT NULL, "
+				   "id_placeScheme       INTEGER NOT NULL, "
+				   "state				 INTEGER DEFAULT 0, "
+				   "id_reservation       INTEGER NULL, "
+				   "id_priceGroup        INTEGER NULL, "
+				   "PRIMARY KEY (id_action, id_placeScheme)"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 }
@@ -101,6 +122,7 @@ void MainWindow::connected(QString connectionName)
 	ui->wCategories->setConnectionName(mConnectionName);
 	ui->wPlaces->setConnectionName(mConnectionName);
 	ui->wClients->setConnectionName(mConnectionName);
+	ui->wActions->setConnectionName(mConnectionName);
 
 	createTables();
 
@@ -115,6 +137,7 @@ void MainWindow::on_lwSettings_currentRowChanged(int currentRow)
 		case 1: ui->wCategories->updateData(); break;
 		case 2: ui->wPlaces->updateData(); break;
 		case 3: ui->wClients->updateData(); break;
+		case 4: ui->wActions->updateData(); break;
 	}
 
 	ui->swSettings->setCurrentIndex(currentRow);
