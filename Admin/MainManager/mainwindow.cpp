@@ -18,7 +18,8 @@ void MainWindow::createTables()
 				   "id                   INTEGER " + autoincExpr +
 				   "login                TEXT NULL, "
 				   "passwordCrypt        TEXT NULL, "
-				   "name                 TEXT NULL "
+				   "name                 TEXT NULL, "
+				   "marketsID            INTEGER NOT NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 
@@ -73,6 +74,11 @@ void MainWindow::createTables()
 				   "PRIMARY KEY (id_action, id_placeScheme)"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Markets( "
+				   "id                   INTEGER " + autoincExpr +
+				   "address              TEXT NULL "
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
 }
 
 //public:
@@ -123,6 +129,7 @@ void MainWindow::connected(QString connectionName)
 	ui->wPlaces->setConnectionName(mConnectionName);
 	ui->wClients->setConnectionName(mConnectionName);
 	ui->wActions->setConnectionName(mConnectionName);
+	ui->wMarkets->setConnectionName(mConnectionName);
 
 	createTables();
 
@@ -138,6 +145,7 @@ void MainWindow::on_lwSettings_currentRowChanged(int currentRow)
 		case 2: ui->wPlaces->updateData(); break;
 		case 3: ui->wClients->updateData(); break;
 		case 4: ui->wActions->updateData(); break;
+		case 5: ui->wMarkets->updateData(); break;
 	}
 
 	ui->swSettings->setCurrentIndex(currentRow);

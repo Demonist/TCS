@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>735</width>
+    <width>736</width>
     <height>433</height>
    </rect>
   </property>
@@ -52,7 +52,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
+             <width>200</width>
              <height>16777215</height>
             </size>
            </property>
@@ -62,29 +62,64 @@
            <property name="selectionBehavior">
             <enum>QAbstractItemView::SelectItems</enum>
            </property>
+           <property name="iconSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
            <item>
             <property name="text">
              <string>Пользователи</string>
+            </property>
+            <property name="icon">
+             <iconset resource="main_res.qrc">
+              <normaloff>:/images/categoriesImages/imUsers.png</normaloff>:/images/categoriesImages/imUsers.png</iconset>
             </property>
            </item>
            <item>
             <property name="text">
              <string>Категории</string>
             </property>
+            <property name="icon">
+             <iconset resource="main_res.qrc">
+              <normaloff>:/images/categoriesImages/imCategories.png</normaloff>:/images/categoriesImages/imCategories.png</iconset>
+            </property>
            </item>
            <item>
             <property name="text">
              <string>Концертные площадки</string>
+            </property>
+            <property name="icon">
+             <iconset resource="main_res.qrc">
+              <normaloff>:/images/categoriesImages/imAreas.png</normaloff>:/images/categoriesImages/imAreas.png</iconset>
             </property>
            </item>
            <item>
             <property name="text">
              <string>Клиенты</string>
             </property>
+            <property name="icon">
+             <iconset resource="main_res.qrc">
+              <normaloff>:/images/categoriesImages/imClients.png</normaloff>:/images/categoriesImages/imClients.png</iconset>
+            </property>
            </item>
            <item>
             <property name="text">
              <string>Мероприятия</string>
+            </property>
+            <property name="icon">
+             <iconset resource="main_res.qrc">
+              <normaloff>:/images/categoriesImages/imActions.png</normaloff>:/images/categoriesImages/imActions.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Торговые точки</string>
+            </property>
+            <property name="icon">
+             <iconset resource="main_res.qrc">
+              <normaloff>:/images/categoriesImages/imShops.png</normaloff>:/images/categoriesImages/imShops.png</iconset>
             </property>
            </item>
           </widget>
@@ -96,7 +131,7 @@
             </sizepolicy>
            </property>
            <property name="currentIndex">
-            <number>4</number>
+            <number>5</number>
            </property>
            <widget class="QWidget" name="page_users">
             <layout class="QGridLayout" name="gridLayout_3">
@@ -148,6 +183,16 @@
              </item>
             </layout>
            </widget>
+           <widget class="QWidget" name="page_markets">
+            <layout class="QGridLayout" name="gridLayout_9">
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="CMarketsWidget" name="wMarkets" native="true"/>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </widget>
         </item>
@@ -196,7 +241,15 @@
    <header location="global">cactionswidget.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>CMarketsWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">cmarketswidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="main_res.qrc"/>
+ </resources>
  <connections/>
 </ui>

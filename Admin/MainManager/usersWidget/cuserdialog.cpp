@@ -9,6 +9,17 @@ CUserDialog::CUserDialog(const QString &connectionName, QWidget *parent) :
 	mConnectionName = connectionName;
 	setWindowTitle(tr("Добавление пользователя"));
 	mType = Add;
+    QSqlQuery query(QSqlDatabase::database(mConnectionName));
+    query.exec("SELECT id, address FROM Markets");
+    int incrementIndex = 0;
+    while(query.next())
+    {
+        ui->cbxMarkets->addItem(query.value(1).toString());
+        ui->cbxMarkets->setItemData(incrementIndex, query.value(0).toString());
+        incrementIndex++;
+    }
+
+
 }
 
 CUserDialog::CUserDialog(const QString &connectionName, const int id, QWidget *parent) :
@@ -23,14 +34,28 @@ CUserDialog::CUserDialog(const QString &connectionName, const int id, QWidget *p
 	mId = id;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	query.prepare("SELECT login, passwordCrypt, name FROM Users WHERE id = :id;");
-	query.bindValue(":id", mId);
+
+
+
+    query.prepare("SELECT login, passwordCrypt, name, address, Markets.ID FROM Users, Markets WHERE Users.id = :id AND marketsID = Markets.ID;");
+	query.bindValue(":id", mId);    
 	if(query.exec() && query.first())
 	{
 		ui->leLogin->setText(query.value(0).toString());
 		ui->lePassword->setText(query.value(1).toString());
 		ui->leName->setText(query.value(2).toString());
-	}
+        ui->cbxMarkets->addItem(query.value(3).toString());
+        ui->cbxMarkets->setItemData(ui->cbxMarkets->currentIndex(), query.value(4).toString());
+    }
+    query.exec("SELECT id, address FROM Markets WHERE id <> (SELECT marketsid FROM Users WHERE id = " + QString::number(mId) + ");");
+    int cIndex = 1;
+    while(query.next())
+    {
+        ui->cbxMarkets->addItem(query.value(1).toString());
+        ui->cbxMarkets->setItemData(cIndex, query.value(0).toString());
+        cIndex++;
+    }
+
 }
 
 CUserDialog::~CUserDialog()
@@ -45,17 +70,21 @@ void CUserDialog::on_buttonBox_accepted()
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 	if(mType == Add)
 	{
-		query.prepare("INSERT INTO Users VALUES(NULL, :login, :password, :name);");
+        query.prepare("INSERT INTO Users VALUES(NULL, :login, :password, :name, :marketsID);");
 		query.bindValue(":login", ui->leLogin->text());
 		query.bindValue(":password", ui->lePassword->text());
 		query.bindValue(":name", ui->leName->text());
+        query.bindValue(":marketsID", ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toInt());
+        qDebug(ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toByteArray());
 	}
 	else if(mType == Edit)
 	{
-		query.prepare("UPDATE Users SET passwordCrypt = :password, name = :name WHERE id = :id;");
+        query.prepare("UPDATE Users SET passwordCrypt = :password, name = :name, marketsID = :marketsID WHERE id = :id;");
 		query.bindValue(":password", ui->lePassword->text());
 		query.bindValue(":name", ui->leName->text());
+        query.bindValue(":marketsID", ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toInt());
 		query.bindValue(":id", mId);
+        qDebug(ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toByteArray());
 	}
 
 	////TODO: Добавить обработчик ошибок:

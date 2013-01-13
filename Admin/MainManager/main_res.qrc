@@ -5,5 +5,11 @@
         <file>images/edit.png</file>
         <file>images/apply.png</file>
         <file>images/cancel.png</file>
+        <file>images/categoriesImages/imAreas.png</file>
+        <file>images/categoriesImages/imCategories.png</file>
+        <file>images/categoriesImages/imClients.png</file>
+        <file>images/categoriesImages/imShops.png</file>
+        <file>images/categoriesImages/imUsers.png</file>
+        <file>images/categoriesImages/imActions.png</file>
     </qresource>
 </RCC>

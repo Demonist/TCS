@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CUsersWidget</class>
- <widget class="CAbstractCommonWidget" name="CUsersWidget">
+ <class>CMarketsWidget</class>
+ <widget class="QWidget" name="CMarketsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,47 +13,23 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QGroupBox" name="gbxUsers">
+    <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Пользователи системы</string>
+      <string>Точки продаж</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="QTreeWidget" name="twUsers">
-        <property name="showDropIndicator" stdset="0">
-         <bool>false</bool>
-        </property>
-        <property name="rootIsDecorated">
-         <bool>false</bool>
-        </property>
-        <property name="itemsExpandable">
-         <bool>false</bool>
-        </property>
+       <widget class="QTreeWidget" name="twMarkets">
         <column>
          <property name="text">
-          <string>id</string>
+          <string>ID</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>Логин</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Пароль</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>ФИО</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Торговая точка</string>
+          <string>Адрес торговой площадки</string>
          </property>
         </column>
        </widget>
@@ -61,9 +37,9 @@
       <item row="0" column="1">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QToolButton" name="tbnAdd">
-          <property name="toolTip">
-           <string>Добавить пользователя</string>
+         <widget class="QToolButton" name="tbnMarketAdd">
+          <property name="text">
+           <string/>
           </property>
           <property name="icon">
            <iconset resource="../main_res.qrc">
@@ -72,9 +48,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="tbnEdit">
-          <property name="toolTip">
-           <string>Редактировать данные пользователя</string>
+         <widget class="QToolButton" name="tbnMarketEdit">
+          <property name="text">
+           <string/>
           </property>
           <property name="icon">
            <iconset resource="../main_res.qrc">
@@ -83,9 +59,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="tbnDel">
-          <property name="toolTip">
-           <string>Удалить выбранного пользователя</string>
+         <widget class="QToolButton" name="tbnMarketDelete">
+          <property name="text">
+           <string/>
           </property>
           <property name="icon">
            <iconset resource="../main_res.qrc">
@@ -113,14 +89,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>CAbstractCommonWidget</class>
-   <extends>QWidget</extends>
-   <header>cabstractcommonwidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../main_res.qrc"/>
  </resources>

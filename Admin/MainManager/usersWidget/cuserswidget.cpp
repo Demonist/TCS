@@ -5,6 +5,7 @@
 #define LOGIN 1
 #define PASSWORD 2
 #define NAME 3
+#define MARKET 4
 
 CUsersWidget::CUsersWidget(QWidget *parent) :
 	CAbstractCommonWidget(parent),
@@ -13,9 +14,10 @@ CUsersWidget::CUsersWidget(QWidget *parent) :
 	ui->setupUi(this);
 	ui->twUsers->hideColumn(ID);
 	ui->twUsers->setColumnWidth(ID, 0);
-	ui->twUsers->setColumnWidth(LOGIN, 100);
-	ui->twUsers->setColumnWidth(PASSWORD, 100);
-	ui->twUsers->setColumnWidth(NAME, 200);
+    ui->twUsers->setColumnWidth(LOGIN, 200);
+    ui->twUsers->setColumnWidth(PASSWORD, 200);
+    ui->twUsers->setColumnWidth(NAME, 200);
+    ui->twUsers->setColumnWidth(MARKET, 200);
 }
 
 CUsersWidget::~CUsersWidget()
@@ -26,7 +28,7 @@ CUsersWidget::~CUsersWidget()
 void CUsersWidget::updateData()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	if(query.exec("SELECT id, login, passwordCrypt, name FROM Users;"))
+    if(query.exec("SELECT Users.id, login, passwordCrypt, name, address FROM Users, Markets WHERE marketsID = Markets.ID;"))
 	{
 		ui->twUsers->clear();
 
@@ -41,7 +43,7 @@ void CUsersWidget::updateData()
 				item->setText(LOGIN, query.value(1).toString());
 				item->setText(PASSWORD, query.value(2).toString());
 				item->setText(NAME, query.value(3).toString());
-
+                item->setText(MARKET, query.value(4).toString());
 				ui->twUsers->addTopLevelItem(item);
 				count++;
 			}

@@ -18,7 +18,8 @@ INCLUDEPATH += ../../common/ \
         categoriesWidget/ \
         placesWidget/ \
 		clientsWidget/ \
-		actionsWidget/
+		actionsWidget/ \
+		marketsWidget/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -39,7 +40,9 @@ SOURCES += main.cpp\
 	actionsWidget/cactiondialog.cpp \
     ../../common/dateDialog/cdatedialog.cpp \
     actionsWidget/cactionticketsmanagement.cpp \
-    ../../common/seatItem/cactionseatitem.cpp
+	../../common/seatItem/cactionseatitem.cpp \
+	marketsWidget/cmarketswidget.cpp \
+	marketsWidget/cmarketdialog.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -61,8 +64,9 @@ HEADERS  += mainwindow.h \
     ../../common/dateDialog/cdatedialog.h \
     actionsWidget/cactionticketsmanagement.h \
     ../../common/parallel.h \
-    ../../common/seatItem/cactionseatitem.h
-
+	../../common/seatItem/cactionseatitem.h \
+	marketsWidget/cmarketswidget.h \
+	marketsWidget/cmarketdialog.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -78,7 +82,9 @@ FORMS    += mainwindow.ui \
     actionsWidget/cactionswidget.ui \
     actionsWidget/cactiondialog.ui \
     ../../common/dateDialog/cdatedialog.ui \
-    actionsWidget/cactionticketsmanagement.ui
+	actionsWidget/cactionticketsmanagement.ui \
+	marketsWidget/cmarketswidget.ui \
+	marketsWidget/cmarketdialog.ui
 
 RESOURCES += \
 	../../common/connectionWidget/connectionwidget_res.qrc \

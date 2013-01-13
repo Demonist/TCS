@@ -18,8 +18,7 @@ private:
 	Type mType;
 	int mId;
 	QString mConnectionName;
-	QList<QString> generateLogins(QString name, QString birthDate);
-	QString validateLogin(QString login);
+    bool validateLogin(QString login, Type actionType, int id = 0);
 
 public:
 	explicit CClientDialog(const QString &connectionName, QWidget *parent = 0);   //Конструктор добавления.
