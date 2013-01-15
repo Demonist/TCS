@@ -1,6 +1,6 @@
 #include "cseatitem.h"
 
-#define SIZE 50
+#define SIZE 30
 #define HALFSIZE SIZE/2
 
 //protected:

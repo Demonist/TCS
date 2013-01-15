@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtSql>
 #include "cseatitem.h"
+#include "cdistanceitem.h"
 
 namespace Ui {
 class CPlaceSchemeDialog;
@@ -30,7 +31,20 @@ private:
 	CSeatItem *mAddItem;
 	CSeatItem *mSelectedItem;
 
+	CDistanceItem *mDistanceLeftItem;
+	CDistanceItem *mDistanceUpItem;
+	CDistanceItem *mDistanceRightItem;
+	CDistanceItem *mDistanceDownItem;
+	CDistanceItem *mDistanceLeftLeftItem;
+	CDistanceItem *mDistanceUpUpItem;
+	CDistanceItem *mDistanceRightRightItem;
+	CDistanceItem *mDistanceDownDownItem;
+
 private:
+	void drawDistances(const QGraphicsItem &item);
+	QPoint toGrid(const QPoint &pos);
+	inline QPoint toGrid(const QPointF &pos);
+
 	bool eventFilter(QObject *obj, QEvent *event);
 	void updateSeatsCountText();
 	void updateScaleText();
@@ -54,5 +68,12 @@ private slots:
 	void on_tbnSelect_toggled(bool checked);
 	void on_tbnDrag_toggled(bool checked);
 };
+
+//inline implementation:
+
+inline QPoint CPlaceSchemeDialog::toGrid(const QPointF &pos)
+{
+	return toGrid(pos.toPoint());
+}
 
 #endif // CPLACESCHEMEDIALOG_H

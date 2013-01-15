@@ -3,6 +3,230 @@
 
 //private:
 
+QPoint CPlaceSchemeDialog::toGrid(const QPoint &pos)
+{
+	const int gridStep = 10;
+	QPoint newPos;
+	newPos.setX(pos.x() - pos.x() % gridStep);
+	newPos.setY(pos.y() - pos.y() % gridStep);
+	return newPos;
+}
+
+void CPlaceSchemeDialog::drawDistances(const QGraphicsItem &item)
+{
+	const int maxDistance = 500;
+	const int minDistance = 50;
+
+	QGraphicsItem *left = 0,
+			*up = 0,
+			*right = 0,
+			*down = 0;
+	QGraphicsItem *leftLeft = 0,
+			*upUp = 0,
+			*rightRight = 0,
+			*downDown = 0;
+	QPoint pos;
+
+	//Demonist: Приношу свои извинения за следующую неводомую адовую хвень...
+
+	pos.setY(item.y());
+	for(int dx = 1; dx < maxDistance*2; dx++)
+	{
+		if(!left)
+		{
+			if(dx < maxDistance)
+			{
+				pos.setX(item.x() - dx);
+				left = mScene.itemAt(pos);
+				if(left)
+					if(left->data(0).toString() != CSeatItem::itemName()
+					   || left == &item
+					   || pos != left->pos())
+						left = 0;
+			}
+			else
+				if(!right)
+					break;
+		}
+		else if(!leftLeft)
+		{
+			pos.setX(item.x() - dx);
+			leftLeft = mScene.itemAt(pos);
+			if(leftLeft)
+				if(leftLeft->data(0).toString() != CSeatItem::itemName()
+				   || leftLeft == left
+				   || pos != leftLeft->pos())
+					leftLeft = 0;
+		}
+		else if(rightRight)
+			break;
+
+		if(!right)
+		{
+			if(dx < maxDistance)
+			{
+				pos.setX(item.x() + dx);
+				right = mScene.itemAt(pos);
+				if(right)
+					if(right->data(0).toString() != CSeatItem::itemName()
+					   || right == &item
+					   || pos != right->pos())
+						right = 0;
+			}
+		}
+		else if(!rightRight)
+		{
+			pos.setX(item.x() + dx);
+			rightRight = mScene.itemAt(pos);
+			if(rightRight)
+				if(rightRight->data(0).toString() != CSeatItem::itemName()
+				   || rightRight == right
+				   || pos != rightRight->pos())
+					rightRight = 0;
+		}
+	}
+
+	pos.setX(item.x());
+	for(int dy = 1; dy < maxDistance*2; dy++)
+	{
+		if(!up)
+		{
+			if(dy < maxDistance)
+			{
+				pos.setY(item.y() - dy);
+				up = mScene.itemAt(pos);
+				if(up)
+					if(up->data(0).toString() != CSeatItem::itemName()
+					   || up == &item
+					   || pos != up->pos())
+						up = 0;
+			}
+			else if(!down)
+				break;
+		}
+		else if(!upUp)
+		{
+			pos.setY(item.y() - dy);
+			upUp = mScene.itemAt(pos);
+			if(upUp)
+				if(upUp->data(0).toString() != CSeatItem::itemName()
+				   || upUp == up
+				   || pos != upUp->pos())
+					upUp = 0;
+		}
+		else if(downDown)
+			break;
+
+		if(!down)
+		{
+			if(dy < maxDistance)
+			{
+				pos.setY(item.y() + dy);
+				down = mScene.itemAt(pos);
+				if(down)
+					if(down->data(0).toString() != CSeatItem::itemName()
+					   || down == &item
+					   || pos != down->pos())
+						down = 0;
+			}
+		}
+		else if(!downDown)
+		{
+			pos.setY(item.y() + dy);
+			downDown = mScene.itemAt(pos);
+			if(downDown)
+				if(downDown->data(0).toString() != CSeatItem::itemName()
+				   || downDown == down
+				   || pos != downDown->pos())
+					downDown = 0;
+		}
+	}
+
+	if(left && item.x() - left->x() >= minDistance)
+	{
+		mDistanceLeftItem->setPos(item.pos());
+		mDistanceLeftItem->setTargetPos(left->pos() - item.pos());
+		mDistanceLeftItem->show();
+
+		if(leftLeft && left->x() - leftLeft->x() >= minDistance)
+		{
+			mDistanceLeftLeftItem->setPos(left->pos());
+			mDistanceLeftLeftItem->setTargetPos(leftLeft->pos() - left->pos());
+			mDistanceLeftLeftItem->show();
+		}
+		else
+			mDistanceLeftLeftItem->hide();
+	}
+	else
+	{
+		mDistanceLeftItem->hide();
+		mDistanceLeftLeftItem->hide();
+	}
+
+	if(up && item.y() - up->y() >= minDistance)
+	{
+		mDistanceUpItem->setPos(item.pos());
+		mDistanceUpItem->setTargetPos(up->pos() - item.pos());
+		mDistanceUpItem->show();
+
+		if(upUp && up->y() - upUp->y() >= minDistance)
+		{
+			mDistanceUpUpItem->setPos(up->pos());
+			mDistanceUpUpItem->setTargetPos(upUp->pos() - up->pos());
+			mDistanceUpUpItem->show();
+		}
+		else
+			mDistanceUpUpItem->hide();
+	}
+	else
+	{
+		mDistanceUpItem->hide();
+		mDistanceUpUpItem->hide();
+	}
+
+	if(right && right->x() - item.x() >= minDistance)
+	{
+		mDistanceRightItem->setPos(item.pos());
+		mDistanceRightItem->setTargetPos(right->pos() - item.pos());
+		mDistanceRightItem->show();
+
+		if(rightRight && rightRight->x() - right->x() >= minDistance)
+		{
+			mDistanceRightRightItem->setPos(right->pos());
+			mDistanceRightRightItem->setTargetPos(rightRight->pos() - right->pos());
+			mDistanceRightRightItem->show();
+		}
+		else
+			mDistanceRightRightItem->hide();
+	}
+	else
+	{
+		mDistanceRightItem->hide();
+		mDistanceRightRightItem->hide();
+	}
+
+	if(down && down->y() - item.y() >= minDistance)
+	{
+		mDistanceDownItem->setPos(item.pos());
+		mDistanceDownItem->setTargetPos(down->pos() - item.pos());
+		mDistanceDownItem->show();
+
+		if(downDown && downDown->y() - down->y() >= minDistance)
+		{
+			mDistanceDownDownItem->setPos(down->pos());
+			mDistanceDownDownItem->setTargetPos(downDown->pos() - down->pos());
+			mDistanceDownDownItem->show();
+		}
+		else
+			mDistanceDownDownItem->hide();
+	}
+	else
+	{
+		mDistanceDownItem->hide();
+		mDistanceDownDownItem->hide();
+	}
+}
+
 bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 {
 	if(obj != ui->gvScheme->viewport())
@@ -23,7 +247,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 			if(mEditType == Add)
 			{
 				CSeatItem *item = new CSeatItem();
-				item->setPos((QPointF)(ui->gvScheme->mapToScene(mouseEvent->pos())).toPoint());
+				item->setPos(toGrid(ui->gvScheme->mapToScene(mouseEvent->pos())));
 
 				mScene.addItem(item);
 				item->showAnimated(500);
@@ -49,6 +273,15 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 				movingItem->setSelected(false);
 				movingItem = 0;
 				ui->gvScheme->setCursor(Qt::ArrowCursor);
+
+				mDistanceLeftItem->hide();
+				mDistanceUpItem->hide();
+				mDistanceRightItem->hide();
+				mDistanceDownItem->hide();
+				mDistanceLeftLeftItem->hide();
+				mDistanceUpUpItem->hide();
+				mDistanceRightRightItem->hide();
+				mDistanceDownDownItem->hide();
 			}
 			else if(mEditType == Drag)
 			{
@@ -103,6 +336,8 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 
 					movingItem = item;
 					ui->gvScheme->setCursor(Qt::SizeAllCursor);
+
+					drawDistances(*movingItem);
 				}
 			}
 			else if(mEditType == Drag)
@@ -121,14 +356,8 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 		{
 			if(movingItem)
 			{
-				movingItem->setPos((QPointF)(ui->gvScheme->mapToScene(mouseEvent->pos()) + offset).toPoint());
-				QRectF rectLeft(movingItem->pos().toPoint(), QSize(-1020, 1));
-				QList<QGraphicsItem*> leftItems = mScene.items(rectLeft, Qt::IntersectsItemBoundingRect);
-				leftItems.removeOne(movingItem);
-				for(int i = 0; i < leftItems.count(); i++)
-					if((int)leftItems[i]->y() != (int)movingItem->y())
-						leftItems.removeAt(i--);
-//				setWindowTitle(tr("%1").arg(leftItems.count()));
+				movingItem->setPos(toGrid(ui->gvScheme->mapToScene(mouseEvent->pos()) + offset));
+				drawDistances(*movingItem);
 			}
 			else
 			{
@@ -159,7 +388,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 		}
 		else if(mAddItem && mEditType == Add)
 		{
-			mAddItem->setPos((QPointF)(ui->gvScheme->mapToScene(mouseEvent->pos())).toPoint());
+			mAddItem->setPos(toGrid(ui->gvScheme->mapToScene(mouseEvent->pos())));
 			QList<QGraphicsItem*> collidingItems = mScene.collidingItems(mAddItem, Qt::IntersectsItemBoundingRect);
 			if(collidingItems.isEmpty())
 				mAddItem->show();
@@ -270,12 +499,48 @@ CPlaceSchemeDialog::CPlaceSchemeDialog(const QString &connectionName, const int 
 	ui->gvScheme->setScene(&mScene);
 	ui->gvScheme->viewport()->installEventFilter(this);
 
+	//addItem:
 	mAddItem = new CSeatItem();
 	mAddItem->setData(0, "addItem");
 	mAddItem->hide();
 	mAddItem->setOpacity(0.4);
 	mScene.addItem(mAddItem);
 
+	//Distances ->
+	mDistanceLeftItem = new CDistanceItem();
+	mDistanceUpItem = new CDistanceItem();
+	mDistanceRightItem = new CDistanceItem();
+	mDistanceDownItem = new CDistanceItem();
+	mDistanceLeftLeftItem = new CDistanceItem();
+	mDistanceUpUpItem = new CDistanceItem();
+	mDistanceRightRightItem = new CDistanceItem();
+	mDistanceDownDownItem = new CDistanceItem();
+
+	mDistanceLeftItem->hide();
+	mDistanceUpItem->hide();
+	mDistanceRightItem->hide();
+	mDistanceDownItem->hide();
+	mDistanceLeftLeftItem->hide();
+	mDistanceUpUpItem->hide();
+	mDistanceRightRightItem->hide();
+	mDistanceDownDownItem->hide();
+
+	mDistanceLeftItem->setBold(true);
+	mDistanceUpItem->setBold(true);
+	mDistanceRightItem->setBold(true);
+	mDistanceDownItem->setBold(true);
+
+	mScene.addItem(mDistanceLeftItem);
+	mScene.addItem(mDistanceUpItem);
+	mScene.addItem(mDistanceRightItem);
+	mScene.addItem(mDistanceDownItem);
+	mScene.addItem(mDistanceLeftLeftItem);
+	mScene.addItem(mDistanceUpUpItem);
+	mScene.addItem(mDistanceRightRightItem);
+	mScene.addItem(mDistanceDownDownItem);
+	//Distances <-
+
+	//load:
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
 	query.prepare("SELECT title FROM Places WHERE id = :id;");

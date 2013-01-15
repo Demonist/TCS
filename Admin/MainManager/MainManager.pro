@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     actionsWidget/cactionticketsmanagement.cpp \
 	../../common/seatItem/cactionseatitem.cpp \
 	marketsWidget/cmarketswidget.cpp \
-	marketsWidget/cmarketdialog.cpp
+	marketsWidget/cmarketdialog.cpp \
+    placesWidget/cdistanceitem.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -66,7 +67,8 @@ HEADERS  += mainwindow.h \
     ../../common/parallel.h \
 	../../common/seatItem/cactionseatitem.h \
 	marketsWidget/cmarketswidget.h \
-	marketsWidget/cmarketdialog.h
+	marketsWidget/cmarketdialog.h \
+    placesWidget/cdistanceitem.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
