@@ -93,7 +93,7 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	query.prepare("SELECT Actions.title, Places.title, Actions.dateTime, Places.id FROM Actions, Places WHERE Actions.id = :id AND Actions.id_place = Places.id;");
+	query.prepare("SELECT Actions.title, Places.title, Actions.dateTime, Places.id, Actions.fanPrice, Actions.fanCount, Places.id_background FROM Actions, Places WHERE Actions.id = :id AND Actions.id_place = Places.id;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
 	{
@@ -103,6 +103,10 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 							.arg(query.value(2).toDateTime().toString("dd.MM.yyyy hh:mm"))
 							);
 		mPlaceId = query.value(3).toInt();
+		ui->sbxPrice->setValue(query.value(4).toInt());
+		ui->sbxFanTicketsCount->setValue(query.value(5).toInt());
+		if(query.isNull(6) == false)
+			mScene.setBackgroundBrush(CImages::instance()->image(query.value(6).toInt()));
 	}
 
 	query.prepare("SELECT id FROM PlaceSchemes WHERE id_place = :id;");
@@ -147,7 +151,23 @@ void CActionTicketsManagement::on_pbnCancel_clicked()
 
 void CActionTicketsManagement::on_pbnApply_clicked()
 {
+	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+
+	query.prepare("UPDATE Actions SET fanPrice = :price, fanCount = :count WHERE id = :id;");
+	query.bindValue(":id", mId);
+	query.bindValue(":price", ui->sbxPrice->value());
+	query.bindValue(":count", ui->sbxFanTicketsCount->value());
+	if(!query.exec())
+		qDebug(qPrintable(query.lastError().text()));
+
 	QList<QGraphicsItem*> items = mScene.items();
+
+	QProgressDialog progressDialog(this);
+	progressDialog.setWindowTitle(tr("Сохранение"));
+	progressDialog.setCancelButton(0);
+	progressDialog.setMinimumDuration(500);
+	progressDialog.setMaximum(items.count());
+
 	for(int i = 0; i < items.size(); i++)
 	{
 		if(items[i]->data(0) == CActionSeatItem::itemName())
@@ -155,8 +175,6 @@ void CActionTicketsManagement::on_pbnApply_clicked()
 			CActionSeatItem *seatItem = static_cast<CActionSeatItem*>(items[i]);
 			if(seatItem->needSave())
 			{
-				QSqlQuery query(QSqlDatabase::database(mConnectionName));
-
 				if(seatItem->seatState() == Global::SeatHided && seatItem->data(1).toBool() == true)
 				{
 					query.prepare("DELETE FROM ActionScheme WHERE id_action = :actId AND id_placeScheme = :seatId;");
@@ -183,7 +201,9 @@ void CActionTicketsManagement::on_pbnApply_clicked()
 				query.exec();
 			}
 		}
+		progressDialog.setValue(i);
 	}
+	progressDialog.close();
 	close();
 }
 

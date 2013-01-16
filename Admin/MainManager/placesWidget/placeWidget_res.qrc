@@ -6,5 +6,6 @@
         <file>images/zoomIn.png</file>
         <file>images/zoomOut.png</file>
         <file>images/cursor.png</file>
+        <file>images/background.png</file>
     </qresource>
 </RCC>

@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include "cabstractcommonwidget.h"
+#include "cimages.h"
 
 namespace Ui {
 class MainWindow;

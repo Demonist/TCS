@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>642</width>
+    <height>565</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -206,6 +206,26 @@
             </property>
             <property name="wordWrap">
              <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Подложка</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pbnBackground">
+            <property name="text">
+             <string>Изменить</string>
+            </property>
+            <property name="icon">
+             <iconset resource="placeWidget_res.qrc">
+              <normaloff>:/images/background.png</normaloff>:/images/background.png</iconset>
             </property>
            </widget>
           </item>

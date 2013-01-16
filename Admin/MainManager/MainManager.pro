@@ -43,7 +43,9 @@ SOURCES += main.cpp\
 	../../common/seatItem/cactionseatitem.cpp \
 	marketsWidget/cmarketswidget.cpp \
 	marketsWidget/cmarketdialog.cpp \
-    placesWidget/cdistanceitem.cpp
+    placesWidget/cdistanceitem.cpp \
+    ../../common/cimages.cpp \
+    placesWidget/cbackgrounddialog.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -68,7 +70,9 @@ HEADERS  += mainwindow.h \
 	../../common/seatItem/cactionseatitem.h \
 	marketsWidget/cmarketswidget.h \
 	marketsWidget/cmarketdialog.h \
-    placesWidget/cdistanceitem.h
+    placesWidget/cdistanceitem.h \
+    ../../common/cimages.h \
+    placesWidget/cbackgrounddialog.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -86,7 +90,8 @@ FORMS    += mainwindow.ui \
     ../../common/dateDialog/cdatedialog.ui \
 	actionsWidget/cactionticketsmanagement.ui \
 	marketsWidget/cmarketswidget.ui \
-	marketsWidget/cmarketdialog.ui
+	marketsWidget/cmarketdialog.ui \
+    placesWidget/cbackgrounddialog.ui
 
 RESOURCES += \
 	../../common/connectionWidget/connectionwidget_res.qrc \

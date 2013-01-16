@@ -390,8 +390,14 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 		{
 			mAddItem->setPos(toGrid(ui->gvScheme->mapToScene(mouseEvent->pos())));
 			QList<QGraphicsItem*> collidingItems = mScene.collidingItems(mAddItem, Qt::IntersectsItemBoundingRect);
+			for(int i = 0; i < collidingItems.count(); i++)
+				if(collidingItems[i]->data(0).toString() != CSeatItem::itemName())
+					collidingItems.removeAt(i--);
 			if(collidingItems.isEmpty())
+			{
 				mAddItem->show();
+				drawDistances(*mAddItem);
+			}
 			else
 				mAddItem->hide();
 		}
@@ -543,10 +549,16 @@ CPlaceSchemeDialog::CPlaceSchemeDialog(const QString &connectionName, const int 
 	//load:
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	query.prepare("SELECT title FROM Places WHERE id = :id;");
+	query.prepare("SELECT title, id_background FROM Places WHERE id = :id;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
+	{
 		ui->lPlaceName->setText(query.value(0).toString());
+		if(query.isNull(1) == false)
+		{
+			mScene.setBackgroundBrush(CImages::instance()->image(query.value(1).toInt()));
+		}
+	}
 
 	query.prepare("SELECT id FROM PlaceSchemes WHERE id_place = :id;");
 	query.bindValue(":id", mId);
@@ -577,6 +589,13 @@ void CPlaceSchemeDialog::on_pbnApply_clicked()
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
 	QList<QGraphicsItem*> items = mScene.items();
+
+	QProgressDialog progressDialog(this);
+	progressDialog.setWindowTitle(tr("Сохранение"));
+	progressDialog.setCancelButton(0);
+	progressDialog.setMinimumDuration(500);
+	progressDialog.setMaximum(items.count());
+
 	for(int i = 0; i < items.count(); i++)
 	{
 		if(items[i]->data(0).toString() == CSeatItem::itemName())
@@ -604,7 +623,9 @@ void CPlaceSchemeDialog::on_pbnApply_clicked()
 				}
 			}
 		}
+		progressDialog.setValue(i);
 	}
+	progressDialog.close();
 
 	for(int i = 0; i < mDeletedIds.count(); i++)
 		if(mDeletedIds[i] > 0)
@@ -740,4 +761,12 @@ void CPlaceSchemeDialog::on_tbnDrag_toggled(bool checked)
 		ui->gvScheme->setCursor(Qt::OpenHandCursor);
 	else
 		ui->gvScheme->setCursor(Qt::ArrowCursor);
+}
+
+void CPlaceSchemeDialog::on_pbnBackground_clicked()
+{
+	CBackgroundDialog backgroundDialog(mConnectionName, mId, this);
+	backgroundDialog.exec();
+	if(backgroundDialog.wasUpdated())
+		mScene.setBackgroundBrush(backgroundDialog.image());
 }

@@ -5,6 +5,7 @@
 #include <QtSql>
 #include "cseatitem.h"
 #include "cdistanceitem.h"
+#include "cbackgrounddialog.h"
 
 namespace Ui {
 class CPlaceSchemeDialog;
@@ -20,7 +21,7 @@ private:
 private:
 	Ui::CPlaceSchemeDialog *ui;
 	QString mConnectionName;
-	int mId;
+	int mId;	//! Идентификатор концертной площадки.
 	QList<int> mDeletedIds;
 
 	int mScalePersent;
@@ -67,6 +68,7 @@ private slots:
 	void on_leSeatNumber_textEdited(const QString &arg1);
 	void on_tbnSelect_toggled(bool checked);
 	void on_tbnDrag_toggled(bool checked);
+	void on_pbnBackground_clicked();
 };
 
 //inline implementation:

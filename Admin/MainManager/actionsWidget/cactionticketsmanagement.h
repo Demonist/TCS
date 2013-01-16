@@ -5,6 +5,7 @@
 #include <QtSql>
 #include "cactionseatitem.h"
 #include "global.h"
+#include "cimages.h"
 
 namespace Ui {
     class CActionTicketsManagement;

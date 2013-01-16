@@ -43,7 +43,7 @@ void CPlaceDialog::on_buttonBox_accepted()
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 	if(mType == Add)
 	{
-		query.prepare("INSERT INTO Places VALUES(NULL, :title, :address);");
+		query.prepare("INSERT INTO Places VALUES(NULL, :title, :address, NULL);");
 		query.bindValue(":name", ui->lePlaceTitle->text());
 		query.bindValue(":address", ui->lePlaceAddress->text());
 	}

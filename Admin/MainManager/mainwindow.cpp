@@ -32,7 +32,8 @@ void MainWindow::createTables()
 	if(!query.exec("CREATE TABLE IF NOT EXISTS Places( "
 				   "id                    INTEGER " + autoincExpr +
 				   "title                 TEXT NULL, "
-				   "address               TEXT NULL  "
+				   "address               TEXT NULL, "
+				   "id_background         INTEGER NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 
@@ -60,6 +61,8 @@ void MainWindow::createTables()
 				   "description          TEXT NULL, "
 				   "dateTime             DATETIME NULL, "
 				   "state                INTEGER DEFAULT 0, "
+				   "fanPrice             INTEGER DEFAULT 0, "
+				   "fanCount             INTEGER DEFAULT 0, "
 				   "id_place             INTEGER NULL, "
 				   "id_category          INTEGER NULL"
 				   ");"))
@@ -74,9 +77,17 @@ void MainWindow::createTables()
 				   "PRIMARY KEY (id_action, id_placeScheme)"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
+
 	if(!query.exec("CREATE TABLE IF NOT EXISTS Markets( "
 				   "id                   INTEGER " + autoincExpr +
 				   "address              TEXT NULL "
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Images( "
+				   "id                   INTEGER " + autoincExpr +
+				   "image                MEDIUMBLOB NULL, "
+				   "dateTime             DATETIME NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 }
@@ -132,6 +143,7 @@ void MainWindow::connected(QString connectionName)
 	ui->wMarkets->setConnectionName(mConnectionName);
 
 	createTables();
+	CImages::instance(mConnectionName);
 
 	ui->stackedWidget->setCurrentIndex(1);
 }

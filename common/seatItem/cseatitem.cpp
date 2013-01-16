@@ -19,7 +19,7 @@ void CSeatItem::init()
 	mSelected = false;
 
 	mBorderColor = QColor(70, 70, 70);
-	mPenWidth = 5;
+	mPenWidth = 4;
 	mBrush = QColor(200, 200, 200);
 }
 
@@ -55,27 +55,22 @@ void CSeatItem::animationInit()
 
 int CSeatItem::fontSizeForText(const QString &text) const
 {
-	//Для SIZE == 50:
+	//Для SIZE == 30:
 	switch(text.size())
 	{
 	case 0:
 	case 1:
 	case 2:
-		return 16;
-	case 3:
 		return 15;
+	case 3:
+		return 11;
 	case 4:
-		return 12;
+		return 8;
 	case 5:
-		return 9;
-	case 6:
-		return 7;
-	case 7:
-	case 8:
-		return 6;
-	case 9:
-	default:
 		return 5;
+	case 7:
+	default:
+		return 4;
 	}
 }
 
@@ -239,13 +234,13 @@ void CSeatItem::setSelected(const bool selected)
 		mSelected = selected;
 		if(mSelected)
 		{
-			setPenWidth(8);
+			setPenWidth(5);
 			if(isHovered() == false)
 				setScale(1.1);
 		}
 		else
 		{
-			setPenWidth(5);
+			setPenWidth(4);
 			if(isHovered() == false)
 				setScale(1.0);
 		}
@@ -259,13 +254,13 @@ void CSeatItem::setSelectedAnimated(const bool selected, const int durationMs)
 		mSelected = selected;
 		if(mSelected)
 		{
-			setPenWidthAnimated(8, durationMs);
+			setPenWidth(5);
 			if(isHovered() == false)
 				setScaleAnimated(1.1, durationMs);
 		}
 		else
 		{
-			setPenWidthAnimated(5, durationMs);
+			setPenWidth(4);
 			if(isHovered() == false)
 				setScaleAnimated(1.0, durationMs);
 		}

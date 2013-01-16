@@ -90,7 +90,7 @@ void CActionDialog::on_pbnApply_clicked()
 
 	if(mType == Add)
 	{
-		query.prepare("INSERT INTO Actions VALUES(NULL, :title, :description, :date, :state, :id_place, :id_cat);");
+		query.prepare("INSERT INTO Actions VALUES(NULL, :title, :description, :date, :state, 0, 0, :id_place, :id_cat);");
 		query.bindValue(":title", ui->leTitle->text());
 		query.bindValue(":description", ui->teDescription->toPlainText());
 		QString h = ui->sbxHour->text();
