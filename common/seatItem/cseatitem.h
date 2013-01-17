@@ -18,6 +18,7 @@ protected:
 	bool mSelected;
 
 	QString mText;
+	QString mRow;
 	QColor mBrush;
 	QColor mBorderColor;
 	int mPenWidth;
@@ -39,6 +40,7 @@ protected:
 
 	//save:
 	QString mInitText;
+	QString mInitRow;
 	QPoint mInitPoint;
 
 	//methods:
@@ -79,8 +81,12 @@ public:
 	inline bool isSelected() const;
 
 	inline int id() const;
+
 	inline QString text() const;
 	inline void setText(const QString &text);
+
+	inline QString row() const;
+	inline void setRow(const QString &row);
 
 	inline QColor brush() const;
 	inline void setBrush(const QColor &brush);
@@ -124,6 +130,16 @@ inline void CSeatItem::setText(const QString &text)
 {
 	mText = text;
 	update();
+}
+
+inline QString CSeatItem::row() const
+{
+	return mRow;
+}
+
+inline void CSeatItem::setRow(const QString &row)
+{
+	mRow = row;
 }
 
 inline QColor CSeatItem::brush() const

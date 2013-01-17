@@ -7,6 +7,7 @@
 #define DATETIME 3
 #define STATE 4
 #define CATEGORY 5
+#define PERFORMER 6
 
 CActionsWidget::CActionsWidget(QWidget *parent) :
 	CAbstractCommonWidget(parent),
@@ -26,7 +27,7 @@ void CActionsWidget::updateData()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	if(query.exec("SELECT Actions.id, Actions.title, Places.title, Places.address, Actions.dateTime, Actions.state, Categories.name FROM Actions, Places, Categories WHERE Actions.id_place == Places.id AND Actions.id_category == Categories.id;"))
+	if(query.exec("SELECT Actions.id, Actions.title, Places.title, Places.address, Actions.dateTime, Actions.state, Categories.name, Actions.performer FROM Actions, Places, Categories WHERE Actions.id_place == Places.id AND Actions.id_category == Categories.id;"))
 	{
 		ui->twActions->clear();
 
@@ -47,6 +48,7 @@ void CActionsWidget::updateData()
 							  );
 				item->setText(STATE, Global::actionStateToText(query.value(5).toInt()));
 				item->setText(CATEGORY, query.value(6).toString());
+				item->setText(PERFORMER, query.value(7).toString());
 
 				ui->twActions->addTopLevelItem(item);
 				count++;

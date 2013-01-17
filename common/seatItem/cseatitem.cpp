@@ -92,12 +92,15 @@ CSeatItem::CSeatItem(const QString &connectionName, const int seatId) :
 	mId = seatId;
 
 	QSqlQuery query(QSqlDatabase::database(connectionName));
-	query.prepare("SELECT seatNumber, x, y FROM PlaceSchemes WHERE id = :id;");
+	query.prepare("SELECT seatNumber, row, x, y FROM PlaceSchemes WHERE id = :id;");
 	query.bindValue(":id", seatId);
 	if(query.exec() && query.first())
 	{
-		setText(query.value(0).toString());
-		setPos(query.value(1).toReal(), query.value(2).toReal());
+		mText = query.value(0).toString();
+		mInitText = mText;
+		mRow = query.value(1).toString();
+		mInitRow = mRow;
+		setPos(query.value(2).toReal(), query.value(3).toReal());
 	}
 }
 
@@ -138,6 +141,7 @@ bool CSeatItem::needSave() const
 {
 	if(mId == 0
 			|| mText != mInitText
+			|| mRow != mInitRow
 			|| pos().toPoint() != mInitPoint)
 		return true;
 	return false;
