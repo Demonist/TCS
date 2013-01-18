@@ -15,7 +15,7 @@ CAccountingWidget::~CAccountingWidget()
 
 void CAccountingWidget::updateData()
 {
-    ui->cbxMarkets->clear();
+   /* ui->cbxMarkets->clear();
     ui->cbxUsers->clear();
     QSqlQuery query(QSqlDatabase::database(mConnectionName));
     if(query.exec("SELECT ID, address From Markets;"))
@@ -36,10 +36,10 @@ void CAccountingWidget::updateData()
         }
 
     }
-    else qDebug(qPrintable(query.lastError().text()));
+    else qDebug(qPrintable(query.lastError().text()));*/
 }
 
-void CAccountingWidget::on_tbnActions_clicked()
+/*void CAccountingWidget::on_tbnActions_clicked()
 {
     CAccountingActionsDialog caccountingactionsdialog(mConnectionName, this);
     caccountingactionsdialog.exec();
@@ -68,3 +68,4 @@ void CAccountingWidget::on_tbnDo_clicked()
     if(dateDialog.result())
         ui->leDoDate->setText(dateDialog.selectedDate().toString("dd.MM.yyyy"));
 }
+*/

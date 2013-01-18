@@ -144,6 +144,7 @@ void MainWindow::connected(QString connectionName)
 	ui->wActions->setConnectionName(mConnectionName);
 	ui->wMarkets->setConnectionName(mConnectionName);
     ui->wAccounting->setConnectionName(mConnectionName);
+    ui->wUploading->setConnectionName(mConnectionName);
 
 	createTables();
 	CImages::instance(mConnectionName);
@@ -162,6 +163,7 @@ void MainWindow::on_lwSettings_currentRowChanged(int currentRow)
 		case 4: ui->wActions->updateData(); break;
 		case 5: ui->wMarkets->updateData(); break;
         case 6: ui->wAccounting->updateData(); break;
+        case 7: ui->wUploading->updateData(); break;
 	}
 
 	ui->swSettings->setCurrentIndex(currentRow);

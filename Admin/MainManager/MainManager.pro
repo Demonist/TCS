@@ -20,7 +20,8 @@ INCLUDEPATH += ../../common/ \
 		clientsWidget/ \
 		actionsWidget/ \
                 marketsWidget/ \
-        accountingWidget/
+        accountingWidget/ \
+        uploadingWidget/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -48,7 +49,8 @@ SOURCES += main.cpp\
     ../../common/cimages.cpp \
     placesWidget/cbackgrounddialog.cpp \
     accountingWidget/caccountingwidget.cpp \
-    accountingWidget/caccountingactionsdialog.cpp
+    accountingWidget/caccountingactionsdialog.cpp \
+    uploadingWidget/cuploadingwidget.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -77,7 +79,8 @@ HEADERS  += mainwindow.h \
     ../../common/cimages.h \
     placesWidget/cbackgrounddialog.h \
     accountingWidget/caccountingwidget.h \
-    accountingWidget/caccountingactionsdialog.h
+    accountingWidget/caccountingactionsdialog.h \
+    uploadingWidget/cuploadingwidget.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -98,7 +101,8 @@ FORMS    += mainwindow.ui \
 	marketsWidget/cmarketdialog.ui \
     placesWidget/cbackgrounddialog.ui \
     accountingWidget/caccountingwidget.ui \
-    accountingWidget/caccountingactionsdialog.ui
+    accountingWidget/caccountingactionsdialog.ui \
+    uploadingWidget/cuploadingwidget.ui
 
 RESOURCES += \
 	../../common/connectionWidget/connectionwidget_res.qrc \

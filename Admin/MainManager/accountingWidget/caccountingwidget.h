@@ -23,11 +23,11 @@ public slots:
     void updateData();
 
 private slots:
-    void on_tbnActions_clicked();
+   /* void on_tbnActions_clicked();
 
     void on_tbnS_clicked();
 
-    void on_tbnDo_clicked();
+    void on_tbnDo_clicked();*/
 
 private:
     Ui::CAccountingWidget *ui;

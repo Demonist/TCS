@@ -149,7 +149,7 @@
             </sizepolicy>
            </property>
            <property name="currentIndex">
-            <number>6</number>
+            <number>7</number>
            </property>
            <widget class="QWidget" name="page_users">
             <layout class="QGridLayout" name="gridLayout_3">
@@ -221,6 +221,16 @@
              </item>
             </layout>
            </widget>
+           <widget class="QWidget" name="page_uploading">
+            <layout class="QGridLayout" name="gridLayout_11">
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="CUploadingWidget" name="wUploading" native="true"/>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </widget>
         </item>
@@ -279,6 +289,12 @@
    <class>CAccountingWidget</class>
    <extends>QWidget</extends>
    <header location="global">caccountingwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CUploadingWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">cuploadingwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
