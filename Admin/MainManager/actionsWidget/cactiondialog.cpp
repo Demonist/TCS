@@ -16,16 +16,6 @@ CActionDialog::CActionDialog(const QString &connectionName, QWidget *parent) :
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	if(query.exec("SELECT DISTINCT performer FROM Actions;"))
-	{
-		QStringList completerData;
-		while(query.next())
-			completerData.append(query.value(0).toString());
-		mCompleterModel.setStringList(completerData);
-		mCompleter.setModel(&mCompleterModel);
-		ui->lePerformer->setCompleter(&mCompleter);
-	}
-
 	if(query.exec("SELECT id, name FROM Categories;"))
 		while(query.next())
 			ui->cbxCategory->addItem(query.value(1).toString(), query.value(0));
@@ -46,17 +36,7 @@ CActionDialog::CActionDialog(const QString &connectionName, const int id, QWidge
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	if(query.exec("SELECT DISTINCT performer FROM Actions;"))
-	{
-		QStringList completerData;
-		while(query.next())
-			completerData.append(query.value(0).toString());
-		mCompleterModel.setStringList(completerData);
-		mCompleter.setModel(&mCompleterModel);
-		ui->lePerformer->setCompleter(&mCompleter);
-	}
-
-	query.prepare("SELECT title, id_place, dateTime, state, id_category, description, performer FROM Actions WHERE id = :id;");
+	query.prepare("SELECT title, id_place, dateTime, state, id_category, description FROM Actions WHERE id = :id;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
 	{
@@ -66,7 +46,6 @@ CActionDialog::CActionDialog(const QString &connectionName, const int id, QWidge
 		ui->sbxHour->setValue(dateTime.time().hour());
 		ui->sbxMinute->setValue(dateTime.time().minute());
 		ui->teDescription->setPlainText(query.value(5).toString());
-		ui->lePerformer->setText(query.value(6).toString());
 
 		ui->cbxState->addItems(Global::actionStates());
 		ui->cbxState->setCurrentIndex(ui->cbxState->findText(Global::actionStateToText(query.value(3).toInt())));
@@ -111,9 +90,8 @@ void CActionDialog::on_pbnApply_clicked()
 
 	if(mType == Add)
 	{
-		query.prepare("INSERT INTO Actions VALUES(NULL, :title, :performer, :description, :date, :state, 0, 0, :id_place, :id_cat);");
+		query.prepare("INSERT INTO Actions VALUES(NULL, :title, :description, :date, :state, 0, 0, :id_place, :id_cat);");
 		query.bindValue(":title", ui->leTitle->text());
-		query.bindValue(":performer", ui->lePerformer->text());
 		query.bindValue(":description", ui->teDescription->toPlainText());
 		QString h = ui->sbxHour->text();
 		if(h.size() == 1)
@@ -128,10 +106,9 @@ void CActionDialog::on_pbnApply_clicked()
 	}
 	else if(mType == Edit)
 	{
-		query.prepare("UPDATE Actions SET title = :title, performer = :performer, description = :description, dateTime = :date, state = :state, id_place = :id_place, id_category = :id_cat WHERE id = :id;");
+		query.prepare("UPDATE Actions SET title = :title, description = :description, dateTime = :date, state = :state, id_place = :id_place, id_category = :id_cat WHERE id = :id;");
 		query.bindValue(":id", mId);
 		query.bindValue(":title", ui->leTitle->text());
-		query.bindValue(":performer", ui->lePerformer->text());
 		query.bindValue(":description", ui->teDescription->toPlainText());
 		query.bindValue(":date",
 						QDateTime(

@@ -23,9 +23,6 @@ private:
 	int mId;	//! Идентификатор мероприятия.
 	QString mConnectionName;
 
-	QStringListModel mCompleterModel;
-	QCompleter mCompleter;
-
 public:
 	explicit CActionDialog(const QString &connectionName, QWidget *parent = 0);
 	explicit CActionDialog(const QString &connectionName, const int id, QWidget *parent = 0);

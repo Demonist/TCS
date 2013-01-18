@@ -40,7 +40,6 @@ void MainWindow::createTables()
 	if(!query.exec("CREATE TABLE IF NOT EXISTS PlaceSchemes( "
 				   "id                   INTEGER " + autoincExpr +
 				   "seatNumber           TEXT NULL, "
-				   "row                  TEXT NULL, "
 				   "x                    INTEGER NULL, "
 				   "y                    INTEGER NULL, "
 				   "id_place             INTEGER NOT NULL"
@@ -59,7 +58,6 @@ void MainWindow::createTables()
 	if(!query.exec("CREATE TABLE IF NOT EXISTS Actions( "
 				   "id                   INTEGER " + autoincExpr +
 				   "title                TEXT NULL, "
-				   "performer            TEXT NULL, "
 				   "description          TEXT NULL, "
 				   "dateTime             DATETIME NULL, "
 				   "state                INTEGER DEFAULT 0, "
@@ -143,6 +141,7 @@ void MainWindow::connected(QString connectionName)
 	ui->wClients->setConnectionName(mConnectionName);
 	ui->wActions->setConnectionName(mConnectionName);
 	ui->wMarkets->setConnectionName(mConnectionName);
+    ui->wAccounting->setConnectionName(mConnectionName);
 
 	createTables();
 	CImages::instance(mConnectionName);
@@ -160,6 +159,7 @@ void MainWindow::on_lwSettings_currentRowChanged(int currentRow)
 		case 3: ui->wClients->updateData(); break;
 		case 4: ui->wActions->updateData(); break;
 		case 5: ui->wMarkets->updateData(); break;
+        case 6: ui->wAccounting->updateData(); break;
 	}
 
 	ui->swSettings->setCurrentIndex(currentRow);

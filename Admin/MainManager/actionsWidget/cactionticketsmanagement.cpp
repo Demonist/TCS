@@ -93,14 +93,13 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	query.prepare("SELECT Actions.title, Places.title, Actions.dateTime, Places.id, Actions.fanPrice, Actions.fanCount, Places.id_background, Actions.performer FROM Actions, Places WHERE Actions.id = :id AND Actions.id_place = Places.id;");
+	query.prepare("SELECT Actions.title, Places.title, Actions.dateTime, Places.id, Actions.fanPrice, Actions.fanCount, Places.id_background FROM Actions, Places WHERE Actions.id = :id AND Actions.id_place = Places.id;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
 	{
-		ui->lPlace->setText(tr("%1 (%2) - %3 - %4")
+		ui->lPlace->setText(tr("%1 (%2) - %3")
 							.arg(query.value(0).toString())
 							.arg(query.value(1).toString())
-							.arg(query.value(7).toString())
 							.arg(query.value(2).toDateTime().toString("dd.MM.yyyy hh:mm"))
 							);
 		mPlaceId = query.value(3).toInt();

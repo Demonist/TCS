@@ -11,5 +11,8 @@
         <file>images/categoriesImages/imShops.png</file>
         <file>images/categoriesImages/imUsers.png</file>
         <file>images/categoriesImages/imActions.png</file>
+        <file>images/categoriesImages/imReport.png</file>
+        <file>images/search.png</file>
+        <file>images/categoriesImages/imUploading.png</file>
     </qresource>
 </RCC>

@@ -65,27 +65,6 @@
           <string>Место</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="gbxNumber">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="title">
-             <string>Номер</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout">
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>2</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="QLineEdit" name="leSeatNumber"/>
-             </item>
-            </layout>
-           </widget>
-          </item>
           <item row="0" column="0">
            <layout class="QGridLayout" name="gridLayout_2">
             <item row="0" column="0">
@@ -134,15 +113,15 @@
             </item>
            </layout>
           </item>
-          <item row="2" column="0">
-           <widget class="QGroupBox" name="gbxRow">
+          <item row="1" column="0">
+           <widget class="QGroupBox" name="gbxNumber">
             <property name="enabled">
              <bool>false</bool>
             </property>
             <property name="title">
-             <string>Ряд</string>
+             <string>Номер</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_8">
+            <layout class="QGridLayout" name="gridLayout">
              <property name="topMargin">
               <number>0</number>
              </property>
@@ -150,7 +129,7 @@
               <number>2</number>
              </property>
              <item row="0" column="0">
-              <widget class="QLineEdit" name="leRow"/>
+              <widget class="QLineEdit" name="leSeatNumber"/>
              </item>
             </layout>
            </widget>

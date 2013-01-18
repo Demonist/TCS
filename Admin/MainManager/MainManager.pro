@@ -19,7 +19,8 @@ INCLUDEPATH += ../../common/ \
         placesWidget/ \
 		clientsWidget/ \
 		actionsWidget/ \
-		marketsWidget/
+                marketsWidget/ \
+        accountingWidget/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -45,7 +46,9 @@ SOURCES += main.cpp\
 	marketsWidget/cmarketdialog.cpp \
     placesWidget/cdistanceitem.cpp \
     ../../common/cimages.cpp \
-    placesWidget/cbackgrounddialog.cpp
+    placesWidget/cbackgrounddialog.cpp \
+    accountingWidget/caccountingwidget.cpp \
+    accountingWidget/caccountingactionsdialog.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -72,7 +75,9 @@ HEADERS  += mainwindow.h \
 	marketsWidget/cmarketdialog.h \
     placesWidget/cdistanceitem.h \
     ../../common/cimages.h \
-    placesWidget/cbackgrounddialog.h
+    placesWidget/cbackgrounddialog.h \
+    accountingWidget/caccountingwidget.h \
+    accountingWidget/caccountingactionsdialog.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -91,7 +96,9 @@ FORMS    += mainwindow.ui \
 	actionsWidget/cactionticketsmanagement.ui \
 	marketsWidget/cmarketswidget.ui \
 	marketsWidget/cmarketdialog.ui \
-    placesWidget/cbackgrounddialog.ui
+    placesWidget/cbackgrounddialog.ui \
+    accountingWidget/caccountingwidget.ui \
+    accountingWidget/caccountingactionsdialog.ui
 
 RESOURCES += \
 	../../common/connectionWidget/connectionwidget_res.qrc \

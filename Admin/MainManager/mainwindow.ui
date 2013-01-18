@@ -122,6 +122,24 @@
               <normaloff>:/images/categoriesImages/imShops.png</normaloff>:/images/categoriesImages/imShops.png</iconset>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>Отчеты</string>
+            </property>
+            <property name="icon">
+             <iconset resource="main_res.qrc">
+              <normaloff>:/images/categoriesImages/imReport.png</normaloff>:/images/categoriesImages/imReport.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Выгрузка базы</string>
+            </property>
+            <property name="icon">
+             <iconset resource="main_res.qrc">
+              <normaloff>:/images/categoriesImages/imUploading.png</normaloff>:/images/categoriesImages/imUploading.png</iconset>
+            </property>
+           </item>
           </widget>
           <widget class="QStackedWidget" name="swSettings">
            <property name="sizePolicy">
@@ -131,7 +149,7 @@
             </sizepolicy>
            </property>
            <property name="currentIndex">
-            <number>5</number>
+            <number>6</number>
            </property>
            <widget class="QWidget" name="page_users">
             <layout class="QGridLayout" name="gridLayout_3">
@@ -193,6 +211,16 @@
              </item>
             </layout>
            </widget>
+           <widget class="QWidget" name="page_accounting">
+            <layout class="QGridLayout" name="gridLayout_10">
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="CAccountingWidget" name="wAccounting" native="true"/>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </widget>
         </item>
@@ -245,6 +273,12 @@
    <class>CMarketsWidget</class>
    <extends>QWidget</extends>
    <header location="global">cmarketswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CAccountingWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">caccountingwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
