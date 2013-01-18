@@ -113,6 +113,12 @@
             <iconset resource="../actionsWidget/actionWidget_res.qrc">
              <normaloff>:/images/unavaible.png</normaloff>:/images/unavaible.png</iconset>
            </property>
+           <property name="iconSize">
+            <size>
+             <width>17</width>
+             <height>16</height>
+            </size>
+           </property>
           </widget>
          </item>
         </layout>

@@ -85,8 +85,7 @@ void CUploadingWidget::on_tbnSelectDate_clicked()
 
 void CUploadingWidget::on_tbnSearch_clicked()
 {
-   // QList<QTreeWidgetItem*> findList = ui->twActions->findItems(ui->leSearch->text(), Qt::MatchRecursive, 1);
-  //  ui->twActions->clear();
+
     QTreeWidgetItemIterator it(ui->twActions);
     while (*it)
     {
@@ -108,4 +107,12 @@ void CUploadingWidget::on_tbClearDate_clicked()
     tDate = "";
     ui->leDate->setText("");
     ui->lInfo->setText(tr("Выгрузка мероприятия: ")+tActionName);
+}
+
+void CUploadingWidget::on_pbnUploading_clicked()
+{
+    QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия ") + tActionName, QDir::currentPath(), tr("Файл базы данных(.sqlite)"));
+    QFile file(pth);
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+
 }
