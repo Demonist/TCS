@@ -103,7 +103,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	ui->stackedWidget->setCurrentIndex(0);  ////Чтобы не менять в ui.
 
-	ui->connectionWidget->setConnectionName("dataBase");
+	ui->connectionWidget->setConnectionName("dataBaseAdmin");
 	connect(ui->connectionWidget, SIGNAL(closed()), this, SLOT(close()));
 	connect(ui->connectionWidget, SIGNAL(connectedToDatabase(QString)), this, SLOT(connected(QString)));
 
@@ -132,6 +132,12 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
 	delete ui;
+
+	{
+		QSqlDatabase db = QSqlDatabase::database(mConnectionName);
+		db.close();
+	}
+	QSqlDatabase::removeDatabase(mConnectionName);
 }
 
 void MainWindow::connected(QString connectionName)

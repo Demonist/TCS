@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CActionsWidget</class>
+ <widget class="QWidget" name="CActionsWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>713</width>
+    <height>459</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="gbxActions">
+     <property name="title">
+      <string>Мероприятия</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_7">
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="title">
+         <string>Фильтр</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0" rowspan="2">
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="title">
+            <string>Категория</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
+             <widget class="QComboBox" name="cbxCategory"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QToolButton" name="tbnCategory">
+              <property name="icon">
+               <iconset resource="../clinet_res.qrc">
+                <normaloff>:/images/clear.png</normaloff>:/images/clear.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="1" rowspan="2">
+          <widget class="QGroupBox" name="groupBox_4">
+           <property name="title">
+            <string>Исполнитель</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <widget class="QComboBox" name="cbxPerformer"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QToolButton" name="tbnPerformer">
+              <property name="icon">
+               <iconset resource="../clinet_res.qrc">
+                <normaloff>:/images/clear.png</normaloff>:/images/clear.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="2" rowspan="2">
+          <widget class="QGroupBox" name="groupBox_5">
+           <property name="title">
+            <string>Площадка</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QComboBox" name="cbxPlace"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QToolButton" name="tbnPlace">
+              <property name="icon">
+               <iconset resource="../clinet_res.qrc">
+                <normaloff>:/images/clear.png</normaloff>:/images/clear.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="3" rowspan="2">
+          <widget class="QGroupBox" name="groupBox_6">
+           <property name="title">
+            <string>Дата</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="leDate">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QToolButton" name="tbnDate">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QToolButton" name="tbnClearDate">
+              <property name="icon">
+               <iconset resource="../clinet_res.qrc">
+                <normaloff>:/images/clear.png</normaloff>:/images/clear.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="4">
+          <widget class="QToolButton" name="tbnClearFilter">
+           <property name="icon">
+            <iconset resource="../clinet_res.qrc">
+             <normaloff>:/images/clear.png</normaloff>:/images/clear.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QTreeWidget" name="twActions">
+        <attribute name="headerDefaultSectionSize">
+         <number>150</number>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>id</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Название</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Исполнитель</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Время проведения</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Концертная площадка</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Категория</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../clinet_res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

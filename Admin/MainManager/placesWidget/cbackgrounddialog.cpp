@@ -36,6 +36,7 @@ CBackgroundDialog::CBackgroundDialog(const QString &connectionName, const int pl
 		{
 			mImage = CImages::instance()->image(query.value(0).toInt());
 			mImageFileName = CImages::imageFileName(query.value(0).toInt());
+			ui->lImage->resize(400, 300);
 			updateImage();
 			ui->pbnRemove->setEnabled(true);
 		}
