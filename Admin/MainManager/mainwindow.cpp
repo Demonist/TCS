@@ -40,6 +40,7 @@ void MainWindow::createTables()
 	if(!query.exec("CREATE TABLE IF NOT EXISTS PlaceSchemes( "
 				   "id                   INTEGER " + autoincExpr +
 				   "seatNumber           TEXT NULL, "
+				   "row                  TEXT NULL, "
 				   "x                    INTEGER NULL, "
 				   "y                    INTEGER NULL, "
 				   "id_place             INTEGER NOT NULL"
@@ -58,6 +59,7 @@ void MainWindow::createTables()
 	if(!query.exec("CREATE TABLE IF NOT EXISTS Actions( "
 				   "id                   INTEGER " + autoincExpr +
 				   "title                TEXT NULL, "
+				   "performer            TEXT NULL, "
 				   "description          TEXT NULL, "
 				   "dateTime             DATETIME NULL, "
 				   "state                INTEGER DEFAULT 0, "

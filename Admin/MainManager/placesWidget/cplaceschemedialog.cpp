@@ -299,6 +299,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 						mSelectedItem = item;
 						mSelectedItem->setSelectedAnimated(true);
 						ui->leSeatNumber->setText(mSelectedItem->text());
+						ui->leRow->setText(mSelectedItem->row());
 						ui->leSeatNumber->setFocus();
 					}
 					else if(mSelectedItem != item)
@@ -307,6 +308,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 						mSelectedItem = item;
 						mSelectedItem->setSelectedAnimated(true);
 						ui->leSeatNumber->setText(mSelectedItem->text());
+						ui->leRow->setText(mSelectedItem->row());
 						ui->leSeatNumber->setFocus();
 					}
 				}
@@ -399,7 +401,17 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 				drawDistances(*mAddItem);
 			}
 			else
+			{
 				mAddItem->hide();
+				mDistanceLeftItem->hide();
+				mDistanceUpItem->hide();
+				mDistanceRightItem->hide();
+				mDistanceDownItem->hide();
+				mDistanceLeftLeftItem->hide();
+				mDistanceUpUpItem->hide();
+				mDistanceRightRightItem->hide();
+				mDistanceDownDownItem->hide();
+			}
 		}
 		else if(mEditType == Delete)
 		{
@@ -605,8 +617,9 @@ void CPlaceSchemeDialog::on_pbnApply_clicked()
 			{
 				if(item->id() == 0)
 				{
-					query.prepare("INSERT INTO PlaceSchemes VALUES(NULL, :number, :x, :y, :placeId);");
+					query.prepare("INSERT INTO PlaceSchemes VALUES(NULL, :number, :row, :x, :y, :placeId);");
 					query.bindValue(":number", item->text());
+					query.bindValue(":row", item->row());
 					query.bindValue(":x", item->x());
 					query.bindValue(":y", item->y());
 					query.bindValue(":placeId", mId);
@@ -614,8 +627,9 @@ void CPlaceSchemeDialog::on_pbnApply_clicked()
 				}
 				else
 				{
-					query.prepare("UPDATE PlaceSchemes SET seatNumber = :number, x = :x, y = :y WHERE id = :id;");
+					query.prepare("UPDATE PlaceSchemes SET seatNumber = :number, row = :row, x = :x, y = :y WHERE id = :id;");
 					query.bindValue(":number", item->text());
+					query.bindValue(":row", item->row());
 					query.bindValue(":x", item->x());
 					query.bindValue(":y", item->y());
 					query.bindValue(":id", item->id());
@@ -671,13 +685,11 @@ void CPlaceSchemeDialog::on_tbnSelect_clicked(bool checked)
 		ui->tbnDel->setChecked(false);
 		ui->tbnDrag->setChecked(false);
 		ui->gbxNumber->setEnabled(true);
+		ui->gbxRow->setEnabled(true);
 		mEditType = Select;
 	}
 	else
-	{
 		mEditType = None;
-		ui->gbxNumber->setEnabled(false);
-	}
 }
 
 void CPlaceSchemeDialog::on_tbnMove_clicked(bool checked)
@@ -742,11 +754,18 @@ void CPlaceSchemeDialog::on_leSeatNumber_textEdited(const QString &arg1)
 		mSelectedItem->setText(arg1);
 }
 
+void CPlaceSchemeDialog::on_leRow_textEdited(const QString &arg1)
+{
+	if(mSelectedItem)
+		mSelectedItem->setRow(arg1);
+}
+
 void CPlaceSchemeDialog::on_tbnSelect_toggled(bool checked)
 {
 	if(!checked)
 	{
 		ui->gbxNumber->setEnabled(false);
+		ui->gbxRow->setEnabled(false);
 		if(mSelectedItem)
 		{
 			mSelectedItem->setSelectedAnimated(false);

@@ -66,6 +66,7 @@ private slots:
 	void on_tbnDel_clicked(bool checked);
 	void on_tbnDrag_clicked(bool checked);
 	void on_leSeatNumber_textEdited(const QString &arg1);
+	void on_leRow_textEdited(const QString &arg1);
 	void on_tbnSelect_toggled(bool checked);
 	void on_tbnDrag_toggled(bool checked);
 	void on_pbnBackground_clicked();
