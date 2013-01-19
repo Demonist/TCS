@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>images/apply.png</file>
-        <file>images/cancel.png</file>
-        <file>images/categoriesImages/imActions.png</file>
-        <file>images/clear.png</file>
-    </qresource>
-</RCC>

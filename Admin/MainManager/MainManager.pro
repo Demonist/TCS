@@ -10,16 +10,16 @@ TARGET = MainManager
 TEMPLATE = app
 
 INCLUDEPATH += ../../common/ \
+		../../common/commonWidget/ \
 		../../common/connectionWidget/ \
 		../../common/seatItem/ \
 		../../common/dateDialog/ \
-        commonWidget/ \
         usersWidget/ \
         categoriesWidget/ \
         placesWidget/ \
 		clientsWidget/ \
 		actionsWidget/ \
-                marketsWidget/ \
+		marketsWidget/ \
         accountingWidget/ \
         uploadingWidget/
 
@@ -27,7 +27,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
 	../../common/global.cpp \
 	../../common/connectionWidget/cdatabaseconnectionwidget.cpp \
-	commonWidget/cabstractcommonwidget.cpp \
 	usersWidget/cuserswidget.cpp \
     usersWidget/cuserdialog.cpp \
     categoriesWidget/ccategorieswidget.cpp \
@@ -50,13 +49,13 @@ SOURCES += main.cpp\
     placesWidget/cbackgrounddialog.cpp \
     accountingWidget/caccountingwidget.cpp \
     accountingWidget/caccountingactionsdialog.cpp \
-    uploadingWidget/cuploadingwidget.cpp
+    uploadingWidget/cuploadingwidget.cpp \
+    ../../common/commonWidget/cabstractcommonwidget.cpp
 
 
 HEADERS  += mainwindow.h \
 	../../common/global.h \
 	../../common/connectionWidget/cdatabaseconnectionwidget.h \
-	commonWidget/cabstractcommonwidget.h \
 	usersWidget/cuserswidget.h \
     usersWidget/cuserdialog.h \
     categoriesWidget/ccategorieswidget.h \
@@ -80,7 +79,8 @@ HEADERS  += mainwindow.h \
     placesWidget/cbackgrounddialog.h \
     accountingWidget/caccountingwidget.h \
     accountingWidget/caccountingactionsdialog.h \
-    uploadingWidget/cuploadingwidget.h
+    uploadingWidget/cuploadingwidget.h \
+    ../../common/commonWidget/cabstractcommonwidget.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
