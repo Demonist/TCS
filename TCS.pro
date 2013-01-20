@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 
 SUBDIRS = \
-	Admin/MainManager
+	Admin/MainManager \
+    Client/ClientManager

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>clientImages/apply.png</file>
+        <file>clientImages/cancel.png</file>
+        <file>clientImages/clear.png</file>
+        <file>clientImages/categoriesImages/imActions.png</file>
+    </qresource>
+</RCC>
