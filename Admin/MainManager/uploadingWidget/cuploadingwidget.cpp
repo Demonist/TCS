@@ -119,20 +119,48 @@ void CUploadingWidget::on_pbnUploading_clicked()
     db.setDatabaseName(pth);
     if(db.open())
     {
-        QSqlQuery query(db);
-        query.exec(createDBSCheme());
-    }
+        QSqlQuery createDBQuery(db);
+        createDBQuery.exec(createDBScheme());
+        QSqlQuery selectDataQuery(QSqlDatabase::database(mConnectionName));
+        if(selectDataQuery.exec("SELECT * FROM Actions WHERE id = " + ui->twActions->currentItem()->text(ID)))
+        {
+            QSqlQuery insertDataQuery(db);
+            insertDataQuery.exec("INSERT INTO Actions VALUES(NULL, :title, :performer, :description, :date, :state, :fanPrice, :fanCount, :id_place, :id_cat);");
+            while(selectDataQuery.next())
+            {
+                insertDataQuery.bindValue(":title", selectDataQuery.value(1).toString());
+                insertDataQuery.bindValue(":performer", selectDataQuery.value(2).toString());
+                insertDataQuery.bindValue(":description", selectDataQuery.value(3).toString());
+                insertDataQuery.bindValue(":date", selectDataQuery.value(4).toString());
+                insertDataQuery.bindValue(":state", selectDataQuery.value(5).toString());
+                insertDataQuery.bindValue(":fanPrice", selectDataQuery.value(6).toString());
+                insertDataQuery.bindValue(":fanCount", selectDataQuery.value(7).toString());
+                insertDataQuery.bindValue(":id_place", selectDataQuery.value(8).toString());
+                insertDataQuery.bindValue(":id_cat", selectDataQuery.value(9).toString());
+                insertDataQuery.exec();
+            }
 
+
+
+        }
+
+
+    }
 }
 
-QString CUploadingWidget::createDBSCheme()
+QString CUploadingWidget::createDBScheme()
 {
-    return "CREATE TABLE IF NOT EXISTS PlaceSchemes( "
-                   "id                   INTEGER PRIMARY KEY AUTOINCREMENT, "
-                   "seatNumber           TEXT NULL, "
-                   "row                  TEXT NULL, "
-                   "x                    INTEGER NULL, "
-                   "y                    INTEGER NULL, "
-                   "id_place             INTEGER NOT NULL"
-                   ");";
+    return "CREATE TABLE IF NOT EXISTS Actions( "
+                       "id                   INTEGER PRIMARY KEY AUTOINCREMENT, "
+                       "title                TEXT NULL, "
+                       "performer            TEXT NULL, "
+                       "description          TEXT NULL, "
+                       "dateTime             DATETIME NULL, "
+                       "state                INTEGER DEFAULT 0, "
+                       "fanPrice             INTEGER DEFAULT 0, "
+                       "fanCount             INTEGER DEFAULT 0, "
+                       "id_place             INTEGER NULL, "
+                       "id_category          INTEGER NULL"
+                       ");";
+
 }
