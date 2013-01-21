@@ -11,8 +11,8 @@ CActionDialog::CActionDialog(const QString &connectionName, QWidget *parent) :
 	ui->pbnTicketsManagement->hide();
 	mType = Add;
 
-	ui->cbxState->addItems(Global::actionStates());
-	ui->cbxState->setCurrentIndex(ui->cbxState->findText(Global::actionStateToText(Global::ActionInactive)));
+	ui->cbxState->addItem(Global::actionStateToText(Global::ActionInactive));
+	ui->gbxState->setEnabled(false);
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
@@ -107,6 +107,16 @@ void CActionDialog::on_pbnCancel_clicked()
 
 void CActionDialog::on_pbnApply_clicked()
 {
+	//Проверка входных данных:
+	QString error;
+	if(ui->leTitle->text().isEmpty())
+		error += tr("Название мероприятия не может быть пустым.\n");
+	if(error.isEmpty() == false)
+	{
+		QMessageBox::warning(this, tr("Внимание"), error);
+		return;
+	}
+
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
 	if(mType == Add)

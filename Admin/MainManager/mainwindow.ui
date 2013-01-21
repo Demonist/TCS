@@ -124,7 +124,7 @@
              <string>Отчеты</string>
             </property>
             <property name="icon">
-             <iconset resource="main_res.qrc">
+             <iconset>
               <normaloff>:/images/categoriesImages/imReport.png</normaloff>:/images/categoriesImages/imReport.png</iconset>
             </property>
            </item>
@@ -133,7 +133,7 @@
              <string>Выгрузка базы</string>
             </property>
             <property name="icon">
-             <iconset resource="main_res.qrc">
+             <iconset>
               <normaloff>:/images/categoriesImages/imUploading.png</normaloff>:/images/categoriesImages/imUploading.png</iconset>
             </property>
            </item>
@@ -146,7 +146,7 @@
             </sizepolicy>
            </property>
            <property name="currentIndex">
-            <number>7</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="page_users">
             <layout class="QGridLayout" name="gridLayout_3">
@@ -243,59 +243,60 @@
   <customwidget>
    <class>CDataBaseConnectionWidget</class>
    <extends>QWidget</extends>
-   <header location="global">cdatabaseconnectionwidget.h</header>
+   <header>cdatabaseconnectionwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CUsersWidget</class>
    <extends>QWidget</extends>
-   <header location="global">cuserswidget.h</header>
+   <header>cuserswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CCategoriesWidget</class>
    <extends>QWidget</extends>
-   <header location="global">ccategorieswidget.h</header>
+   <header>ccategorieswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CPlacesWidget</class>
    <extends>QWidget</extends>
-   <header location="global">cplaceswidget.h</header>
+   <header>cplaceswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CClientsWidget</class>
    <extends>QWidget</extends>
-   <header location="global">cclientswidget.h</header>
+   <header>cclientswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CActionsWidget</class>
    <extends>QWidget</extends>
-   <header location="global">cactionswidget.h</header>
+   <header>cactionswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CMarketsWidget</class>
    <extends>QWidget</extends>
-   <header location="global">cmarketswidget.h</header>
+   <header>cmarketswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CAccountingWidget</class>
    <extends>QWidget</extends>
-   <header location="global">caccountingwidget.h</header>
+   <header>caccountingwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CUploadingWidget</class>
    <extends>QWidget</extends>
-   <header location="global">cuploadingwidget.h</header>
+   <header>cuploadingwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="main_res.qrc"/>
   <include location="main_res.qrc"/>
  </resources>
  <connections/>

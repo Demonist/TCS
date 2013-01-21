@@ -29,6 +29,7 @@ private slots:
 
 private:
     Ui::CActionsWidget *ui;
+	int mCategoriesCount;
 };
 
 #endif // CACTIONSWIDGET_H

@@ -16,6 +16,7 @@ CActionsWidget::CActionsWidget(QWidget *parent) :
     ui->setupUi(this);
 	ui->twActions->hideColumn(ID);
 	ui->twActions->setColumnWidth(ID, 0);
+	mCategoriesCount = 0;
 }
 
 CActionsWidget::~CActionsWidget()
@@ -27,7 +28,10 @@ void CActionsWidget::updateData()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	if(query.exec("SELECT Actions.id, Actions.title, Places.title, Places.address, Actions.dateTime, Actions.state, Categories.name, Actions.performer FROM Actions, Places, Categories WHERE Actions.id_place == Places.id AND Actions.id_category == Categories.id;"))
+	if(query.exec("SELECT COUNT(id) FROM Categories;") && query.first())
+		mCategoriesCount = query.value(0).toInt();
+
+	if(query.exec("SELECT Actions.id, Actions.title, Places.title, Places.address, Actions.dateTime, Actions.state, Categories.name, Actions.performer FROM Actions, Places, Categories WHERE Actions.id_place = Places.id AND Actions.id_category = Categories.id;"))
 	{
 		ui->twActions->clear();
 
@@ -43,7 +47,7 @@ void CActionsWidget::updateData()
 				item->setText(PLACE, query.value(2).toString() + " (" + query.value(3).toString() + ')');
 				QDateTime dateTime = query.value(4).toDateTime();
 				item->setText(DATETIME, tr("%1 (%2)")
-							  .arg(dateTime.toString("dd.MM.yyyy"))
+							  .arg(dateTime.toString("dd.MM.yyyy hh:mm"))
 							  .arg(QDate::longDayName(dateTime.date().dayOfWeek()))
 							  );
 				item->setText(STATE, Global::actionStateToText(query.value(5).toInt()));
@@ -62,6 +66,12 @@ void CActionsWidget::updateData()
 
 void CActionsWidget::on_tbnAdd_clicked()
 {
+	if(mCategoriesCount == 0)
+	{
+		QMessageBox::warning(this, tr("Внимание"), tr("Невозможно добавить мероприятие т.к. нет ни одной категории.\nСначала добавте хотя бы одну категорию."));
+		return;
+	}
+
 	CActionDialog actionDialog(mConnectionName, this);
 	connect(&actionDialog, SIGNAL(dataWasUpdated()), this, SLOT(updateData()));
 	actionDialog.exec();

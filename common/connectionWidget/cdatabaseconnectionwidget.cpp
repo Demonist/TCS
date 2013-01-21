@@ -93,7 +93,12 @@ void CDataBaseConnectionWidget::on_pbnDbConnect_clicked()
 	QApplication::processEvents();
 
 	bool connectingToServer = ui->rbnDbServer->isChecked(); //Флаг, показывающий подключаемся ли мы к серверу или к файлу.
-	QSqlDatabase db = QSqlDatabase::addDatabase(connectingToServer ? "QMYSQL" : "QSQLITE", mConnectionName);
+
+	QSqlDatabase db;
+	if(QSqlDatabase::contains(mConnectionName))
+		db = QSqlDatabase::database(mConnectionName);
+	else
+		db = QSqlDatabase::addDatabase(connectingToServer ? "QMYSQL" : "QSQLITE", mConnectionName);
 
 	if(connectingToServer)
 	{
@@ -105,6 +110,11 @@ void CDataBaseConnectionWidget::on_pbnDbConnect_clicked()
 	else    //connecting to file
 	{
 		db.setDatabaseName(ui->cbxDbFileName->currentText());
+		if(db.databaseName().isEmpty())
+		{
+			ui->lDbConnectionStatus->setText(tr("Файл не выбран"));
+			return;
+		}
 	}
 
 	if(db.open() && db.tables().count())   //connection is successfully

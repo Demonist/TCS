@@ -14,23 +14,31 @@ INCLUDEPATH += ../../common/ \
 		../../common/connectionWidget/ \
 		../../common/seatItem/ \
 		../../common/dateDialog/ \
-		startingDialog/
+		startingDialog/ \
+		clientActionsWidget/
 
 SOURCES += main.cpp\
         cclientmainwindow.cpp \
     ../../common/commonWidget/cabstractcommonwidget.cpp \
     ../../common/connectionWidget/cdatabaseconnectionwidget.cpp \
-    startingDialog/cstartingdialog.cpp
+    startingDialog/cstartingdialog.cpp \
+    clientActionsWidget/cclientactionswidget.cpp \
+    ../../common/dateDialog/cdatedialog.cpp
 
 HEADERS  += cclientmainwindow.h \
     ../../common/commonWidget/cabstractcommonwidget.h \
     ../../common/connectionWidget/cdatabaseconnectionwidget.h \
-    startingDialog/cstartingdialog.h
+    startingDialog/cstartingdialog.h \
+    clientActionsWidget/cclientactionswidget.h \
+    ../../common/dateDialog/cdatedialog.h
 
 FORMS    += cclientmainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
-    startingDialog/cstartingdialog.ui
+    startingDialog/cstartingdialog.ui \
+    clientActionsWidget/cclientactionswidget.ui \
+    ../../common/dateDialog/cdatedialog.ui
 
 RESOURCES += \
     ../../common/connectionWidget/connectionwidget_res.qrc \
-    clinet_res.qrc
+    clinet_res.qrc \
+    ../../Admin/MainManager/main_res.qrc

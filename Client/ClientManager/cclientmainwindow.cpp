@@ -18,6 +18,7 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 
 	if(startingDialog.isLogined())
 	{
+		ui->wActions->setConnectionName(mConnectionName);
 		show();
 	}
 	else
