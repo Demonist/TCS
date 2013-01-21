@@ -1,7 +1,8 @@
 #ifndef CONTROLMANAGERMAINWINDOW_H
 #define CONTROLMANAGERMAINWINDOW_H
 
-#include <QMainWindow>
+#include <QtGui>
+#include <QtSql>
 
 namespace Ui {
 class ControlManagerMainWindow;
@@ -16,7 +17,7 @@ public:
     ~ControlManagerMainWindow();
     
 private slots:
-    void on_lineEdit_returnPressed();
+   // void on_lineEdit_returnPressed();
 
 private:
     Ui::ControlManagerMainWindow *ui;

@@ -13,10 +13,10 @@ ControlManagerMainWindow::~ControlManagerMainWindow()
     delete ui;
 }
 
-void ControlManagerMainWindow::on_lineEdit_returnPressed()
+/*void ControlManagerMainWindow::on_lineEdit_returnPressed()
 {
-    if(ui->lineEdit->text() == "123")
+    if(ui->leGetBarcode->text() == "123")
     {
-        ui->widget->setStyleSheet("background: green");
+        ui->wOutResult->setStyleSheet("background: green");
     }
-}
+}*/

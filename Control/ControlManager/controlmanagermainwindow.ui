@@ -16,14 +16,14 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="leGetBarcode">
       <property name="readOnly">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QWidget" name="widget" native="true"/>
+     <widget class="QWidget" name="wOutResult" native="true"/>
     </item>
    </layout>
   </widget>
@@ -36,7 +36,31 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="aOpenNewDB"/>
+    <addaction name="aAddThisDB"/>
+    <addaction name="aExit"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
+  <action name="aOpenNewDB">
+   <property name="text">
+    <string>Открыть новый файл БД</string>
+   </property>
+  </action>
+  <action name="aAddThisDB">
+   <property name="text">
+    <string>Дописать текущий файл БД</string>
+   </property>
+  </action>
+  <action name="aExit">
+   <property name="text">
+    <string>Выход</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
