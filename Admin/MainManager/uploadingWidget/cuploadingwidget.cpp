@@ -114,6 +114,7 @@ void CUploadingWidget::on_pbnUploading_clicked()
     QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия ") + tActionName, QDir::currentPath(), tr("Файл базы данных(.sqlite)"));
     QFile file(pth);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
+    file.close();
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "myConnection");
     db.setDatabaseName(pth);
     if(db.open())
