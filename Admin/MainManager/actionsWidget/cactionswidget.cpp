@@ -16,7 +16,9 @@ CActionsWidget::CActionsWidget(QWidget *parent) :
     ui->setupUi(this);
 	ui->twActions->hideColumn(ID);
 	ui->twActions->setColumnWidth(ID, 0);
+
 	mCategoriesCount = 0;
+	mPlacesCount = 0;
 }
 
 CActionsWidget::~CActionsWidget()
@@ -30,6 +32,8 @@ void CActionsWidget::updateData()
 
 	if(query.exec("SELECT COUNT(id) FROM Categories;") && query.first())
 		mCategoriesCount = query.value(0).toInt();
+	if(query.exec("SELECT COUNT(id) FROM Places;") && query.first())
+		mPlacesCount = query.value(0).toInt();
 
 	if(query.exec("SELECT Actions.id, Actions.title, Places.title, Places.address, Actions.dateTime, Actions.state, Categories.name, Actions.performer FROM Actions, Places, Categories WHERE Actions.id_place = Places.id AND Actions.id_category = Categories.id;"))
 	{
@@ -66,9 +70,15 @@ void CActionsWidget::updateData()
 
 void CActionsWidget::on_tbnAdd_clicked()
 {
+	QString error;
 	if(mCategoriesCount == 0)
+		error += tr("Невозможно добавить мероприятие т.к. нет ни одной категории.\nСначала добавте хотя бы одну категорию.\n\n");
+	if(mPlacesCount == 0)
+		error += tr("Невозможно добавить мероприятие т.к. нет ни одной концертной площадки.\nСначала добавте хотя бы одну концертную площадку.\n\n");
+
+	if(error.isEmpty() == false)
 	{
-		QMessageBox::warning(this, tr("Внимание"), tr("Невозможно добавить мероприятие т.к. нет ни одной категории.\nСначала добавте хотя бы одну категорию."));
+		QMessageBox::warning(this, tr("Внимание"), error);
 		return;
 	}
 

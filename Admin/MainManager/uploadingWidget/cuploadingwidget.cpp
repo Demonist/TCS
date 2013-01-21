@@ -24,7 +24,7 @@ CUploadingWidget::~CUploadingWidget()
 void CUploadingWidget::updateData()
 {
     QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    if(query.exec("SELECT Actions.ID, Actions.Title, Categories.name FROM Categories, Actions WHERE Actions.id_category = Categories.ID;"))
+	if(query.exec("SELECT Actions.id, Actions.title, Categories.name FROM Categories, Actions WHERE Actions.id_category = Categories.id;"))
     {
         ui->twActions->clear();
         QTreeWidgetItem *item;
@@ -38,26 +38,22 @@ void CUploadingWidget::updateData()
                 item->setText(TYPE, query.value(2).toString());
                 ui->twActions->addTopLevelItem(item);
             }
-
         }
     }
 }
 
-
 void CUploadingWidget::on_twActions_itemSelectionChanged()
 {
     QTreeWidgetItem *selectedItem = ui->twActions->currentItem();
-    if(tDate == "")
-    {
-        tActionName = selectedItem->text(NAME);
-        ui->lInfo->setText(tr("Выгрузка мероприятия: ")+selectedItem->text(NAME));
-    }
-    else
-    {
-        tActionName = selectedItem->text(NAME);
-        ui->lInfo->setText(tr("Выгрузка мероприятия: ")+selectedItem->text(NAME) + tr(", начиная с ") + tDate);
-    }
+	if(selectedItem)
+	{
+		tActionName = selectedItem->text(NAME);
 
+		QString text = tr("Выгрузка мероприятия: ")+selectedItem->text(NAME);
+		if(tDate.isEmpty() == false)
+			text += tr(", начиная с ") + tDate;
+		ui->lInfo->setText(text);
+	}
 }
 
 void CUploadingWidget::on_tbnSelectDate_clicked()
@@ -83,25 +79,6 @@ void CUploadingWidget::on_tbnSelectDate_clicked()
     }
 }
 
-void CUploadingWidget::on_tbnSearch_clicked()
-{
-
-    QTreeWidgetItemIterator it(ui->twActions);
-    while (*it)
-    {
-        if (!(*it)->text(1).contains(ui->leSearch->text(), Qt::CaseInsensitive) && ((*it)->childCount() == 0))
-        {
-            (*it)->setHidden(true);
-        }
-        else
-        {
-            (*it)->setHidden(false);
-        }
-        ++it;
-    }
-
-}
-
 void CUploadingWidget::on_tbClearDate_clicked()
 {
     tDate = "";
@@ -115,6 +92,7 @@ void CUploadingWidget::on_pbnUploading_clicked()
     QFile file(pth);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     file.close();
+
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "myConnection");
     db.setDatabaseName(pth);
     if(db.open())
@@ -163,4 +141,25 @@ QString CUploadingWidget::createDBScheme()
                        "id_category          INTEGER NULL"
                        ");";
 
+}
+
+void CUploadingWidget::on_tbnSearchClear_clicked()
+{
+	ui->leSearch->clear();
+}
+
+void CUploadingWidget::on_leSearch_textChanged(const QString &text)
+{
+	QTreeWidgetItem *item;
+	for(int i = 0; i < ui->twActions->topLevelItemCount(); i++)
+	{
+		item = ui->twActions->topLevelItem(i);
+
+		if(text.isEmpty())
+			item->setHidden(false);
+		else if(item->text(NAME).contains(text, Qt::CaseInsensitive))
+			item->setHidden(false);
+		else
+			item->setHidden(true);
+	}
 }

@@ -14,10 +14,12 @@ CUsersWidget::CUsersWidget(QWidget *parent) :
 	ui->setupUi(this);
 	ui->twUsers->hideColumn(ID);
 	ui->twUsers->setColumnWidth(ID, 0);
-    ui->twUsers->setColumnWidth(LOGIN, 200);
-    ui->twUsers->setColumnWidth(PASSWORD, 200);
-    ui->twUsers->setColumnWidth(NAME, 200);
-    ui->twUsers->setColumnWidth(MARKET, 200);
+	ui->twUsers->setColumnWidth(LOGIN, 200);
+	ui->twUsers->setColumnWidth(PASSWORD, 200);
+	ui->twUsers->setColumnWidth(NAME, 200);
+	ui->twUsers->setColumnWidth(MARKET, 200);
+
+	mMarketsCount = 0;
 }
 
 CUsersWidget::~CUsersWidget()
@@ -28,7 +30,11 @@ CUsersWidget::~CUsersWidget()
 void CUsersWidget::updateData()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    if(query.exec("SELECT Users.id, login, passwordCrypt, name, address FROM Users, Markets WHERE marketsID = Markets.ID;"))
+
+	if(query.exec("SELECT COUNT(id) FROM Markets;") && query.first())
+		mMarketsCount = query.value(0).toInt();
+
+	if(query.exec("SELECT Users.id, login, passwordCrypt, name, address FROM Users, Markets WHERE marketsID = Markets.ID;"))
 	{
 		ui->twUsers->clear();
 
@@ -43,7 +49,7 @@ void CUsersWidget::updateData()
 				item->setText(LOGIN, query.value(1).toString());
 				item->setText(PASSWORD, query.value(2).toString());
 				item->setText(NAME, query.value(3).toString());
-                item->setText(MARKET, query.value(4).toString());
+				item->setText(MARKET, query.value(4).toString());
 				ui->twUsers->addTopLevelItem(item);
 				count++;
 			}
@@ -55,6 +61,12 @@ void CUsersWidget::updateData()
 
 void CUsersWidget::on_tbnAdd_clicked()
 {
+	if(mMarketsCount == 0)
+	{
+		QMessageBox::warning(this, tr("Внимание"), tr("Невозможно добавить пользователя т.к. нет ни одной торговой точки.\nСначала добавте хотя бы одну торговую точку."));
+		return;
+	}
+
 	CUserDialog userDialog(mConnectionName, this);
 	connect(&userDialog, SIGNAL(dataWasUpdated()), this, SLOT(updateData()));
 	userDialog.exec();

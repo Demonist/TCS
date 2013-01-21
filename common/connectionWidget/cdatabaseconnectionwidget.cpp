@@ -10,11 +10,6 @@
 #define INI_LOGIN "dataBaseLogin"
 #define INI_PASSWORD "dataBasePassword"
 
-
-//private:
-
-
-
 //public:
 
 CDataBaseConnectionWidget::CDataBaseConnectionWidget(QWidget *parent) :
@@ -26,7 +21,9 @@ CDataBaseConnectionWidget::CDataBaseConnectionWidget(QWidget *parent) :
 	mConnectionName = "common";
 	mConnectionType = ConnectionServer;
 
-	mCache = new QSettings("settings/dataBaseConnection.ini", QSettings::IniFormat, this);
+	QDir path(QCoreApplication::arguments().value(0));
+	path.cdUp();
+	mCache = new QSettings(path.absoluteFilePath("settings/dataBaseConnection.ini"), QSettings::IniFormat, this);
 	if(mCache)
 	{
 		if("file" == mCache->value(INI_CONNECTION_TYPE).toString())
@@ -94,11 +91,7 @@ void CDataBaseConnectionWidget::on_pbnDbConnect_clicked()
 
 	bool connectingToServer = ui->rbnDbServer->isChecked(); //Флаг, показывающий подключаемся ли мы к серверу или к файлу.
 
-	QSqlDatabase db;
-	if(QSqlDatabase::contains(mConnectionName))
-		db = QSqlDatabase::database(mConnectionName);
-	else
-		db = QSqlDatabase::addDatabase(connectingToServer ? "QMYSQL" : "QSQLITE", mConnectionName);
+	QSqlDatabase db = QSqlDatabase::addDatabase(connectingToServer ? "QMYSQL" : "QSQLITE", mConnectionName);
 
 	if(connectingToServer)
 	{
@@ -106,6 +99,12 @@ void CDataBaseConnectionWidget::on_pbnDbConnect_clicked()
 		db.setDatabaseName(ui->leDbName->text());
 		db.setUserName(ui->leDbLogin->text());
 		db.setPassword(ui->leDbPassword->text());
+
+		if(db.hostName().isEmpty() || db.databaseName().isEmpty())
+		{
+			ui->lDbConnectionStatus->setText(tr("Указаны не все данные"));
+			return;
+		}
 	}
 	else    //connecting to file
 	{
@@ -163,7 +162,7 @@ void CDataBaseConnectionWidget::on_pbnDbConnect_clicked()
 	{
 		ui->lDbConnectionStatus->setText(tr("Ошибка подключения"));
 		QApplication::processEvents();
-		qDebug("%d", db.lastError().number());
+		qDebug("CDataBaseConnectionWidget::on_pbnDbConnect_clicked: error: %d", db.lastError().number());
 		QString errorText = tr("Не удалось подключиться к базе данных.\n");
 		switch(db.lastError().number())
 		{

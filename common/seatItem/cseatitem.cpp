@@ -101,6 +101,7 @@ CSeatItem::CSeatItem(const QString &connectionName, const int seatId) :
 		mRow = query.value(1).toString();
 		mInitRow = mRow;
 		setPos(query.value(2).toReal(), query.value(3).toReal());
+		mInitPoint = pos().toPoint();
 	}
 }
 

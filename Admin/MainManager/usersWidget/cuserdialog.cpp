@@ -9,7 +9,8 @@ CUserDialog::CUserDialog(const QString &connectionName, QWidget *parent) :
 	mConnectionName = connectionName;
 	setWindowTitle(tr("Добавление пользователя"));
 	mType = Add;
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
+
+	QSqlQuery query(QSqlDatabase::database(mConnectionName));
     query.exec("SELECT id, address FROM Markets");
     int incrementIndex = 0;
     while(query.next())
@@ -18,8 +19,6 @@ CUserDialog::CUserDialog(const QString &connectionName, QWidget *parent) :
         ui->cbxMarkets->setItemData(incrementIndex, query.value(0).toString());
         incrementIndex++;
     }
-
-
 }
 
 CUserDialog::CUserDialog(const QString &connectionName, const int id, QWidget *parent) :
@@ -34,8 +33,6 @@ CUserDialog::CUserDialog(const QString &connectionName, const int id, QWidget *p
 	mId = id;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-
-
 
     query.prepare("SELECT login, passwordCrypt, name, address, Markets.ID FROM Users, Markets WHERE Users.id = :id AND marketsID = Markets.ID;");
 	query.bindValue(":id", mId);    
@@ -55,7 +52,6 @@ CUserDialog::CUserDialog(const QString &connectionName, const int id, QWidget *p
         ui->cbxMarkets->setItemData(cIndex, query.value(0).toString());
         cIndex++;
     }
-
 }
 
 CUserDialog::~CUserDialog()
@@ -65,9 +61,28 @@ CUserDialog::~CUserDialog()
 
 void CUserDialog::on_buttonBox_accepted()
 {
-	////TODO: Добавить проверку входных данных: поля логина/пароля не должны быть пустыми; логин не должен повторяться.
-
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+
+	//Проверка входных данных:
+	QString error;
+	if(ui->leLogin->text().isEmpty())
+		error += tr("Поле логина не должно быть пустым.\n");
+	else
+	{
+		query.prepare("SELECT COUNT(id) FROM Users WHERE login = :login;");
+		query.bindValue(":login", ui->leLogin->text());
+		if(query.exec() && query.first() && query.value(0).toInt() != 0)
+			error += tr("Указанный логин уже занят.\n");
+	}
+	if(ui->lePassword->text().isEmpty())
+		error += tr("Поле пароля не должно быть пустым.\n");
+
+	if(error.isEmpty() == false)
+	{
+		QMessageBox::warning(this, tr("Внимание"), error);
+		return;
+	}
+
 	if(mType == Add)
 	{
         query.prepare("INSERT INTO Users VALUES(NULL, :login, :password, :name, :marketsID);");
@@ -75,7 +90,6 @@ void CUserDialog::on_buttonBox_accepted()
 		query.bindValue(":password", ui->lePassword->text());
 		query.bindValue(":name", ui->leName->text());
         query.bindValue(":marketsID", ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toInt());
-        qDebug(ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toByteArray());
 	}
 	else if(mType == Edit)
 	{
@@ -84,7 +98,6 @@ void CUserDialog::on_buttonBox_accepted()
 		query.bindValue(":name", ui->leName->text());
         query.bindValue(":marketsID", ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toInt());
 		query.bindValue(":id", mId);
-        qDebug(ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toByteArray());
 	}
 
 	////TODO: Добавить обработчик ошибок:

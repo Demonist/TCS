@@ -14,6 +14,7 @@ class CUsersWidget : public CAbstractCommonWidget
 	Q_OBJECT
 private:
 	Ui::CUsersWidget *ui;
+	int mMarketsCount;
 
 public:
 	explicit CUsersWidget(QWidget *parent = 0);

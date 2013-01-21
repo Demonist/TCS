@@ -30,6 +30,8 @@ inline QString seatStateToText(const SeatState seatState);
 int seatStateFromText(const QString &seatStateText);
 QList<QString> seatStates();
 
+QString currentPath();
+
 //inline implementation:
 inline QString actionStateToText(const ActionState actionState)
 {
@@ -40,6 +42,6 @@ inline QString seatStateToText(const SeatState seatState)
 {
 	return seatStateToText((const int)seatState);
 }
-}
+} //namespace Global
 
 #endif // GLOBAL_H

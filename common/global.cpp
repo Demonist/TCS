@@ -81,4 +81,16 @@ QList<QString> seatStates()
 	return states;
 }
 
+/**
+Возвращает путь к каталогу, где располагается исполняемы файл.
+Не зависит от директории запуска.
+Путь возвращается \b без слеша в конце.
+*/
+QString currentPath()
+{
+	QDir path(QCoreApplication::arguments().value(0));
+	path.cdUp();
+	return path.absolutePath();
 }
+
+} //namespace Global

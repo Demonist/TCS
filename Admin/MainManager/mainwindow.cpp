@@ -114,10 +114,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->sSettings->setStretchFactor(1, 100);
 
 	////for testing only:
-	if(QFile::exists("test.db") == false)
+	QString testDbFileName = Global::currentPath() + "/test.db";
+	if(QFile::exists(testDbFileName) == false)
 	{
 		QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "test");
-		db.setDatabaseName("test.db");
+		db.setDatabaseName(testDbFileName);
 		if(db.open())
 		{
 			QSqlQuery query(db);
