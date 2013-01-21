@@ -22,7 +22,7 @@ private:
     Ui::CUploadingWidget *ui;
     QString tDate;
     QString tActionName;
-
+    QString createDBSCheme();
 
 public slots:
     void updateData();

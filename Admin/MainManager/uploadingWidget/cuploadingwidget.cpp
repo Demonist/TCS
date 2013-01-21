@@ -114,5 +114,24 @@ void CUploadingWidget::on_pbnUploading_clicked()
     QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия ") + tActionName, QDir::currentPath(), tr("Файл базы данных(.sqlite)"));
     QFile file(pth);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "myConnection");
+    db.setDatabaseName(pth);
+    if(db.open())
+    {
+        QSqlQuery query(db);
+        query.exec(createDBSCheme());
+    }
 
+}
+
+QString CUploadingWidget::createDBSCheme()
+{
+    return "CREATE TABLE IF NOT EXISTS PlaceSchemes( "
+                   "id                   INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   "seatNumber           TEXT NULL, "
+                   "row                  TEXT NULL, "
+                   "x                    INTEGER NULL, "
+                   "y                    INTEGER NULL, "
+                   "id_place             INTEGER NOT NULL"
+                   ");";
 }
