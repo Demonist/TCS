@@ -33,7 +33,9 @@ void MainWindow::createTables()
 				   "id                    INTEGER " + autoincExpr +
 				   "title                 TEXT NULL, "
 				   "address               TEXT NULL, "
-				   "id_background         INTEGER NULL"
+				   "id_background         INTEGER NULL, "
+				   "backgroundWidth       INTEGER DEFAULT 400, "
+				   "backgroundHeight      INTEGER DEFAULT 300"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 
@@ -74,9 +76,18 @@ void MainWindow::createTables()
 				   "id_action            INTEGER NOT NULL, "
 				   "id_placeScheme       INTEGER NOT NULL, "
 				   "state				 INTEGER DEFAULT 0, "
-				   "id_reservation       INTEGER NULL, "
 				   "id_priceGroup        INTEGER NULL, "
+				   "id_reservation       INTEGER NULL, "
 				   "PRIMARY KEY (id_action, id_placeScheme)"
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS ActionPriceGroups( "
+				   "id                   INTEGER " + autoincExpr +
+				   "id_action            INTEGER NOT NULL, "
+				   "name                 TEXT NULL, "
+				   "price                INTEGER DEFAULT 0, "
+				   "color                TEXT NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 
@@ -150,8 +161,8 @@ void MainWindow::connected(QString connectionName)
 	ui->wClients->setConnectionName(mConnectionName);
 	ui->wActions->setConnectionName(mConnectionName);
 	ui->wMarkets->setConnectionName(mConnectionName);
-    ui->wAccounting->setConnectionName(mConnectionName);
-    ui->wUploading->setConnectionName(mConnectionName);
+	ui->wAccounting->setConnectionName(mConnectionName);
+	ui->wUploading->setConnectionName(mConnectionName);
 
 	createTables();
 	CImages::instance(mConnectionName);
@@ -169,8 +180,8 @@ void MainWindow::on_lwSettings_currentRowChanged(int currentRow)
 		case 3: ui->wClients->updateData(); break;
 		case 4: ui->wActions->updateData(); break;
 		case 5: ui->wMarkets->updateData(); break;
-        case 6: ui->wAccounting->updateData(); break;
-        case 7: ui->wUploading->updateData(); break;
+		case 6: ui->wAccounting->updateData(); break;
+		case 7: ui->wUploading->updateData(); break;
 	}
 
 	ui->swSettings->setCurrentIndex(currentRow);

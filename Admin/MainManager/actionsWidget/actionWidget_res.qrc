@@ -4,5 +4,6 @@
         <file>images/hide.png</file>
         <file>images/show.png</file>
         <file>images/unavaible.png</file>
+        <file>images/brush.png</file>
     </qresource>
 </RCC>

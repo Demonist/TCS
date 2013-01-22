@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>642</width>
-    <height>565</height>
+    <width>900</width>
+    <height>673</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="lPlaceName">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -34,18 +34,19 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <layout class="QHBoxLayout" name="hblMain">
-     <item>
-      <widget class="QGraphicsView" name="gvScheme">
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-       </property>
-       <property name="renderHints">
-        <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
-       </property>
-      </widget>
-     </item>
-     <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
+     </property>
+     <widget class="CGraphicsView" name="gvScheme">
+      <property name="renderHints">
+       <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QGroupBox" name="groupBox_2">
@@ -90,6 +91,9 @@
            <layout class="QGridLayout" name="gridLayout_2">
             <item row="0" column="0">
              <widget class="QToolButton" name="tbnSelect">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Выбор места&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="icon">
                <iconset resource="placeWidget_res.qrc">
                 <normaloff>:/images/cursor.png</normaloff>:/images/cursor.png</iconset>
@@ -101,6 +105,9 @@
             </item>
             <item row="0" column="1">
              <widget class="QToolButton" name="tbnMove">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Перемещение места&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="icon">
                <iconset resource="placeWidget_res.qrc">
                 <normaloff>:/images/move.png</normaloff>:/images/move.png</iconset>
@@ -112,6 +119,9 @@
             </item>
             <item row="1" column="0">
              <widget class="QToolButton" name="tbnAdd">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Добавление места&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="icon">
                <iconset resource="../main_res.qrc">
                 <normaloff>:/images/add.png</normaloff>:/images/add.png</iconset>
@@ -123,6 +133,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QToolButton" name="tbnDel">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Удаление места&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="icon">
                <iconset resource="../main_res.qrc">
                 <normaloff>:/images/delete.png</normaloff>:/images/delete.png</iconset>
@@ -159,6 +172,37 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Информация</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lTotalSeatCount">
+            <property name="text">
+             <string>Максимальное число мест в зале:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="gbxScale">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -175,59 +219,158 @@
          <property name="title">
           <string>Вид [100%]</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_3">
+         <layout class="QGridLayout" name="gridLayout_10">
           <item row="0" column="0">
-           <widget class="QToolButton" name="tbnZoomIn">
-            <property name="icon">
-             <iconset resource="placeWidget_res.qrc">
-              <normaloff>:/images/zoomIn.png</normaloff>:/images/zoomIn.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QToolButton" name="tbnDrag">
-            <property name="icon">
-             <iconset resource="placeWidget_res.qrc">
-              <normaloff>:/images/drag.png</normaloff>:/images/drag.png</iconset>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-           </widget>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QToolButton" name="tbnZoomIn">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Увеличить&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="icon">
+               <iconset resource="placeWidget_res.qrc">
+                <normaloff>:/images/zoomIn.png</normaloff>:/images/zoomIn.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QToolButton" name="tbnDrag">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Перетаскивание.&lt;/p&gt;&lt;p&gt;Так же доступно правой кнопкой мыши.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="icon">
+               <iconset resource="placeWidget_res.qrc">
+                <normaloff>:/images/drag.png</normaloff>:/images/drag.png</iconset>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QToolButton" name="tbnZoomOut">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Уменьшить&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="icon">
+               <iconset resource="placeWidget_res.qrc">
+                <normaloff>:/images/zoomOut.png</normaloff>:/images/zoomOut.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QToolButton" name="tbnZoomDefault">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Вернуться к стандартному масштабу&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="icon">
+               <iconset resource="placeWidget_res.qrc">
+                <normaloff>:/images/zoomDefault.png</normaloff>:/images/zoomDefault.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item row="1" column="0">
-           <widget class="QToolButton" name="tbnZoomOut">
-            <property name="icon">
-             <iconset resource="placeWidget_res.qrc">
-              <normaloff>:/images/zoomOut.png</normaloff>:/images/zoomOut.png</iconset>
+           <widget class="QCheckBox" name="chbxShowBackground">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Изменение данной опции не влияет на отображение подложки у покупателя.&lt;/p&gt;&lt;p&gt;Чтобы удалить подложку нажмите кнопку &amp;quot;Изменить&amp;quot; и в появившемся окне нажмите &amp;quot;Удалить&amp;quot;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QToolButton" name="tbnZoomDefault">
-            <property name="icon">
-             <iconset resource="placeWidget_res.qrc">
-              <normaloff>:/images/zoomDefault.png</normaloff>:/images/zoomDefault.png</iconset>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="title">
-          <string>Информация</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="0">
-           <widget class="QLabel" name="lTotalSeatCount">
             <property name="text">
-             <string>Максимальное число мест в зале:</string>
+             <string>Отображать подложку</string>
             </property>
-            <property name="wordWrap">
-             <bool>true</bool>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="chbxShowAxis">
+            <property name="toolTip">
+             <string>Оси отображаются только у Вас т.е. у администратора.
+Покупатель оси не увидит в любом случае.</string>
             </property>
+            <property name="text">
+             <string>Отображать оси</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>Размер сцены</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_9">
+             <item row="0" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QLabel" name="label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Ширина</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="sbxWidth">
+                 <property name="suffix">
+                  <string> px</string>
+                 </property>
+                 <property name="minimum">
+                  <number>400</number>
+                 </property>
+                 <property name="maximum">
+                  <number>7680</number>
+                 </property>
+                 <property name="singleStep">
+                  <number>50</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <widget class="QLabel" name="label_2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Высота</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="sbxHeight">
+                 <property name="suffix">
+                  <string> px</string>
+                 </property>
+                 <property name="minimum">
+                  <number>300</number>
+                 </property>
+                 <property name="maximum">
+                  <number>4800</number>
+                 </property>
+                 <property name="singleStep">
+                  <number>50</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
@@ -308,14 +451,22 @@
         </layout>
        </item>
       </layout>
-     </item>
-    </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>cgraphicsview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../main_res.qrc"/>
   <include location="placeWidget_res.qrc"/>
+  <include location="../main_res.qrc"/>
  </resources>
  <connections/>
 </ui>

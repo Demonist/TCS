@@ -6,6 +6,7 @@
 #include "cseatitem.h"
 #include "cdistanceitem.h"
 #include "cbackgrounddialog.h"
+#include "cgraphicsscene.h"
 
 namespace Ui {
 class CPlaceSchemeDialog;
@@ -24,10 +25,10 @@ private:
 	int mId;	//! Идентификатор концертной площадки.
 	QList<int> mDeletedIds;
 
-	int mScalePersent;
+	qreal mScale;
 	int mSeatsCount;
 
-	QGraphicsScene mScene;
+	CGraphicsScene mScene;
 	EditType mEditType;
 	CSeatItem *mAddItem;
 	CSeatItem *mSelectedItem;
@@ -43,6 +44,7 @@ private:
 
 private:
 	void drawDistances(const QGraphicsItem &item);
+	void hideDistances();
 	QPoint toGrid(const QPoint &pos);
 	inline QPoint toGrid(const QPointF &pos);
 
@@ -70,6 +72,10 @@ private slots:
 	void on_tbnSelect_toggled(bool checked);
 	void on_tbnDrag_toggled(bool checked);
 	void on_pbnBackground_clicked();
+	void on_chbxShowBackground_toggled(bool checked);
+	void on_chbxShowAxis_toggled(bool checked);
+	void on_sbxWidth_valueChanged(int arg1);
+	void on_sbxHeight_valueChanged(int arg1);
 };
 
 //inline implementation:

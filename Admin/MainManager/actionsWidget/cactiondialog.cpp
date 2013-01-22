@@ -8,7 +8,8 @@ CActionDialog::CActionDialog(const QString &connectionName, QWidget *parent) :
 	ui->setupUi(this);
 	mConnectionName = connectionName;
 	setWindowTitle(tr("Добавление мероприятия"));
-	ui->pbnTicketsManagement->hide();
+	ui->pbnTicketsManagement->setEnabled(false);
+	ui->pbnTicketsManagement->setToolTip(tr("Данный функционал доступен только при редактировании"));
 	mType = Add;
 
 	ui->cbxState->addItem(Global::actionStateToText(Global::ActionInactive));

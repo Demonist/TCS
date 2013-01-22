@@ -6,16 +6,19 @@
 #include "cactionseatitem.h"
 #include "global.h"
 #include "cimages.h"
+#include "cgraphicsscene.h"
+#include "cpricedialog.h"
+#include "cabstractlegend.h"
 
 namespace Ui {
     class CActionTicketsManagement;
 }
 
-class CActionTicketsManagement : public QDialog
+class CActionTicketsManagement : public QDialog, public CAbstractLegend
 {
     Q_OBJECT
 	//types:
-	enum EditType{None, Avaible, NotAvaible, Hide, Show, Price, Drag};
+	enum EditType{None, Avaible, NotAvaible, Hide, Show, Price, Drag, Paint};
 
 	//members:
 protected:
@@ -24,15 +27,16 @@ protected:
 	int mId;		//! Идентификатор мероприятия.
 	int mPlaceId;	//! Идентификатор концертной площадки, на которой будет происходить данное мероприятие.
 
-	QGraphicsScene mScene;
+	CGraphicsScene mScene;
 	EditType mEditType;
-	int mScalePersent;
+	qreal mScale;
 
 	//methods:
 protected:
 	bool eventFilter(QObject *obj, QEvent *event);
 	void mouseSceneEvent(QMouseEvent *event);
 	void updateScaleText();
+	void paintLenend(QPainter *painter, const QSize &viewSize);
 
 public:
 	explicit CActionTicketsManagement(const QString &connectionName, const int id, QWidget *parent = 0);
@@ -46,10 +50,17 @@ private slots:
 	void on_tbnHide_clicked(bool checked);
 	void on_tbnShow_clicked(bool checked);
 	void on_tbnDrag_clicked(bool checked);
+	void on_tbnPricePaint_clicked(bool checked);
 	void on_tbnDrag_toggled(bool checked);
+	void on_tbnPricePaint_toggled(bool checked);
 	void on_tbnZoomIn_clicked();
 	void on_tbnZoomOut_clicked();
 	void on_tbnZoomDefault_clicked();
+	void on_cbxShowBackground_toggled(bool checked);
+	void on_cbxShowLegend_toggled(bool checked);
+	void on_tbnPriceAdd_clicked();
+	void on_tbnPriceEdit_clicked();
+	void on_tbnPriceDel_clicked();
 };
 
 #endif // CACTIONTICKETSMANAGEMENT_H

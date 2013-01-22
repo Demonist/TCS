@@ -227,6 +227,18 @@ void CPlaceSchemeDialog::drawDistances(const QGraphicsItem &item)
 	}
 }
 
+void CPlaceSchemeDialog::hideDistances()
+{
+	mDistanceLeftItem->hide();
+	mDistanceUpItem->hide();
+	mDistanceRightItem->hide();
+	mDistanceDownItem->hide();
+	mDistanceLeftLeftItem->hide();
+	mDistanceUpUpItem->hide();
+	mDistanceRightRightItem->hide();
+	mDistanceDownDownItem->hide();
+}
+
 bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 {
 	if(obj != ui->gvScheme->viewport())
@@ -234,9 +246,6 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 
 	static QGraphicsItem *movingItem = 0;
 	static QPointF offset(0, 0);
-
-	static bool dragStarted = false;
-	static QPoint lastDragPos(0, 0);
 
 	if(event->type() == QEvent::MouseButtonRelease)
 	{
@@ -274,20 +283,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 				movingItem = 0;
 				ui->gvScheme->setCursor(Qt::ArrowCursor);
 
-				mDistanceLeftItem->hide();
-				mDistanceUpItem->hide();
-				mDistanceRightItem->hide();
-				mDistanceDownItem->hide();
-				mDistanceLeftLeftItem->hide();
-				mDistanceUpUpItem->hide();
-				mDistanceRightRightItem->hide();
-				mDistanceDownDownItem->hide();
-			}
-			else if(mEditType == Drag)
-			{
-				lastDragPos = QPoint(0, 0);
-				dragStarted = false;
-				ui->gvScheme->setCursor(Qt::OpenHandCursor);
+				hideDistances();
 			}
 			else if(mEditType == Select)
 			{
@@ -325,7 +321,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 	{
 		QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-		if(obj == ui->gvScheme->viewport() && mouseEvent->button() == Qt::LeftButton)
+		if(mouseEvent->button() == Qt::LeftButton)
 		{
 			QPointF pos = ui->gvScheme->mapToScene(mouseEvent->pos());
 			if(mEditType == Move)
@@ -341,12 +337,6 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 
 					drawDistances(*movingItem);
 				}
-			}
-			else if(mEditType == Drag)
-			{
-				lastDragPos = mouseEvent->pos();
-				dragStarted = true;
-				ui->gvScheme->setCursor(Qt::ClosedHandCursor);
 			}
 		}
 	}
@@ -403,14 +393,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 			else
 			{
 				mAddItem->hide();
-				mDistanceLeftItem->hide();
-				mDistanceUpItem->hide();
-				mDistanceRightItem->hide();
-				mDistanceDownItem->hide();
-				mDistanceLeftLeftItem->hide();
-				mDistanceUpUpItem->hide();
-				mDistanceRightRightItem->hide();
-				mDistanceDownDownItem->hide();
+				hideDistances();
 			}
 		}
 		else if(mEditType == Delete)
@@ -438,15 +421,6 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 				itemAtCursor->setBorderColorAnimated(QColor(70, 70, 70));
 				itemAtCursor = 0;
 			}
-		}
-		else if(mEditType == Drag && dragStarted == true)
-		{
-			QPoint pos = mouseEvent->pos();
-			QPoint scroll = lastDragPos - pos;
-			ui->gvScheme->horizontalScrollBar()->setValue(ui->gvScheme->horizontalScrollBar()->value() + scroll.x());
-			ui->gvScheme->verticalScrollBar()->setValue(ui->gvScheme->verticalScrollBar()->value() + scroll.y());
-			lastDragPos = pos;
-
 		}
 		else if(mEditType == Select)
 		{
@@ -476,7 +450,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 	else if(event->type() == QEvent::Leave && mAddItem && mEditType == Add)
 	{
 		mAddItem->hide();
-		dragStarted = false;
+		hideDistances();
 	}
 
 	return false;
@@ -489,7 +463,7 @@ void CPlaceSchemeDialog::updateSeatsCountText()
 
 void CPlaceSchemeDialog::updateScaleText()
 {
-	ui->gbxScale->setTitle(tr("Вид [%1%]").arg(mScalePersent));
+	ui->gbxScale->setTitle(tr("Вид [%1%]").arg(mScale*100));
 }
 
 //public:
@@ -500,22 +474,28 @@ CPlaceSchemeDialog::CPlaceSchemeDialog(const QString &connectionName, const int 
 {
 	ui->setupUi(this);
 	ui->gvScheme->setMouseTracking(true);
-	ui->hblMain->setStretch(0, 100);
-	ui->hblMain->setStretch(1, 1);
+	ui->splitter->setStretchFactor(0, 100);
+	ui->splitter->setStretchFactor(1, 1);
+	ui->splitter->setCollapsible(1, true);
 
 	setWindowState(windowState() | Qt::WindowMaximized);
 
 	mEditType = None;
-	mScalePersent = 100;
+	mScale = 1.0f;
 	mSeatsCount = 0;
 	mSelectedItem = 0;
 
 	mConnectionName = connectionName;
 	mId = placeId;
 
-	mScene.setSceneRect(0.0, 0.0, 1020.0, 730.0);
+	mScene.setSceneRect(0.0, 0.0, 1020.0f, 730.0f);
 	ui->gvScheme->setScene(&mScene);
 	ui->gvScheme->viewport()->installEventFilter(this);
+	connect(ui->gvScheme, SIGNAL(wheelUp()), this, SLOT(on_tbnZoomIn_clicked()));
+	connect(ui->gvScheme, SIGNAL(wheelDown()), this, SLOT(on_tbnZoomOut_clicked()));
+
+	ui->chbxShowAxis->setChecked(mScene.isDrawAxis());
+	ui->chbxShowBackground->setChecked(mScene.isDrawBackground());
 
 	//addItem:
 	mAddItem = new CSeatItem();
@@ -534,14 +514,7 @@ CPlaceSchemeDialog::CPlaceSchemeDialog(const QString &connectionName, const int 
 	mDistanceRightRightItem = new CDistanceItem();
 	mDistanceDownDownItem = new CDistanceItem();
 
-	mDistanceLeftItem->hide();
-	mDistanceUpItem->hide();
-	mDistanceRightItem->hide();
-	mDistanceDownItem->hide();
-	mDistanceLeftLeftItem->hide();
-	mDistanceUpUpItem->hide();
-	mDistanceRightRightItem->hide();
-	mDistanceDownDownItem->hide();
+	hideDistances();
 
 	mDistanceLeftItem->setBold(true);
 	mDistanceUpItem->setBold(true);
@@ -561,15 +534,18 @@ CPlaceSchemeDialog::CPlaceSchemeDialog(const QString &connectionName, const int 
 	//load:
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	query.prepare("SELECT title, id_background FROM Places WHERE id = :id;");
+	query.prepare("SELECT title, id_background, backgroundWidth, backgroundHeight FROM Places WHERE id = :id;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
 	{
 		ui->lPlaceName->setText(query.value(0).toString());
 		if(query.isNull(1) == false)
 		{
-			mScene.setBackgroundBrush(CImages::instance()->image(query.value(1).toInt()));
+			mScene.setBackgroundImage(CImages::instance()->image(query.value(1).toInt()));
 		}
+		ui->sbxWidth->setValue(query.value(2).toInt());
+		ui->sbxHeight->setValue(query.value(3).toInt());
+		mScene.setSceneRect(0.0f, 0.0f, query.value(2).toReal(), query.value(3).toReal());
 	}
 
 	query.prepare("SELECT id FROM PlaceSchemes WHERE id_place = :id;");
@@ -599,6 +575,13 @@ void CPlaceSchemeDialog::on_pbnCancel_clicked()
 void CPlaceSchemeDialog::on_pbnApply_clicked()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+
+	query.prepare("UPDATE Places SET backgroundWidth = :width, backgroundHeight = :height WHERE id = :id;");
+	query.bindValue(":id", mId);
+	query.bindValue(":width", ui->sbxWidth->value());
+	query.bindValue(":height", ui->sbxHeight->value());
+	if(!query.exec())
+		qDebug(qPrintable(query.lastError().text()));
 
 	QList<QGraphicsItem*> items = mScene.items();
 
@@ -654,25 +637,31 @@ void CPlaceSchemeDialog::on_pbnApply_clicked()
 
 void CPlaceSchemeDialog::on_tbnZoomIn_clicked()
 {
-	ui->gvScheme->scale(1.2, 1.2);
-	mScalePersent += 20;
+	if(mScale >= 1.0f)
+		mScale += qRound(mScale + 1.0f) * 0.2f;
+	else
+		mScale += 0.2f;
+	ui->gvScheme->setScaleAnimated(mScale);
 	updateScaleText();
 }
 
 void CPlaceSchemeDialog::on_tbnZoomOut_clicked()
 {
-	if(mScalePersent > 20)
+	if(mScale > 0.2f)
 	{
-		ui->gvScheme->scale(0.8, 0.8);
-		mScalePersent -= 20;
+		if(mScale >= 1.0f)
+			mScale -= qRound(mScale + 1.0f) * 0.2f;
+		else
+			mScale -= 0.2f;
+		ui->gvScheme->setScaleAnimated(mScale);
 		updateScaleText();
 	}
 }
 
 void CPlaceSchemeDialog::on_tbnZoomDefault_clicked()
 {
-	ui->gvScheme->resetMatrix();
-	mScalePersent = 100;
+	mScale = 1.0f;
+	ui->gvScheme->setScaleAnimated(mScale);
 	updateScaleText();
 }
 
@@ -776,10 +765,7 @@ void CPlaceSchemeDialog::on_tbnSelect_toggled(bool checked)
 
 void CPlaceSchemeDialog::on_tbnDrag_toggled(bool checked)
 {
-	if(checked)
-		ui->gvScheme->setCursor(Qt::OpenHandCursor);
-	else
-		ui->gvScheme->setCursor(Qt::ArrowCursor);
+	ui->gvScheme->setDragEnabled(checked);
 }
 
 void CPlaceSchemeDialog::on_pbnBackground_clicked()
@@ -787,5 +773,25 @@ void CPlaceSchemeDialog::on_pbnBackground_clicked()
 	CBackgroundDialog backgroundDialog(mConnectionName, mId, this);
 	backgroundDialog.exec();
 	if(backgroundDialog.wasUpdated())
-		mScene.setBackgroundBrush(backgroundDialog.image());
+		mScene.setBackgroundImage(backgroundDialog.image());
+}
+
+void CPlaceSchemeDialog::on_chbxShowBackground_toggled(bool checked)
+{
+	mScene.setDrawBackground(checked);
+}
+
+void CPlaceSchemeDialog::on_chbxShowAxis_toggled(bool checked)
+{
+	mScene.setDrawAxis(checked);
+}
+
+void CPlaceSchemeDialog::on_sbxWidth_valueChanged(int arg1)
+{
+	mScene.setSceneRect(0, 0, arg1, mScene.height());
+}
+
+void CPlaceSchemeDialog::on_sbxHeight_valueChanged(int arg1)
+{
+	mScene.setSceneRect(0, 0, mScene.width(), arg1);
 }

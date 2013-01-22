@@ -8,18 +8,13 @@ class CActionSeatItem : public CSeatItem
 {
 	Q_OBJECT
 
-private:
-	QPropertyAnimation _mBlinkAnimationBlur;
-	QPropertyAnimation _mBlinkAnimationUnblur;
-
 	//members:
 protected:
 	Global::SeatState mSeatState;
-
-	QSequentialAnimationGroup mBlinkAnimation;
-	QParallelAnimationGroup mStateChangeAnimation;
+	int mPriceGroupId;
 
 	Global::SeatState mInitSeatState;
+	int mInitPriceGroupId;
 
 	//methods:
 protected:
@@ -28,16 +23,18 @@ protected:
 
 public:
 	explicit CActionSeatItem(const QString &connectionName, const int seatId);
-	explicit CActionSeatItem(const QString &connectionName, const int seatId, const Global::SeatState seatState);
+	explicit CActionSeatItem(const QString &connectionName, const int seatId, const Global::SeatState seatState, const int priceGroupId);
 	~CActionSeatItem();
 
-	void setBlinkAnimated(const qreal maximuxBlurRadius, const int durationMs = 300);
 	void setSeatStateAnimated(const Global::SeatState seatState, const int durationMs = 300);
 
 	bool needSave();
 
 	inline Global::SeatState seatState() const;
 	inline void setSeatState(const Global::SeatState seatState);
+
+	inline int priceGroupId() const;
+	inline void setPriceGroupId(const int id);
 
 	static const char* itemName();
 };
@@ -46,11 +43,19 @@ inline Global::SeatState CActionSeatItem::seatState() const
 {
 	return mSeatState;
 }
-
 inline void CActionSeatItem::setSeatState(const Global::SeatState seatState)
 {
 	mSeatState = seatState;
 	mBrush = brushForSeat();
+}
+
+inline int CActionSeatItem::priceGroupId() const
+{
+	return mPriceGroupId;
+}
+inline void CActionSeatItem::setPriceGroupId(const int id)
+{
+	mPriceGroupId = id;
 }
 
 #endif // CACTIONSEATITEM_H

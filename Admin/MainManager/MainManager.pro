@@ -12,7 +12,7 @@ TEMPLATE = app
 INCLUDEPATH += ../../common/ \
 		../../common/commonWidget/ \
 		../../common/connectionWidget/ \
-		../../common/seatItem/ \
+		../../common/graphics/ \
 		../../common/dateDialog/ \
         usersWidget/ \
         categoriesWidget/ \
@@ -36,12 +36,10 @@ SOURCES += main.cpp\
     clientsWidget/cclientdialog.cpp \
     clientsWidget/cclientswidget.cpp \
     placesWidget/cplaceschemedialog.cpp \
-    ../../common/seatItem/cseatitem.cpp \
 	actionsWidget/cactionswidget.cpp \
 	actionsWidget/cactiondialog.cpp \
     ../../common/dateDialog/cdatedialog.cpp \
     actionsWidget/cactionticketsmanagement.cpp \
-	../../common/seatItem/cactionseatitem.cpp \
 	marketsWidget/cmarketswidget.cpp \
 	marketsWidget/cmarketdialog.cpp \
     placesWidget/cdistanceitem.cpp \
@@ -50,7 +48,13 @@ SOURCES += main.cpp\
     accountingWidget/caccountingwidget.cpp \
     accountingWidget/caccountingactionsdialog.cpp \
     uploadingWidget/cuploadingwidget.cpp \
-    ../../common/commonWidget/cabstractcommonwidget.cpp
+    ../../common/commonWidget/cabstractcommonwidget.cpp \
+    ../../common/graphics/cseatitem.cpp \
+    ../../common/graphics/cactionseatitem.cpp \
+    ../../common/graphics/cgraphicsscene.cpp \
+    ../../common/graphics/cgraphicsview.cpp \
+    ../../common/graphics/cabstractlegend.cpp \
+    actionsWidget/cpricedialog.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -65,13 +69,11 @@ HEADERS  += mainwindow.h \
     clientsWidget/cclientdialog.h \
     clientsWidget/cclientswidget.h \
     placesWidget/cplaceschemedialog.h \
-    ../../common/seatItem/cseatitem.h \
 	actionsWidget/cactionswidget.h \
     actionsWidget/cactiondialog.h \
     ../../common/dateDialog/cdatedialog.h \
     actionsWidget/cactionticketsmanagement.h \
     ../../common/parallel.h \
-	../../common/seatItem/cactionseatitem.h \
 	marketsWidget/cmarketswidget.h \
 	marketsWidget/cmarketdialog.h \
     placesWidget/cdistanceitem.h \
@@ -80,7 +82,13 @@ HEADERS  += mainwindow.h \
     accountingWidget/caccountingwidget.h \
     accountingWidget/caccountingactionsdialog.h \
     uploadingWidget/cuploadingwidget.h \
-    ../../common/commonWidget/cabstractcommonwidget.h
+    ../../common/commonWidget/cabstractcommonwidget.h \
+    ../../common/graphics/cseatitem.h \
+    ../../common/graphics/cactionseatitem.h \
+    ../../common/graphics/cgraphicsscene.h \
+    ../../common/graphics/cgraphicsview.h \
+    ../../common/graphics/cabstractlegend.h \
+    actionsWidget/cpricedialog.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -102,7 +110,8 @@ FORMS    += mainwindow.ui \
     placesWidget/cbackgrounddialog.ui \
     accountingWidget/caccountingwidget.ui \
     accountingWidget/caccountingactionsdialog.ui \
-    uploadingWidget/cuploadingwidget.ui
+    uploadingWidget/cuploadingwidget.ui \
+    actionsWidget/cpricedialog.ui
 
 RESOURCES += \
 	../../common/connectionWidget/connectionwidget_res.qrc \

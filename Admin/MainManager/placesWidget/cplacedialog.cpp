@@ -9,7 +9,8 @@ CPlaceDialog::CPlaceDialog(const QString &connectionName, QWidget *parent) :
 	mConnectionName = connectionName;
 	setWindowTitle(tr("Добавление площадки"));
 	mType = Add;
-	ui->pbnEditPlaceScheme->hide();
+	ui->pbnEditPlaceScheme->setEnabled(false);
+	ui->pbnEditPlaceScheme->setToolTip(tr("Данный функционал доступен только при редактировании"));
 }
 
 CPlaceDialog::CPlaceDialog(const QString &connectionName, const int id, QWidget *parent) :
@@ -43,7 +44,7 @@ void CPlaceDialog::on_buttonBox_accepted()
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 	if(mType == Add)
 	{
-		query.prepare("INSERT INTO Places VALUES(NULL, :title, :address, NULL);");
+		query.prepare("INSERT INTO Places VALUES(NULL, :title, :address, NULL, 1030, 720);");
 		query.bindValue(":name", ui->lePlaceTitle->text());
 		query.bindValue(":address", ui->lePlaceAddress->text());
 	}

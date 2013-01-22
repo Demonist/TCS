@@ -6,246 +6,381 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>696</width>
-    <height>500</height>
+    <width>890</width>
+    <height>659</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Управление билетами</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_6">
-   <item row="0" column="0" colspan="2">
+   <item row="0" column="0">
     <widget class="QLabel" name="lPlace">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QGraphicsView" name="gvScene">
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="renderHints">
-      <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
      </property>
+     <widget class="CGraphicsView" name="gvScene">
+      <property name="renderHints">
+       <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>Места</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QToolButton" name="tbnAvaible">
+            <property name="icon">
+             <iconset resource="actionWidget_res.qrc">
+              <normaloff>:/images/avaible.png</normaloff>:/images/avaible.png</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QToolButton" name="tbnNotAvaible">
+            <property name="icon">
+             <iconset resource="actionWidget_res.qrc">
+              <normaloff>:/images/unavaible.png</normaloff>:/images/unavaible.png</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QToolButton" name="tbnShow">
+            <property name="icon">
+             <iconset resource="actionWidget_res.qrc">
+              <normaloff>:/images/show.png</normaloff>:/images/show.png</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QToolButton" name="tbnHide">
+            <property name="icon">
+             <iconset resource="actionWidget_res.qrc">
+              <normaloff>:/images/hide.png</normaloff>:/images/hide.png</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbxScale">
+         <property name="title">
+          <string>Вид [100%]</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="cbxShowBackground">
+            <property name="text">
+             <string>Отображать подложку</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <widget class="QToolButton" name="tbnZoomIn">
+              <property name="icon">
+               <iconset resource="../placesWidget/placeWidget_res.qrc">
+                <normaloff>:/images/zoomIn.png</normaloff>:/images/zoomIn.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QToolButton" name="tbnDrag">
+              <property name="icon">
+               <iconset resource="../placesWidget/placeWidget_res.qrc">
+                <normaloff>:/images/drag.png</normaloff>:/images/drag.png</iconset>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QToolButton" name="tbnZoomOut">
+              <property name="icon">
+               <iconset resource="../placesWidget/placeWidget_res.qrc">
+                <normaloff>:/images/zoomOut.png</normaloff>:/images/zoomOut.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QToolButton" name="tbnZoomDefault">
+              <property name="icon">
+               <iconset resource="../placesWidget/placeWidget_res.qrc">
+                <normaloff>:/images/zoomDefault.png</normaloff>:/images/zoomDefault.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="cbxShowLegend">
+            <property name="text">
+             <string>Отображать легенду</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Фан зона</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="0">
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string>Доступно для продажи</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="0">
+              <widget class="QSpinBox" name="sbxFanTicketsCount">
+               <property name="suffix">
+                <string> шт.</string>
+               </property>
+               <property name="maximum">
+                <number>1000000</number>
+               </property>
+               <property name="singleStep">
+                <number>10</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Стоимоить билета</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="QSpinBox" name="sbxPrice">
+               <property name="suffix">
+                <string> р.</string>
+               </property>
+               <property name="minimum">
+                <number>10</number>
+               </property>
+               <property name="maximum">
+                <number>1000000</number>
+               </property>
+               <property name="singleStep">
+                <number>10</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Ценовые группы</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_8">
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QToolButton" name="tbnPricePaint">
+              <property name="toolTip">
+               <string>Закрасить выбранной ценой место</string>
+              </property>
+              <property name="icon">
+               <iconset resource="actionWidget_res.qrc">
+                <normaloff>:/images/brush.png</normaloff>:/images/brush.png</iconset>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="tbnPriceAdd">
+              <property name="toolTip">
+               <string>Добавить ценовую группу</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../main_res.qrc">
+                <normaloff>:/images/add.png</normaloff>:/images/add.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="tbnPriceEdit">
+              <property name="toolTip">
+               <string>Редактировать ценовую группу</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../main_res.qrc">
+                <normaloff>:/images/edit.png</normaloff>:/images/edit.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="tbnPriceDel">
+              <property name="toolTip">
+               <string>Удалить ценовую группу</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../main_res.qrc">
+                <normaloff>:/images/delete.png</normaloff>:/images/delete.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <widget class="QTreeWidget" name="twPriceGroups">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="rootIsDecorated">
+             <bool>false</bool>
+            </property>
+            <property name="itemsExpandable">
+             <bool>false</bool>
+            </property>
+            <attribute name="headerDefaultSectionSize">
+             <number>50</number>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>id</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string> </string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Название</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Цена</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>147</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbnApply">
+         <property name="text">
+          <string>Применить</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../main_res.qrc">
+           <normaloff>:/images/apply.png</normaloff>:/images/apply.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbnCancel">
+         <property name="text">
+          <string>Отменить</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../main_res.qrc">
+           <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
-   </item>
-   <item row="1" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QGroupBox" name="groupBox_4">
-       <property name="title">
-        <string>Места</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QToolButton" name="tbnAvaible">
-          <property name="icon">
-           <iconset resource="actionWidget_res.qrc">
-            <normaloff>:/images/avaible.png</normaloff>:/images/avaible.png</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QToolButton" name="tbnNotAvaible">
-          <property name="icon">
-           <iconset resource="actionWidget_res.qrc">
-            <normaloff>:/images/unavaible.png</normaloff>:/images/unavaible.png</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QToolButton" name="tbnShow">
-          <property name="icon">
-           <iconset resource="actionWidget_res.qrc">
-            <normaloff>:/images/show.png</normaloff>:/images/show.png</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QToolButton" name="tbnHide">
-          <property name="icon">
-           <iconset resource="actionWidget_res.qrc">
-            <normaloff>:/images/hide.png</normaloff>:/images/hide.png</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="gbxScale">
-       <property name="title">
-        <string>Вид [100%]</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QToolButton" name="tbnZoomIn">
-          <property name="icon">
-           <iconset resource="../placesWidget/placeWidget_res.qrc">
-            <normaloff>:/images/zoomIn.png</normaloff>:/images/zoomIn.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QToolButton" name="tbnDrag">
-          <property name="icon">
-           <iconset resource="../placesWidget/placeWidget_res.qrc">
-            <normaloff>:/images/drag.png</normaloff>:/images/drag.png</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QToolButton" name="tbnZoomOut">
-          <property name="icon">
-           <iconset resource="../placesWidget/placeWidget_res.qrc">
-            <normaloff>:/images/zoomOut.png</normaloff>:/images/zoomOut.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QToolButton" name="tbnZoomDefault">
-          <property name="icon">
-           <iconset resource="../placesWidget/placeWidget_res.qrc">
-            <normaloff>:/images/zoomDefault.png</normaloff>:/images/zoomDefault.png</iconset>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_5">
-       <property name="title">
-        <string>Фан зона</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0">
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>Стоимоить билета</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="0" column="0">
-            <widget class="QSpinBox" name="sbxPrice">
-             <property name="suffix">
-              <string> р.</string>
-             </property>
-             <property name="minimum">
-              <number>10</number>
-             </property>
-             <property name="maximum">
-              <number>1000000</number>
-             </property>
-             <property name="singleStep">
-              <number>10</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QGroupBox" name="groupBox_2">
-          <property name="title">
-           <string>Доступно для продажи</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="0">
-            <widget class="QSpinBox" name="sbxFanTicketsCount">
-             <property name="suffix">
-              <string> шт.</string>
-             </property>
-             <property name="maximum">
-              <number>1000000</number>
-             </property>
-             <property name="singleStep">
-              <number>10</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pbnApply">
-       <property name="text">
-        <string>Применить</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../main_res.qrc">
-         <normaloff>:/images/apply.png</normaloff>:/images/apply.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pbnCancel">
-       <property name="text">
-        <string>Отменить</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../main_res.qrc">
-         <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>cgraphicsview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../main_res.qrc"/>
   <include location="actionWidget_res.qrc"/>
   <include location="../placesWidget/placeWidget_res.qrc"/>
+  <include location="../main_res.qrc"/>
  </resources>
  <connections/>
 </ui>
