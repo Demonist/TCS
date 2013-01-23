@@ -21,7 +21,8 @@ INCLUDEPATH += ../../common/ \
 		actionsWidget/ \
 		marketsWidget/ \
         accountingWidget/ \
-        uploadingWidget/
+		uploadingWidget/ \
+		imageDialog/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -44,7 +45,6 @@ SOURCES += main.cpp\
 	marketsWidget/cmarketdialog.cpp \
     placesWidget/cdistanceitem.cpp \
     ../../common/cimages.cpp \
-    placesWidget/cbackgrounddialog.cpp \
     accountingWidget/caccountingwidget.cpp \
     accountingWidget/caccountingactionsdialog.cpp \
     uploadingWidget/cuploadingwidget.cpp \
@@ -79,7 +79,6 @@ HEADERS  += mainwindow.h \
 	marketsWidget/cmarketdialog.h \
     placesWidget/cdistanceitem.h \
     ../../common/cimages.h \
-    placesWidget/cbackgrounddialog.h \
     accountingWidget/caccountingwidget.h \
     accountingWidget/caccountingactionsdialog.h \
     uploadingWidget/cuploadingwidget.h \
@@ -109,7 +108,6 @@ FORMS    += mainwindow.ui \
 	actionsWidget/cactionticketsmanagement.ui \
 	marketsWidget/cmarketswidget.ui \
 	marketsWidget/cmarketdialog.ui \
-    placesWidget/cbackgrounddialog.ui \
     accountingWidget/caccountingwidget.ui \
     accountingWidget/caccountingactionsdialog.ui \
     uploadingWidget/cuploadingwidget.ui \

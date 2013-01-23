@@ -68,7 +68,8 @@ void MainWindow::createTables()
 				   "fanPrice             INTEGER DEFAULT 0, "
 				   "fanCount             INTEGER DEFAULT 0, "
 				   "id_place             INTEGER NULL, "
-				   "id_category          INTEGER NULL"
+				   "id_category          INTEGER NULL, "
+				   "id_logoImage         INTEGER NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 

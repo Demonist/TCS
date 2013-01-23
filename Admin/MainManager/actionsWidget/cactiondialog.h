@@ -6,6 +6,7 @@
 #include "global.h"
 #include "cdatedialog.h"
 #include "cactionticketsmanagement.h"
+#include "cimagedialog.h"
 
 namespace Ui {
     class CActionDialog;
@@ -36,6 +37,8 @@ private slots:
 	void on_pbnApply_clicked();
 	void on_tbnDate_clicked();
 	void on_pbnTicketsManagement_clicked();
+
+	void on_pbnLogoImage_clicked();
 
 signals:
 	void dataWasUpdated();

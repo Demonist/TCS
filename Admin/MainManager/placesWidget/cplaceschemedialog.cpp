@@ -770,10 +770,10 @@ void CPlaceSchemeDialog::on_tbnDrag_toggled(bool checked)
 
 void CPlaceSchemeDialog::on_pbnBackground_clicked()
 {
-	CBackgroundDialog backgroundDialog(mConnectionName, mId, this);
-	backgroundDialog.exec();
-	if(backgroundDialog.wasUpdated())
-		mScene.setBackgroundImage(backgroundDialog.image());
+	CImageDialog imageDialog(mConnectionName, "Places", "id_background", tr("id = %1").arg(mId), this);
+	imageDialog.setWindowTitle(tr("Подложка концертной площадки"));
+	if(QDialog::Accepted == imageDialog.exec())
+		mScene.setBackgroundImage(imageDialog.image());
 }
 
 void CPlaceSchemeDialog::on_chbxShowBackground_toggled(bool checked)

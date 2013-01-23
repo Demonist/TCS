@@ -5,7 +5,7 @@
 #include <QtSql>
 #include "cseatitem.h"
 #include "cdistanceitem.h"
-#include "cbackgrounddialog.h"
+#include "cimagedialog.h"
 #include "cgraphicsscene.h"
 
 namespace Ui {

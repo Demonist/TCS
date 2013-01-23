@@ -10,6 +10,8 @@ CActionDialog::CActionDialog(const QString &connectionName, QWidget *parent) :
 	setWindowTitle(tr("Добавление мероприятия"));
 	ui->pbnTicketsManagement->setEnabled(false);
 	ui->pbnTicketsManagement->setToolTip(tr("Данный функционал доступен только при редактировании"));
+	ui->gbxLogo->setEnabled(false);
+	ui->pbnLogoImage->setToolTip(tr("Данный функционал доступен только при редактировании"));
 	mType = Add;
 
 	ui->cbxState->addItem(Global::actionStateToText(Global::ActionInactive));
@@ -122,7 +124,7 @@ void CActionDialog::on_pbnApply_clicked()
 
 	if(mType == Add)
 	{
-		query.prepare("INSERT INTO Actions VALUES(NULL, :title, :performer, :description, :date, :state, 0, 0, :id_place, :id_cat);");
+		query.prepare("INSERT INTO Actions VALUES(NULL, :title, :performer, :description, :date, :state, 0, 0, :id_place, :id_cat, NULL);");
 		query.bindValue(":title", ui->leTitle->text());
 		query.bindValue(":performer", ui->lePerformer->text());
 		query.bindValue(":description", ui->teDescription->toPlainText());
@@ -179,4 +181,11 @@ void CActionDialog::on_pbnTicketsManagement_clicked()
 		CActionTicketsManagement ticketsManagement(mConnectionName, mId, this);
 		ticketsManagement.exec();
 	}
+}
+
+void CActionDialog::on_pbnLogoImage_clicked()
+{
+	CImageDialog imageDialog(mConnectionName, "Actions", "id_logoImage", tr("id = %1").arg(mId));
+	imageDialog.setWindowTitle(tr("Логотип мероприятия"));
+	imageDialog.exec();
 }
