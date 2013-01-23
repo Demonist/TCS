@@ -84,7 +84,7 @@ void CActionTicketsManagement::paintLenend(QPainter *painter, const QSize &viewS
 	pen.setWidth(5);
 	painter->setPen(pen);
 	painter->setBrush(QColor(70, 70, 70));
-	painter->drawRoundedRect(-2, 0, viewSize.width()-2, h+5, 20, 10);	//5 - отступы, чтобы была видна только верхняя граница от pen.
+	painter->drawRoundedRect(-2, 0, viewSize.width()-2, h+5, 20, 10);	//2 и 5 - отступы, чтобы была видна только верхняя граница от pen.
 
 	pen.setColor(qRgb(200, 200, 200));
 	painter->setPen(pen);

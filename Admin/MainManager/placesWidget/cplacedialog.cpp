@@ -45,7 +45,7 @@ void CPlaceDialog::on_buttonBox_accepted()
 	if(mType == Add)
 	{
 		query.prepare("INSERT INTO Places VALUES(NULL, :title, :address, NULL, 1030, 720);");
-		query.bindValue(":name", ui->lePlaceTitle->text());
+		query.bindValue(":title", ui->lePlaceTitle->text());
 		query.bindValue(":address", ui->lePlaceAddress->text());
 	}
 	else if(mType == Edit)
@@ -57,7 +57,8 @@ void CPlaceDialog::on_buttonBox_accepted()
 	}
 
 	////TODO: :
-	query.exec();
+	if(!query.exec())
+		qDebug(qPrintable(query.lastError().text()));
 
 	emit dataWasUpdated();
 	close();

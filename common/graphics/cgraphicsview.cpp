@@ -56,6 +56,7 @@ void CGraphicsView::mouseMoveEvent(QMouseEvent *event)
 		if(verticalScrollBar())
 			verticalScrollBar()->setValue(verticalScrollBar()->value() + scroll.y());
 		mDragPos = event->pos();
+		viewport()->repaint();
 	}
 }
 
