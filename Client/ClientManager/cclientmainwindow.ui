@@ -48,6 +48,15 @@
           <normaloff>:/clientImages/categoriesImages/imActions.png</normaloff>:/clientImages/categoriesImages/imActions.png</iconset>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Мероприятия (v2)</string>
+        </property>
+        <property name="icon">
+         <iconset resource="clinet_res.qrc">
+          <normaloff>:/clientImages/categoriesImages/imActions.png</normaloff>:/clientImages/categoriesImages/imActions.png</iconset>
+        </property>
+       </item>
       </widget>
       <widget class="QStackedWidget" name="stackedWidget">
        <widget class="QWidget" name="page_actions">
@@ -60,7 +69,16 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="page_2"/>
+       <widget class="QWidget" name="page_2">
+        <layout class="QGridLayout" name="gridLayout_3">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="CClientActionSceneWidget" name="wSceneActions" native="true"/>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -73,6 +91,12 @@
    <class>CClientActionsWidget</class>
    <extends>QWidget</extends>
    <header>cclientactionswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CClientActionSceneWidget</class>
+   <extends>QWidget</extends>
+   <header>cclientactionscenewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

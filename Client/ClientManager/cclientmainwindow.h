@@ -17,6 +17,9 @@ public:
 	explicit CClientMainWindow(QWidget *parent = 0);
 	~CClientMainWindow();
 	
+private slots:
+	void on_listWidget_currentRowChanged(int currentRow);
+
 private:
 	Ui::CClientMainWindow *ui;
 	QString mConnectionName;

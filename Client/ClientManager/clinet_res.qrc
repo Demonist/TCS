@@ -4,5 +4,6 @@
         <file>clientImages/cancel.png</file>
         <file>clientImages/clear.png</file>
         <file>clientImages/categoriesImages/imActions.png</file>
+        <file>clientImages/background.jpg</file>
     </qresource>
 </RCC>

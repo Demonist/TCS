@@ -10,11 +10,15 @@ void CGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
 		painter->drawPixmap(mImageShear, mImage);
 
 	QPen pen;
-	pen.setColor(qRgb(100, 100, 100));
-	pen.setWidth(5);
 
-	painter->setPen(pen);
-	painter->drawRoundedRect(sceneRect(), 10, 10);
+	if(mDrawBounds)
+	{
+		pen.setColor(qRgb(100, 100, 100));
+		pen.setWidth(5);
+		painter->setPen(pen);
+		painter->drawRoundedRect(sceneRect(), 10, 10);
+	}
+
 	if(mDrawAxis)
 	{
 		pen.setColor(qRgb(200, 200, 200));
@@ -48,4 +52,5 @@ CGraphicsScene::CGraphicsScene(QObject *parent) :
 {
 	mDrawBackground = true;
 	mDrawAxis = false;
+	mDrawBounds = true;
 }

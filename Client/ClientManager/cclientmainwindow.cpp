@@ -18,7 +18,9 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 
 	if(startingDialog.isLogined())
 	{
+		CImages::instance(mConnectionName);
 		ui->wActions->setConnectionName(mConnectionName);
+		ui->wSceneActions->setConnectionName(mConnectionName);
 		show();
 	}
 	else
@@ -34,4 +36,15 @@ CClientMainWindow::~CClientMainWindow()
 		db.close();
 	}
 	QSqlDatabase::removeDatabase(mConnectionName);
+}
+
+void CClientMainWindow::on_listWidget_currentRowChanged(int currentRow)
+{
+	switch(currentRow)
+	{
+		case 0: ui->wActions->updateData(); break;
+		case 1: ui->wSceneActions->updateData(); break;
+	}
+
+	ui->stackedWidget->setCurrentIndex(currentRow);
 }
