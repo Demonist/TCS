@@ -88,8 +88,6 @@ void CClientDialog::on_buttonBox_rejected()
 	close();
 }
 
-
-
 bool CClientDialog::validateLogin(QString login, Type actionType, int id)
 {
     QSqlQuery query(QSqlDatabase::database(mConnectionName));

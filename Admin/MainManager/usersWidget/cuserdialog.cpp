@@ -67,7 +67,7 @@ void CUserDialog::on_buttonBox_accepted()
 	QString error;
 	if(ui->leLogin->text().isEmpty())
 		error += tr("Поле логина не должно быть пустым.\n");
-	else
+	else if(mType == Add)
 	{
 		query.prepare("SELECT COUNT(id) FROM Users WHERE login = :login;");
 		query.bindValue(":login", ui->leLogin->text());
