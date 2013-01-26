@@ -3,9 +3,10 @@
 
 #include <QtGui>
 #include <QtSql>
+#include "cabstractgraphicsitem.h"
 #include "parallel.h"
 
-class CSeatItem : public QGraphicsObject
+class CSeatItem : public CAbstractGraphicsItem
 {
     Q_OBJECT
 
@@ -19,24 +20,6 @@ protected:
 
 	QString mText;
 	QString mRow;
-	QColor mBrush;
-	QColor mBorderColor;
-	int mPenWidth;
-	QGraphicsBlurEffect mBlurEffect;
-
-	Q_PROPERTY(qreal scale READ scale WRITE setScale)
-	Q_PROPERTY(QColor brush READ brush WRITE setBrush)
-	Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor)
-	Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
-	Q_PROPERTY(int penWidth READ penWidth WRITE setPenWidth)
-	Q_PROPERTY(qreal blurRadius READ blurRadius WRITE setBlurRadius)
-
-	QPropertyAnimation mScaleAnimation;
-	QPropertyAnimation mBrushAnimation;
-	QPropertyAnimation mBorderColorAnimation;
-	QPropertyAnimation mOpacityAnimation;
-	QPropertyAnimation mPenWidthAnimation;
-	QPropertyAnimation mBlurAnimation;
 
 	//save:
 	QString mInitText;
@@ -46,7 +29,6 @@ protected:
 	//methods:
 protected:
 	void init();
-	void animationInit();
 	int fontSizeForText(const QString &text) const;
 
 public:
@@ -58,13 +40,6 @@ public:
 	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 	virtual bool needSave() const;
-
-	void setScaleAnimated(const qreal newScale, const int durationMs = 300);
-	void setBrushAnimated(const QColor &newBrushColor, const int durationMs = 300);
-	void setBorderColorAnimated(const QColor &newBorderColor, const int durationMs = 300);
-	void setOpacityAnimated(const qreal newOpacity, const int durationMs = 300);
-	void setPenWidthAnimated(const int newPenWidth, const int durationMs = 300);
-	void setBlurAnimated(const qreal newBlurRadius, const int durationMs = 300);
 
 	void setHovered(const bool hovered);
 	void setHoveredAnimated(const bool hovered, const int durationMs = 300);
@@ -87,21 +62,6 @@ public:
 
 	inline QString row() const;
 	inline void setRow(const QString &row);
-
-	inline QColor brush() const;
-	inline void setBrush(const QColor &brush);
-
-	inline QColor borderColor() const;
-	inline void setBorderColor(const QColor &newBorderColor);
-
-	inline int penWidth() const;
-	inline void setPenWidth(const int penWidth);
-
-	inline qreal blurRadius() const;
-	inline void setBlurRadius(const qreal &blurRadius);
-
-protected slots:
-	inline virtual void update_slot();
 };
 
 //inline implementation:
@@ -125,7 +85,6 @@ inline QString CSeatItem::text() const
 {
 	return mText;
 }
-
 inline void CSeatItem::setText(const QString &text)
 {
 	mText = text;
@@ -136,57 +95,9 @@ inline QString CSeatItem::row() const
 {
 	return mRow;
 }
-
 inline void CSeatItem::setRow(const QString &row)
 {
 	mRow = row;
-}
-
-inline QColor CSeatItem::brush() const
-{
-	return mBrush;
-}
-
-inline void CSeatItem::setBrush(const QColor &brush)
-{
-	mBrush = brush;
-}
-
-inline QColor CSeatItem::borderColor() const
-{
-	return mBorderColor;
-}
-
-inline void CSeatItem::setBorderColor(const QColor &newBorderColor)
-{
-	mBorderColor = newBorderColor;
-}
-
-inline int CSeatItem::penWidth() const
-{
-	return mPenWidth;
-}
-
-inline void CSeatItem::setPenWidth(const int penWidth)
-{
-	mPenWidth = penWidth;
-}
-
-inline qreal CSeatItem::blurRadius() const
-{
-	return mBlurEffect.blurRadius();
-}
-
-inline void CSeatItem::setBlurRadius(const qreal &blurRadius)
-{
-	mBlurEffect.setBlurRadius(blurRadius);
-}
-
-//protected slots:
-
-inline void CSeatItem::update_slot()
-{
-	update();
 }
 
 #endif // CSEATITEM_H

@@ -3,9 +3,10 @@
 
 #include <QtGui>
 #include <QtSql>
+#include "cabstractgraphicsitem.h"
 #include "cimages.h"
 
-class CActionItem : public QGraphicsObject
+class CActionItem : public CAbstractGraphicsItem
 {
 	Q_OBJECT
 
@@ -21,11 +22,6 @@ public:
 	
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
-signals:
-	
-public slots:
-	
 };
 
 #endif // CACTIONITEM_H

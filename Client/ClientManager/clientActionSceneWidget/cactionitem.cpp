@@ -1,7 +1,7 @@
 #include "cactionitem.h"
 
 CActionItem::CActionItem(const QString connectionName, const int actionId) :
-	QGraphicsObject()
+	CAbstractGraphicsItem()
 {
 	mConnectionName = connectionName;
 

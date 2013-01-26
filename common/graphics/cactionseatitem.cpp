@@ -6,9 +6,9 @@ void CActionSeatItem::init()
 {
 	setData(0, CActionSeatItem::itemName());
 
+	mBrushColor = brushForSeat();
 	mInitSeatState = mSeatState;
 	mInitPriceGroupId = mPriceGroupId;
-	mBrush = brushForSeat();
 }
 
 QColor CActionSeatItem::brushForSeat() const
@@ -32,7 +32,6 @@ CActionSeatItem::CActionSeatItem(const QString &connectionName, const int seatId
 {
 	mSeatState = Global::SeatHided;
 	mPriceGroupId = 0;
-
 	init();
 }
 
@@ -41,14 +40,13 @@ CActionSeatItem::CActionSeatItem(const QString &connectionName, const int seatId
 {
 	mSeatState = seatState;
 	mPriceGroupId = priceGroupId;
-
 	init();
 
 	QSqlQuery query(QSqlDatabase::database(connectionName));
 	query.prepare("SELECT color FROM ActionPriceGroups WHERE id = :id;");
 	query.bindValue(":id", mPriceGroupId);
 	if(query.exec() && query.first())
-		setBorderColor(query.value(0).toString());
+		setPenColor(query.value(0).toString());
 }
 
 CActionSeatItem::~CActionSeatItem()
@@ -62,11 +60,7 @@ void CActionSeatItem::setSeatStateAnimated(const Global::SeatState seatState, co
 	{
 		mSeatState = seatState;
 
-		mBrushAnimation.stop();
-		mBrushAnimation.setStartValue(mBrush);
-		mBrushAnimation.setEndValue(brushForSeat());
-		mBrushAnimation.setDuration(durationMs);
-		mBrushAnimation.start();
+		setBrushColorAnimated(brushForSeat(), durationMs);
 	}
 }
 

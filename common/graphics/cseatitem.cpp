@@ -9,48 +9,14 @@ void CSeatItem::init()
 {
 	setZValue(5.0);
 	setData(0, CSeatItem::itemName());
-	mBlurEffect.setBlurRadius(0.0);
-	setGraphicsEffect(&mBlurEffect);
 
 	mId = 0;
-	animationInit();
-
 	mHovered = false;
 	mSelected = false;
 
-	mBorderColor = QColor(70, 70, 70);
-	mPenWidth = 4;
-	mBrush = QColor(200, 200, 200);
-}
-
-void CSeatItem::animationInit()
-{
-	mScaleAnimation.setTargetObject(this);
-	mScaleAnimation.setPropertyName("scale");
-	mScaleAnimation.setEasingCurve(QEasingCurve::InOutSine);
-
-	mBrushAnimation.setTargetObject(this);
-	mBrushAnimation.setPropertyName("brush");
-	mBrushAnimation.setEasingCurve(QEasingCurve::InOutSine);
-	connect(&mBrushAnimation, SIGNAL(valueChanged(QVariant)), this, SLOT(update_slot()));
-
-	mBorderColorAnimation.setTargetObject(this);
-	mBorderColorAnimation.setPropertyName("borderColor");
-	mBorderColorAnimation.setEasingCurve(QEasingCurve::InOutSine);
-	connect(&mBorderColorAnimation, SIGNAL(valueChanged(QVariant)), this, SLOT(update_slot()));
-
-	mOpacityAnimation.setTargetObject(this);
-	mOpacityAnimation.setPropertyName("opacity");
-	mOpacityAnimation.setEasingCurve(QEasingCurve::InOutSine);
-
-	mPenWidthAnimation.setTargetObject(this);
-	mPenWidthAnimation.setPropertyName("penWidth");
-	mPenWidthAnimation.setEasingCurve(QEasingCurve::InOutSine);
-	connect(&mPenWidthAnimation, SIGNAL(valueChanged(QVariant)), this, SLOT(update_slot()));
-
-	mBlurAnimation.setTargetObject(this);
-	mBlurAnimation.setPropertyName("blurRadius");
-	mBlurAnimation.setEasingCurve(QEasingCurve::InOutSine);
+	mPenColor = QColor(70, 70, 70);
+	mPenWidth = 3;
+	mBrushColor = QColor(200, 200, 200);
 }
 
 int CSeatItem::fontSizeForText(const QString &text) const
@@ -77,18 +43,15 @@ int CSeatItem::fontSizeForText(const QString &text) const
 //public:
 
 CSeatItem::CSeatItem() :
-	QGraphicsObject()
+	CAbstractGraphicsItem()
 {
 	init();
-	animationInit();
 }
 
 CSeatItem::CSeatItem(const QString &connectionName, const int seatId) :
-	QGraphicsObject()
+	CAbstractGraphicsItem()
 {
 	init();
-	animationInit();
-
 	mId = seatId;
 
 	QSqlQuery query(QSqlDatabase::database(connectionName));
@@ -119,12 +82,12 @@ QRectF CSeatItem::boundingRect() const
 void CSeatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	QPen pen;
-	pen.setColor(mBorderColor);
+	pen.setColor(mPenColor);
 	pen.setWidth(mPenWidth);
 
 	painter->save();
 	painter->setPen(pen);
-	painter->setBrush(mBrush);
+	painter->setBrush(mBrushColor);
 	painter->drawRoundedRect(-HALFSIZE, -HALFSIZE, SIZE, SIZE, 10, 10);
 	QFont font = painter->font();
 	if(isSelected())
@@ -146,60 +109,6 @@ bool CSeatItem::needSave() const
 			|| pos().toPoint() != mInitPoint)
 		return true;
 	return false;
-}
-
-void CSeatItem::setScaleAnimated(const qreal newScale, const int durationMs)
-{
-	mScaleAnimation.stop();
-	mScaleAnimation.setStartValue(scale());
-	mScaleAnimation.setEndValue(newScale);
-	mScaleAnimation.setDuration(durationMs);
-	mScaleAnimation.start();
-}
-
-void CSeatItem::setBrushAnimated(const QColor &newBrushColor, const int durationMs)
-{
-	mBrushAnimation.stop();
-	mBrushAnimation.setStartValue(brush());
-	mBrushAnimation.setEndValue(newBrushColor);
-	mBrushAnimation.setDuration(durationMs);
-	mBrushAnimation.start();
-}
-
-void CSeatItem::setBorderColorAnimated(const QColor &newBorderColor, const int durationMs)
-{
-	mBorderColorAnimation.stop();
-	mBorderColorAnimation.setStartValue(borderColor());
-	mBorderColorAnimation.setEndValue(newBorderColor);
-	mBorderColorAnimation.setDuration(durationMs);
-	mBorderColorAnimation.start();
-}
-
-void CSeatItem::setOpacityAnimated(const qreal newOpacity, const int durationMs)
-{
-	mOpacityAnimation.stop();
-	mOpacityAnimation.setStartValue(opacity());
-	mOpacityAnimation.setEndValue(newOpacity);
-	mOpacityAnimation.setDuration(durationMs);
-	mOpacityAnimation.start();
-}
-
-void CSeatItem::setPenWidthAnimated(const int newPenWidth, const int durationMs)
-{
-	mPenWidthAnimation.stop();
-	mPenWidthAnimation.setStartValue(penWidth());
-	mPenWidthAnimation.setEndValue(newPenWidth);
-	mPenWidthAnimation.setDuration(durationMs);
-	mPenWidthAnimation.start();
-}
-
-void CSeatItem::setBlurAnimated(const qreal newBlurRadius, const int durationMs)
-{
-	mBlurAnimation.stop();
-	mBlurAnimation.setStartValue(blurRadius());
-	mBlurAnimation.setEndValue(newBlurRadius);
-	mBlurAnimation.setDuration(durationMs);
-	mBlurAnimation.start();
 }
 
 void CSeatItem::setHovered(const bool hovered)
@@ -239,13 +148,13 @@ void CSeatItem::setSelected(const bool selected)
 		mSelected = selected;
 		if(mSelected)
 		{
-			setPenWidth(5);
+			setPenWidth(4);
 			if(isHovered() == false)
 				setScale(1.1);
 		}
 		else
 		{
-			setPenWidth(4);
+			setPenWidth(3);
 			if(isHovered() == false)
 				setScale(1.0);
 		}
@@ -259,13 +168,13 @@ void CSeatItem::setSelectedAnimated(const bool selected, const int durationMs)
 		mSelected = selected;
 		if(mSelected)
 		{
-			setPenWidth(5);
+			setPenWidth(4);
 			if(isHovered() == false)
 				setScaleAnimated(1.1, durationMs);
 		}
 		else
 		{
-			setPenWidth(4);
+			setPenWidth(3);
 			if(isHovered() == false)
 				setScaleAnimated(1.0, durationMs);
 		}
@@ -308,11 +217,7 @@ void CSeatItem::showAnimated(const int durationMs)
 
 	show();
 
-	mOpacityAnimation.stop();
-	mOpacityAnimation.setStartValue(opacity());
-	mOpacityAnimation.setEndValue(1.0);
-	mOpacityAnimation.setDuration(durationMs);
-	mOpacityAnimation.start();
+	setOpacityAnimated(1.0, durationMs);
 }
 
 //static:

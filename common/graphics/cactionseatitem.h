@@ -46,7 +46,7 @@ inline Global::SeatState CActionSeatItem::seatState() const
 inline void CActionSeatItem::setSeatState(const Global::SeatState seatState)
 {
 	mSeatState = seatState;
-	mBrush = brushForSeat();
+	setBrushColor(brushForSeat());
 }
 
 inline int CActionSeatItem::priceGroupId() const

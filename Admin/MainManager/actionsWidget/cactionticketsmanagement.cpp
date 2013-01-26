@@ -62,7 +62,7 @@ void CActionTicketsManagement::mouseSceneEvent(QMouseEvent *event)
 			if(priceItem && seatItem->priceGroupId() != priceItem->text(ID).toInt())
 			{
 				seatItem->setPriceGroupId(priceItem->text(ID).toInt());
-				seatItem->setBorderColorAnimated(priceItem->backgroundColor(COLOR), 500);
+				seatItem->setPenColorAnimated(priceItem->backgroundColor(COLOR), 500);
 			}
 		}
 	}
@@ -94,12 +94,12 @@ void CActionTicketsManagement::paintLenend(QPainter *painter, const QSize &viewS
 	pen.setColor(qRgb(255, 255, 255));
 	painter->setPen(pen);
 	CSeatItem seatItem;
-	seatItem.setBrush(QColor(200, 200, 200));
+	seatItem.setBrushColor(QColor(200, 200, 200));
 	for(int i = 0; i < ui->twPriceGroups->topLevelItemCount(); i++)
 	{
 		QTreeWidgetItem *item = ui->twPriceGroups->topLevelItem(i);
 
-		seatItem.setBorderColor(item->backgroundColor(COLOR));
+		seatItem.setPenColor(item->backgroundColor(COLOR));
 		seatItem.setText(item->text(PRICE));
 		seatItem.paint(painter, 0, 0);
 
@@ -379,17 +379,20 @@ void CActionTicketsManagement::on_tbnPricePaint_toggled(bool checked)
 
 void CActionTicketsManagement::on_tbnZoomIn_clicked()
 {
-	if(mScale >= 1.0f)
-		mScale += qRound(mScale + 1.0f) * 0.2f;
-	else
-		mScale += 0.2f;
-	ui->gvScene->setScaleAnimated(mScale);
-	updateScaleText();
+	if(mScale < 10)
+	{
+		if(mScale >= 1.0f)
+			mScale += qRound(mScale + 1.0f) * 0.2f;
+		else
+			mScale += 0.2f;
+		ui->gvScene->setScaleAnimated(mScale);
+		updateScaleText();
+	}
 }
 
 void CActionTicketsManagement::on_tbnZoomOut_clicked()
 {
-	if(mScale > 0.2f)
+	if(mScale > 0.2000001f)
 	{
 		if(mScale >= 1.0f)
 			mScale -= qRound(mScale + 1.0f) * 0.2f;
@@ -456,7 +459,7 @@ void CActionTicketsManagement::on_tbnPriceEdit_clicked()
 				{
 					CActionSeatItem *seatItem = static_cast<CActionSeatItem*>(items[i]);
 					if(seatItem->priceGroupId() == priceDialog.id())
-						seatItem->setBorderColorAnimated(priceDialog.color(), 1000);
+						seatItem->setPenColorAnimated(priceDialog.color(), 1000);
 				}
 			}
 		}
@@ -486,7 +489,7 @@ void CActionTicketsManagement::on_tbnPriceDel_clicked()
 					if(seatItem->priceGroupId() == priceGrId)
 					{
 						seatItem->setPriceGroupId(0);
-						seatItem->setBorderColorAnimated(qRgb(70, 70, 70), 1000);
+						seatItem->setPenColorAnimated(qRgb(70, 70, 70), 1000);
 					}
 				}
 			}

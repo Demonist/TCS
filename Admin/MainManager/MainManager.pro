@@ -55,7 +55,8 @@ SOURCES += main.cpp\
     ../../common/graphics/cgraphicsview.cpp \
     ../../common/graphics/cabstractlegend.cpp \
     actionsWidget/cpricedialog.cpp \
-    imageDialog/cimagedialog.cpp
+    imageDialog/cimagedialog.cpp \
+    ../../common/graphics/cabstractgraphicsitem.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -89,7 +90,8 @@ HEADERS  += mainwindow.h \
     ../../common/graphics/cgraphicsview.h \
     ../../common/graphics/cabstractlegend.h \
     actionsWidget/cpricedialog.h \
-    imageDialog/cimagedialog.h
+    imageDialog/cimagedialog.h \
+    ../../common/graphics/cabstractgraphicsitem.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \

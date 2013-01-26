@@ -15,7 +15,7 @@ QPoint CPlaceSchemeDialog::toGrid(const QPoint &pos)
 void CPlaceSchemeDialog::drawDistances(const QGraphicsItem &item)
 {
 	const int maxDistance = 500;
-	const int minDistance = 50;
+	const int minDistance = 30;
 
 	QGraphicsItem *left = 0,
 			*up = 0,
@@ -361,19 +361,19 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 					{
 						if(itemAtCursor && itemAtCursor != item)
 						{
-							itemAtCursor->setBorderColorAnimated(QColor(70, 70, 70));
+							itemAtCursor->setPenColorAnimated(QColor(70, 70, 70));
 							itemAtCursor = 0;
 						}
 						if(itemAtCursor == 0)
 						{
 							itemAtCursor = item;
-							itemAtCursor->setBorderColorAnimated(QColor(100, 200, 50));
+							itemAtCursor->setPenColorAnimated(QColor(100, 200, 50));
 						}
 					}
 				}
 				else if(itemAtCursor)
 				{
-					itemAtCursor->setBorderColorAnimated(QColor(70, 70, 70));
+					itemAtCursor->setPenColorAnimated(QColor(70, 70, 70));
 					itemAtCursor = 0;
 				}
 			}
@@ -406,19 +406,19 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 				{
 					if(itemAtCursor && itemAtCursor != item)
 					{
-						itemAtCursor->setBorderColorAnimated(QColor(70, 70, 70));
+						itemAtCursor->setPenColorAnimated(QColor(70, 70, 70));
 						itemAtCursor = 0;
 					}
 					if(itemAtCursor == 0)
 					{
 						itemAtCursor = item;
-						itemAtCursor->setBorderColorAnimated(QColor(200, 100, 100));
+						itemAtCursor->setPenColorAnimated(QColor(200, 100, 100));
 					}
 				}
 			}
 			else if(itemAtCursor)
 			{
-				itemAtCursor->setBorderColorAnimated(QColor(70, 70, 70));
+				itemAtCursor->setPenColorAnimated(QColor(70, 70, 70));
 				itemAtCursor = 0;
 			}
 		}
@@ -637,17 +637,20 @@ void CPlaceSchemeDialog::on_pbnApply_clicked()
 
 void CPlaceSchemeDialog::on_tbnZoomIn_clicked()
 {
-	if(mScale >= 1.0f)
-		mScale += qRound(mScale + 1.0f) * 0.2f;
-	else
-		mScale += 0.2f;
-	ui->gvScheme->setScaleAnimated(mScale);
-	updateScaleText();
+	if(mScale < 10)
+	{
+		if(mScale >= 1.0f)
+			mScale += qRound(mScale + 1.0f) * 0.2f;
+		else
+			mScale += 0.2f;
+		ui->gvScheme->setScaleAnimated(mScale);
+		updateScaleText();
+	}
 }
 
 void CPlaceSchemeDialog::on_tbnZoomOut_clicked()
 {
-	if(mScale > 0.2f)
+	if(mScale > 0.2000001f)
 	{
 		if(mScale >= 1.0f)
 			mScale -= qRound(mScale + 1.0f) * 0.2f;

@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     clientActionSceneWidget/cactionitem.cpp \
     ../../common/graphics/cgraphicsscene.cpp \
     ../../common/graphics/cgraphicsview.cpp \
-    ../../common/cimages.cpp
+    ../../common/cimages.cpp \
+    ../../common/graphics/cabstractgraphicsitem.cpp
 
 HEADERS  += cclientmainwindow.h \
     ../../common/commonWidget/cabstractcommonwidget.h \
@@ -41,7 +42,8 @@ HEADERS  += cclientmainwindow.h \
     clientActionSceneWidget/cactionitem.h \
     ../../common/graphics/cgraphicsscene.h \
     ../../common/graphics/cgraphicsview.h \
-    ../../common/cimages.h
+    ../../common/cimages.h \
+    ../../common/graphics/cabstractgraphicsitem.h
 
 FORMS    += cclientmainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \

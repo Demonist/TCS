@@ -28,7 +28,7 @@ void CDistanceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 	painter->save();
 
 	QPen pen;
-	pen.setWidth(2);
+	pen.setWidth(mBold ? 3 : 2);
 	pen.setColor(qRgb(0, 255, 0));
 
 	painter->setPen(pen);
@@ -36,21 +36,25 @@ void CDistanceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
 	painter->drawLine(QPoint(0, 0), mPos);
 
-	const QString dist = QString::number(distance());
-	QRect textRect = painter->fontMetrics().boundingRect(dist);
-	textRect.moveCenter(boundingRect().center().toPoint());
-	textRect.adjust(-3, 1, 3, 1);
-	painter->drawRoundRect(textRect, 50, 50);
-
-	if(mBold)
+	const int dist = distance();
+	if(dist >= 50)
 	{
-		QFont font = painter->font();
-		font.setBold(mBold);
-		painter->setFont(font);
+		const QString distText = QString::number(dist);
+		QRect textRect = painter->fontMetrics().boundingRect(distText);
+		textRect.moveCenter(boundingRect().center().toPoint());
+		textRect.adjust(-3, 1, 3, 1);
+		painter->drawRoundRect(textRect, 50, 50);
+
+		if(mBold)
+		{
+			QFont font = painter->font();
+			font.setBold(mBold);
+			painter->setFont(font);
+		}
+		pen.setColor(qRgb(0, 0, 0));
+		painter->setPen(pen);
+		painter->drawText(textRect, Qt::AlignCenter, distText);
 	}
-	pen.setColor(qRgb(0, 0, 0));
-	painter->setPen(pen);
-	painter->drawText(textRect, Qt::AlignCenter, dist);
 
 	painter->restore();
 }
