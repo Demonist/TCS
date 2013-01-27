@@ -3,6 +3,7 @@
 CDistanceItem::CDistanceItem() :
 	QGraphicsObject()
 {
+	mBold = false;
 	setZValue(2.0);
 	setData(0, CDistanceItem::itemName());
 }

@@ -124,7 +124,7 @@ void CActionDialog::on_pbnApply_clicked()
 
 	if(mType == Add)
 	{
-		query.prepare("INSERT INTO Actions VALUES(NULL, :title, :performer, :description, :date, :state, 0, 0, :id_place, :id_cat, NULL);");
+		query.prepare("INSERT INTO Actions VALUES(NULL, :title, :performer, :description, :date, :state, 0, 0, 0, :id_place, :id_cat, NULL);");
 		query.bindValue(":title", ui->leTitle->text());
 		query.bindValue(":performer", ui->lePerformer->text());
 		query.bindValue(":description", ui->teDescription->toPlainText());

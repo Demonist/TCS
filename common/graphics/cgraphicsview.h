@@ -16,6 +16,7 @@ private:
 
 protected:
 	bool mDrag;
+	bool mWheelScalling;	//! Флаг, разрешающий изменение масштаба роликом мыши. По умолчанию равен \a true. Если равен \a false, то сингналы \a wheelUp и \a wheelDown не посылаются.
 	qreal mScale;
 	QPropertyAnimation mScaleAnimation;
 	CAbstractLegend *mLegend;
@@ -32,6 +33,7 @@ public:
 	virtual ~CGraphicsView();
 	
 	inline bool dragEnabled() const;
+	inline bool wheelScalling() const;
 	inline qreal scale() const;
 	inline CAbstractLegend* legend() const;
 	inline bool isLegend() const;
@@ -42,6 +44,7 @@ signals:
 
 public slots:
 	void setDragEnabled(const bool enableDrag);
+	inline void setWheelScalling(const bool enalbeWheelScaling);
 	void setScale(const qreal scale);
 	void setScaleAnimated(const qreal scale, const int durationMs = 750);
 	inline void setLegend(CAbstractLegend *legend);
@@ -75,6 +78,15 @@ inline void CGraphicsView::setLegend(CAbstractLegend *legend)
 inline bool CGraphicsView::isLegend() const
 {
 	return mLegend != 0;
+}
+
+inline bool CGraphicsView::wheelScalling() const
+{
+	return mWheelScalling;
+}
+inline void CGraphicsView::setWheelScalling(const bool enalbeWheelScaling)
+{
+	mWheelScalling = enalbeWheelScaling;
 }
 
 #endif // CGRAPHICSVIEW_H

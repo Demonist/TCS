@@ -41,13 +41,14 @@ CPriceDialog::CPriceDialog(const QString &connectionName, const int actionId, co
 	mActionId = actionId;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	query.prepare("SELECT name, price, color FROM ActionPriceGroups WHERE id = :id;");
+	query.prepare("SELECT name, price, penalty, color FROM ActionPriceGroups WHERE id = :id;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
 	{
 		ui->leName->setText(query.value(0).toString());
 		ui->sbxPrice->setValue(query.value(1).toInt());
-		mColor = query.value(2).toString();
+		ui->sbxPenalty->setValue(query.value(2).toInt());
+		mColor = query.value(3).toString();
 		setColor(mColor);
 	}
 }
@@ -67,6 +68,11 @@ int CPriceDialog::price() const
 	return ui->sbxPrice->value();
 }
 
+int CPriceDialog::penalty() const
+{
+	return ui->sbxPenalty->value();
+}
+
 void CPriceDialog::on_pbnCancel_clicked()
 {
 	close();
@@ -78,18 +84,20 @@ void CPriceDialog::on_pbnApply_clicked()
 
 	if(mType == Add)
 	{
-		query.prepare("INSERT INTO ActionPriceGroups VALUES(NULL, :actId, :name, :price, :color);");
+		query.prepare("INSERT INTO ActionPriceGroups VALUES(NULL, :actId, :name, :price, :penalty, :color);");
 		query.bindValue(":actId", mActionId);
 		query.bindValue(":name", ui->leName->text());
 		query.bindValue(":price", ui->sbxPrice->value());
+		query.bindValue(":penalty", ui->sbxPenalty->value());
 		query.bindValue(":color", mColor);
 	}
 	else if(mType == Edit)
 	{
-		query.prepare("UPDATE ActionPriceGroups SET name = :name, price = :price, color = :color WHERE id = :id;");
+		query.prepare("UPDATE ActionPriceGroups SET name = :name, price = :price, penalty = :penalty, color = :color WHERE id = :id;");
 		query.bindValue(":id", mId);
 		query.bindValue(":name", ui->leName->text());
 		query.bindValue(":price", ui->sbxPrice->value());
+		query.bindValue(":penalty", ui->sbxPenalty->value());
 		query.bindValue(":color", mColor);
 	}
 

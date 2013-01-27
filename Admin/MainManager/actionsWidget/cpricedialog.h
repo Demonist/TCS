@@ -25,6 +25,7 @@ public:
 	inline int id() const;
 	QString name() const;
 	int price() const;
+	int penalty() const;
 	inline QColor color() const;
 
 private slots:

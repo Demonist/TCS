@@ -17,6 +17,10 @@ private:
 	QString mTitle;
 	QString mDate;
 
+protected:
+	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
 public:
 	explicit CActionItem(const QString connectionName, const int actionId);
 	

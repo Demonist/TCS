@@ -1,8 +1,23 @@
 #include "cactionitem.h"
 
+//protected:
+
+void CActionItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+	setScaleAnimated(1.05);
+}
+
+void CActionItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+	setScaleAnimated(1.0);
+}
+
+//public:
+
 CActionItem::CActionItem(const QString connectionName, const int actionId) :
 	CAbstractGraphicsItem()
 {
+	setAcceptHoverEvents(true);
 	mConnectionName = connectionName;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
@@ -19,7 +34,7 @@ CActionItem::CActionItem(const QString connectionName, const int actionId) :
 
 QRectF CActionItem::boundingRect() const
 {
-	return QRect(0.0f, 0.0f, 200.0f, 200.0f);
+	return QRectF(0.0f, 0.0f, 200.0f, 200.0f);
 }
 
 void CActionItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

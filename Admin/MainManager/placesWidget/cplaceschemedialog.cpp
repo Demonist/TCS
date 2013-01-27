@@ -473,7 +473,6 @@ CPlaceSchemeDialog::CPlaceSchemeDialog(const QString &connectionName, const int 
 	ui(new Ui::CPlaceSchemeDialog)
 {
 	ui->setupUi(this);
-	ui->gvScheme->setMouseTracking(true);
 	ui->splitter->setStretchFactor(0, 100);
 	ui->splitter->setStretchFactor(1, 1);
 	ui->splitter->setCollapsible(1, true);

@@ -66,6 +66,7 @@ void MainWindow::createTables()
 				   "dateTime             DATETIME NULL, "
 				   "state                INTEGER DEFAULT 0, "
 				   "fanPrice             INTEGER DEFAULT 0, "
+				   "fanPenalty           INTEGER DEFAULT 0, "
 				   "fanCount             INTEGER DEFAULT 0, "
 				   "id_place             INTEGER NULL, "
 				   "id_category          INTEGER NULL, "
@@ -88,6 +89,7 @@ void MainWindow::createTables()
 				   "id_action            INTEGER NOT NULL, "
 				   "name                 TEXT NULL, "
 				   "price                INTEGER DEFAULT 0, "
+				   "penalty              INTEGER DEFAULT 0, "
 				   "color                TEXT NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));

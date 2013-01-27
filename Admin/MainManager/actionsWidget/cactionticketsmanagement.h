@@ -9,6 +9,7 @@
 #include "cgraphicsscene.h"
 #include "cpricedialog.h"
 #include "cabstractlegend.h"
+#include "cfandialog.h"
 
 namespace Ui {
     class CActionTicketsManagement;
@@ -61,6 +62,7 @@ private slots:
 	void on_tbnPriceAdd_clicked();
 	void on_tbnPriceEdit_clicked();
 	void on_tbnPriceDel_clicked();
+	void on_pbnFan_clicked();
 };
 
 #endif // CACTIONTICKETSMANAGEMENT_H

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>890</width>
-    <height>659</height>
+    <height>619</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -162,52 +162,47 @@
          <property name="title">
           <string>Фан зона</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="groupBox_2">
-            <property name="title">
-             <string>Доступно для продажи</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_4">
-             <item row="0" column="0">
-              <widget class="QSpinBox" name="sbxFanTicketsCount">
-               <property name="suffix">
-                <string> шт.</string>
-               </property>
-               <property name="maximum">
-                <number>1000000</number>
-               </property>
-               <property name="singleStep">
-                <number>10</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
+         <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox">
-            <property name="title">
-             <string>Стоимоить билета</string>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QLabel" name="lFanPrice">
+              <property name="text">
+               <string>Стоимость:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lFanPenalty">
+              <property name="text">
+               <string>Неустойка:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lFanCount">
+              <property name="text">
+               <string>Количество:</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pbnFan">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="0">
-              <widget class="QSpinBox" name="sbxPrice">
-               <property name="suffix">
-                <string> р.</string>
-               </property>
-               <property name="minimum">
-                <number>10</number>
-               </property>
-               <property name="maximum">
-                <number>1000000</number>
-               </property>
-               <property name="singleStep">
-                <number>10</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <property name="text">
+             <string>Изменить</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../main_res.qrc">
+              <normaloff>:/images/categoriesImages/imActions.png</normaloff>:/images/categoriesImages/imActions.png</iconset>
+            </property>
            </widget>
           </item>
          </layout>
@@ -307,7 +302,7 @@
             </column>
             <column>
              <property name="text">
-              <string> </string>
+              <string/>
              </property>
             </column>
             <column>
@@ -318,6 +313,11 @@
             <column>
              <property name="text">
               <string>Цена</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Неустойка</string>
              </property>
             </column>
            </widget>

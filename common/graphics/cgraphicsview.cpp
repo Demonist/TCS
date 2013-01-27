@@ -28,6 +28,7 @@ void CGraphicsView::mousePressEvent(QMouseEvent *event)
 		mDragPos = event->pos();
 		setCursor(Qt::ClosedHandCursor);
 	}
+	QGraphicsView::mousePressEvent(event);
 }
 
 void CGraphicsView::mouseReleaseEvent(QMouseEvent *event)
@@ -44,6 +45,7 @@ void CGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 				setCursor(Qt::ArrowCursor);
 		}
 	}
+	QGraphicsView::mouseReleaseEvent(event);
 }
 
 void CGraphicsView::mouseMoveEvent(QMouseEvent *event)
@@ -58,17 +60,23 @@ void CGraphicsView::mouseMoveEvent(QMouseEvent *event)
 		mDragPos = event->pos();
 		viewport()->repaint();
 	}
+	QGraphicsView::mouseMoveEvent(event);
 }
 
 void CGraphicsView::wheelEvent(QWheelEvent *event)
 {
-	if(event->orientation() == Qt::Vertical)
+	if(mWheelScalling)
 	{
-		if(event->delta() > 0)
-			emit wheelUp();
-		else
-			emit wheelDown();
+		if(event->orientation() == Qt::Vertical)
+		{
+			if(event->delta() > 0)
+				emit wheelUp();
+			else
+				emit wheelDown();
+		}
 	}
+	else
+		QGraphicsView::wheelEvent(event);
 }
 
 //public:
@@ -76,8 +84,11 @@ void CGraphicsView::wheelEvent(QWheelEvent *event)
 CGraphicsView::CGraphicsView(QWidget *parent) :
 	QGraphicsView(parent)
 {
+	viewport()->setMouseTracking(true);
+
 	mDragging = false;
 	mDrag = false;
+	mWheelScalling = true;
 	mScale = 1.0f;
 	mLegend = 0;
 

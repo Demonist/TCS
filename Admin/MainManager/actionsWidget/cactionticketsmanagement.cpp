@@ -5,6 +5,7 @@
 #define COLOR 1
 #define NAME 2
 #define PRICE 3
+#define PENALTY 4
 
 //protected:
 
@@ -126,6 +127,7 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 	ui->twPriceGroups->setColumnWidth(COLOR, 20);
 	ui->twPriceGroups->setColumnWidth(NAME, 80);
 	ui->twPriceGroups->setColumnWidth(PRICE, 50);
+	ui->twPriceGroups->setColumnWidth(PENALTY, 80);
 
 	mConnectionName = connectionName;
 	mId = id;
@@ -142,25 +144,26 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	query.prepare("SELECT Actions.title, Places.title, Actions.dateTime, Places.id, Actions.fanPrice, Actions.fanCount, Places.id_background, Actions.performer, Places.backgroundWidth, Places.backgroundHeight FROM Actions, Places WHERE Actions.id = :id AND Actions.id_place = Places.id;");
+	query.prepare("SELECT Actions.title, Places.title, Actions.performer, Actions.dateTime, Places.id, Places.id_background,  Places.backgroundWidth, Places.backgroundHeight, Actions.fanPrice, Actions.fanPenalty, Actions.fanCount FROM Actions, Places WHERE Actions.id = :id AND Actions.id_place = Places.id;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
 	{
 		ui->lPlace->setText(tr("%1 (%2) - %3 - %4")
 							.arg(query.value(0).toString())
 							.arg(query.value(1).toString())
-							.arg(query.value(7).toString())
-							.arg(query.value(2).toDateTime().toString("dd.MM.yyyy hh:mm"))
+							.arg(query.value(2).toString())
+							.arg(query.value(3).toDateTime().toString("dd.MM.yyyy hh:mm"))
 							);
-		mPlaceId = query.value(3).toInt();
-		ui->sbxPrice->setValue(query.value(4).toInt());
-		ui->sbxFanTicketsCount->setValue(query.value(5).toInt());
-		if(query.isNull(6) == false)
-			mScene.setBackgroundImage(CImages::instance()->image(query.value(6).toInt()));
-		mScene.setSceneRect(0.0f, 0.0f, query.value(8).toReal(), query.value(9).toReal());
+		mPlaceId = query.value(4).toInt();
+		if(query.isNull(5) == false)
+			mScene.setBackgroundImage(CImages::instance()->image(query.value(5).toInt()));
+		mScene.setSceneRect(0.0f, 0.0f, query.value(6).toReal(), query.value(7).toReal());
+		ui->lFanPrice->setText(tr("Цена: %1 р.").arg(query.value(8).toInt()));
+		ui->lFanPenalty->setText(tr("Неустойка: %1 р.").arg(query.value(9).toInt()));
+		ui->lFanCount->setText(tr("Количество: %1 шт.").arg(query.value(10).toInt()));
 	}
 
-	query.prepare("SELECT id, name, price, color FROM ActionPriceGroups WHERE id_action = :actId;");
+	query.prepare("SELECT id, name, price, penalty, color FROM ActionPriceGroups WHERE id_action = :actId;");
 	query.bindValue(":actId", mId);
 	if(query.exec())
 		while(query.next())
@@ -171,7 +174,8 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 				item->setText(ID, query.value(0).toString());
 				item->setText(NAME, query.value(1).toString());
 				item->setText(PRICE, query.value(2).toString());
-				item->setBackgroundColor(COLOR, QColor(query.value(3).toString()));
+				item->setBackgroundColor(COLOR, QColor(query.value(4).toString()));
+				item->setText(PENALTY, query.value(3).toString());
 				ui->twPriceGroups->addTopLevelItem(item);
 			}
 		}
@@ -219,14 +223,6 @@ void CActionTicketsManagement::on_pbnCancel_clicked()
 void CActionTicketsManagement::on_pbnApply_clicked()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-
-	query.prepare("UPDATE Actions SET fanPrice = :price, fanCount = :count WHERE id = :id;");
-	query.bindValue(":id", mId);
-	query.bindValue(":price", ui->sbxPrice->value());
-	query.bindValue(":count", ui->sbxFanTicketsCount->value());
-	if(!query.exec())
-		qDebug(qPrintable(query.lastError().text()));
-
 	QList<QGraphicsItem*> items = mScene.items();
 
 	QProgressDialog progressDialog(this);
@@ -435,6 +431,7 @@ void CActionTicketsManagement::on_tbnPriceAdd_clicked()
 			item->setText(NAME, priceDialog.name());
 			item->setText(PRICE, QString::number(priceDialog.price()));
 			item->setBackgroundColor(COLOR, priceDialog.color());
+			item->setText(PENALTY, QString::number(priceDialog.penalty()));
 			ui->twPriceGroups->addTopLevelItem(item);
 		}
 	}
@@ -451,6 +448,7 @@ void CActionTicketsManagement::on_tbnPriceEdit_clicked()
 			item->setText(NAME, priceDialog.name());
 			item->setText(PRICE, QString::number(priceDialog.price()));
 			item->setBackgroundColor(COLOR, priceDialog.color());
+			item->setText(PENALTY, QString::number(priceDialog.penalty()));
 
 			QList<QGraphicsItem*> items = mScene.items();
 			for(int i = 0; i < items.count(); i++)
@@ -494,5 +492,16 @@ void CActionTicketsManagement::on_tbnPriceDel_clicked()
 				}
 			}
 		}
+	}
+}
+
+void CActionTicketsManagement::on_pbnFan_clicked()
+{
+	CFanDialog fanDialog(mConnectionName, mId, this);
+	if(QDialog::Accepted == fanDialog.exec())
+	{
+		ui->lFanPrice->setText(tr("Цена: %1 р.").arg(fanDialog.price()));
+		ui->lFanPenalty->setText(tr("Неустойка: %1 р.").arg(fanDialog.penalty()));
+		ui->lFanCount->setText(tr("Количество: %1 шт.").arg(fanDialog.count()));
 	}
 }
