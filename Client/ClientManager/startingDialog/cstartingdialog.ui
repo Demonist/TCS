@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_6">
    <item row="0" column="0">
-    <widget class="QStackedWidget" name="stackedWidget">
+    <widget class="CAnimatedStackedWidget" name="stackedWidget">
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -180,6 +180,12 @@
    <class>CDataBaseConnectionWidget</class>
    <extends>QWidget</extends>
    <header location="global">cdatabaseconnectionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CAnimatedStackedWidget</class>
+   <extends>QStackedWidget</extends>
+   <header location="global">canimatedstackedwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

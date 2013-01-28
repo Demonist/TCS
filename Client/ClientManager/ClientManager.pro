@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     ../../common/graphics/cgraphicsscene.cpp \
     ../../common/graphics/cgraphicsview.cpp \
     ../../common/cimages.cpp \
-    ../../common/graphics/cabstractgraphicsitem.cpp
+    ../../common/graphics/cabstractgraphicsitem.cpp \
+    ../../common/canimatedstackedwidget.cpp
 
 HEADERS  += cclientmainwindow.h \
     ../../common/commonWidget/cabstractcommonwidget.h \
@@ -43,7 +44,8 @@ HEADERS  += cclientmainwindow.h \
     ../../common/graphics/cgraphicsscene.h \
     ../../common/graphics/cgraphicsview.h \
     ../../common/cimages.h \
-    ../../common/graphics/cabstractgraphicsitem.h
+    ../../common/graphics/cabstractgraphicsitem.h \
+    ../../common/canimatedstackedwidget.h
 
 FORMS    += cclientmainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \

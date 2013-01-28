@@ -6,7 +6,7 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 	ui(new Ui::CClientMainWindow)
 {
 	ui->setupUi(this);
-
+	ui->stackedWidget->setCurrentIndex(0);
 	ui->splitter->setCollapsible(0, true);
 	ui->splitter->setStretchFactor(0, 1);
 	ui->splitter->setStretchFactor(1, 100);
@@ -46,5 +46,5 @@ void CClientMainWindow::on_listWidget_currentRowChanged(int currentRow)
 		case 1: ui->wSceneActions->updateData(); break;
 	}
 
-	ui->stackedWidget->setCurrentIndex(currentRow);
+	ui->stackedWidget->setCurrentIndexAnimatedVertical(currentRow);
 }

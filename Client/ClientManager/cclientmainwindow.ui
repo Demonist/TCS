@@ -58,7 +58,7 @@
         </property>
        </item>
       </widget>
-      <widget class="QStackedWidget" name="stackedWidget">
+      <widget class="CAnimatedStackedWidget" name="stackedWidget">
        <widget class="QWidget" name="page_actions">
         <layout class="QGridLayout" name="gridLayout_2">
          <property name="margin">
@@ -87,6 +87,12 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>CAnimatedStackedWidget</class>
+   <extends>QStackedWidget</extends>
+   <header location="global">canimatedstackedwidget.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>CClientActionsWidget</class>
    <extends>QWidget</extends>

@@ -116,6 +116,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 	ui->stackedWidget->setCurrentIndex(0);  ////Чтобы не менять в ui.
+	ui->swSettings->setCurrentIndex(0);
 
 	ui->connectionWidget->setConnectionName("dataBaseAdmin");
 	connect(ui->connectionWidget, SIGNAL(closed()), this, SLOT(close()));
@@ -170,7 +171,7 @@ void MainWindow::connected(QString connectionName)
 	createTables();
 	CImages::instance(mConnectionName);
 
-	ui->stackedWidget->setCurrentIndex(1);
+	ui->stackedWidget->setCurrentIndexAnimatedHorizontal(1);
 }
 
 void MainWindow::on_lwSettings_currentRowChanged(int currentRow)
@@ -187,5 +188,5 @@ void MainWindow::on_lwSettings_currentRowChanged(int currentRow)
 		case 7: ui->wUploading->updateData(); break;
 	}
 
-	ui->swSettings->setCurrentIndex(currentRow);
+	ui->swSettings->setCurrentIndexAnimatedVertical(currentRow);
 }

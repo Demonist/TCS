@@ -19,7 +19,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QStackedWidget" name="stackedWidget">
+     <widget class="CAnimatedStackedWidget" name="stackedWidget">
       <property name="currentIndex">
        <number>1</number>
       </property>
@@ -124,7 +124,7 @@
              <string>Отчеты</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="main_res.qrc">
               <normaloff>:/images/categoriesImages/imReport.png</normaloff>:/images/categoriesImages/imReport.png</iconset>
             </property>
            </item>
@@ -133,12 +133,12 @@
              <string>Выгрузка базы</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="main_res.qrc">
               <normaloff>:/images/categoriesImages/imUploading.png</normaloff>:/images/categoriesImages/imUploading.png</iconset>
             </property>
            </item>
           </widget>
-          <widget class="QStackedWidget" name="swSettings">
+          <widget class="CAnimatedStackedWidget" name="swSettings">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -243,7 +243,13 @@
   <customwidget>
    <class>CDataBaseConnectionWidget</class>
    <extends>QWidget</extends>
-   <header>cdatabaseconnectionwidget.h</header>
+   <header location="global">cdatabaseconnectionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CAnimatedStackedWidget</class>
+   <extends>QStackedWidget</extends>
+   <header location="global">canimatedstackedwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

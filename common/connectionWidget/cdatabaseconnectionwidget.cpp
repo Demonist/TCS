@@ -109,9 +109,14 @@ void CDataBaseConnectionWidget::on_pbnDbConnect_clicked()
 	else    //connecting to file
 	{
 		db.setDatabaseName(ui->cbxDbFileName->currentText());
+		QString error;
 		if(db.databaseName().isEmpty())
+			error = tr("Файл не выбран");
+		else if(QFile::exists(db.databaseName()) == false)
+			error = tr("Файл не найден");
+		if(error.isEmpty() == false)
 		{
-			ui->lDbConnectionStatus->setText(tr("Файл не выбран"));
+			ui->lDbConnectionStatus->setText(error);
 			return;
 		}
 	}
