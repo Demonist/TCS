@@ -171,7 +171,7 @@ void MainWindow::connected(QString connectionName)
 	createTables();
 	CImages::instance(mConnectionName);
 
-	ui->stackedWidget->setCurrentIndexAnimatedHorizontal(1);
+	ui->stackedWidget->setCurrentIndexAnimatedHorizontal(1, 750);
 }
 
 void MainWindow::on_lwSettings_currentRowChanged(int currentRow)

@@ -65,8 +65,15 @@ public slots:
 	inline void setCurrentIndexAnimatedVertical(const int index, const VerticalDirection direction = VerticalAuto, const int duration = 500);
 	inline void setCurrentIndexAnimatedHorizontal(const int index, const HorizontalDirection direction = HorizontalAuto, const int duration = 500);
 
+	inline void setCurrentWidgetAnimatedVertical(QWidget *widget, const int duration);
+	inline void setCurrentWidgetAnimatedHorizontal(QWidget *widget, const int duration);
+
+	inline void setCurrentIndexAnimatedVertical(const int index, const int duration);
+	inline void setCurrentIndexAnimatedHorizontal(const int index, const int duration);
+
 private slots:
 	void firstAnimationFinished();
+	void secondAnimationFinished();
 };
 
 //inline implementation:
@@ -84,6 +91,26 @@ inline void CAnimatedStackedWidget::setCurrentIndexAnimatedVertical(const int in
 inline void CAnimatedStackedWidget::setCurrentIndexAnimatedHorizontal(const int index, const HorizontalDirection direction, const int duration)
 {
 	setCurrentWidgetAnimatedHorizontal(widget(index), direction, duration);
+}
+
+inline void CAnimatedStackedWidget::setCurrentWidgetAnimatedVertical(QWidget *widget, const int duration)
+{
+	setCurrentWidgetAnimatedVertical(widget, VerticalAuto, duration);
+}
+
+inline void CAnimatedStackedWidget::setCurrentWidgetAnimatedHorizontal(QWidget *widget, const int duration)
+{
+	setCurrentWidgetAnimatedHorizontal(widget, HorizontalAuto, duration);
+}
+
+inline void CAnimatedStackedWidget::setCurrentIndexAnimatedVertical(const int index, const int duration)
+{
+	setCurrentWidgetAnimatedVertical(widget(index), duration);
+}
+
+inline void CAnimatedStackedWidget::setCurrentIndexAnimatedHorizontal(const int index, const int duration)
+{
+	setCurrentWidgetAnimatedHorizontal(widget(index), duration);
 }
 
 #endif // CANIMATEDSTACKEDWIDGET_H

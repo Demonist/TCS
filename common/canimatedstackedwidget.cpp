@@ -8,6 +8,7 @@ CAnimatedStackedWidget::CAnimatedStackedWidget(QWidget *parent) :
 	mNextWidget = 0;
 
 	connect(&mAnimationOut, SIGNAL(finished()), this, SLOT(firstAnimationFinished()));
+	connect(&mAnimationIn, SIGNAL(finished()), this, SLOT(secondAnimationFinished()));
 
 	mAnimationOut.setPropertyName("pos");
 	mAnimationOut.setEasingCurve(QEasingCurve::InQuart);
@@ -103,9 +104,22 @@ void CAnimatedStackedWidget::firstAnimationFinished()
 		mAnimationIn.setStartValue(pos);
 		mAnimationIn.setEndValue(QPoint(0, 0));
 
-		setCurrentWidget(mNextWidget);
-		mNextWidget = 0;
+		//Костыль от мерцания:
+		QWidget *w = currentWidget();
+		QStackedWidget::setCurrentWidget(mNextWidget);	//Смена текущего виджета на новый и обратно сделана для ресайза.
+		QStackedWidget::setCurrentWidget(w);
+		currentWidget()->hide();
+		mNextWidget->show();
 
 		mAnimationIn.start();
+	}
+}
+
+void CAnimatedStackedWidget::secondAnimationFinished()
+{
+	if(mNextWidget)
+	{
+		QStackedWidget::setCurrentWidget(mNextWidget);
+		mNextWidget = 0;
 	}
 }
