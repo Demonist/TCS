@@ -20,45 +20,91 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QListWidget" name="listWidget">
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QListWidget" name="listWidget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>22</width>
+            <height>22</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Мероприятия</string>
+           </property>
+           <property name="icon">
+            <iconset resource="clinet_res.qrc">
+             <normaloff>:/clientImages/categoriesImages/imActions.png</normaloff>:/clientImages/categoriesImages/imActions.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Бронь</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Возврат билета</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Регистрация</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGraphicsView" name="gvPreview">
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
+            <height>150</height>
+           </size>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="interactive">
+           <bool>false</bool>
+          </property>
+          <property name="renderHints">
+           <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="CAnimatedStackedWidget" name="stackedWidget">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>16777215</height>
-        </size>
+       <property name="currentIndex">
+        <number>0</number>
        </property>
-       <property name="iconSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <item>
-        <property name="text">
-         <string>Мероприятия</string>
-        </property>
-        <property name="icon">
-         <iconset resource="clinet_res.qrc">
-          <normaloff>:/clientImages/categoriesImages/imActions.png</normaloff>:/clientImages/categoriesImages/imActions.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Мероприятия (v2)</string>
-        </property>
-        <property name="icon">
-         <iconset resource="clinet_res.qrc">
-          <normaloff>:/clientImages/categoriesImages/imActions.png</normaloff>:/clientImages/categoriesImages/imActions.png</iconset>
-        </property>
-       </item>
-      </widget>
-      <widget class="CAnimatedStackedWidget" name="stackedWidget">
        <widget class="QWidget" name="page_actions">
         <layout class="QGridLayout" name="gridLayout_2">
          <property name="margin">
@@ -75,10 +121,12 @@
           <number>0</number>
          </property>
          <item row="0" column="0">
-          <widget class="CClientActionSceneWidget" name="wSceneActions" native="true"/>
+          <widget class="QWidget" name="widget1" native="true"/>
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="page_3"/>
+       <widget class="QWidget" name="page_4"/>
       </widget>
      </widget>
     </item>
@@ -97,12 +145,6 @@
    <class>CClientActionsWidget</class>
    <extends>QWidget</extends>
    <header>cclientactionswidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>CClientActionSceneWidget</class>
-   <extends>QWidget</extends>
-   <header>cclientactionscenewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

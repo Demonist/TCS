@@ -15,8 +15,7 @@ INCLUDEPATH += ../../common/ \
 		../../common/graphics/ \
 		../../common/dateDialog/ \
 		startingDialog/ \
-		clientActionsWidget/ \
-		clientActionSceneWidget/
+		clientActionsWidget/
 
 SOURCES += main.cpp\
         cclientmainwindow.cpp \
@@ -25,8 +24,6 @@ SOURCES += main.cpp\
     startingDialog/cstartingdialog.cpp \
     clientActionsWidget/cclientactionswidget.cpp \
     ../../common/dateDialog/cdatedialog.cpp \
-    clientActionSceneWidget/cclientactionscenewidget.cpp \
-    clientActionSceneWidget/cactionitem.cpp \
     ../../common/graphics/cgraphicsscene.cpp \
     ../../common/graphics/cgraphicsview.cpp \
     ../../common/cimages.cpp \
@@ -39,8 +36,6 @@ HEADERS  += cclientmainwindow.h \
     startingDialog/cstartingdialog.h \
     clientActionsWidget/cclientactionswidget.h \
     ../../common/dateDialog/cdatedialog.h \
-    clientActionSceneWidget/cclientactionscenewidget.h \
-    clientActionSceneWidget/cactionitem.h \
     ../../common/graphics/cgraphicsscene.h \
     ../../common/graphics/cgraphicsview.h \
     ../../common/cimages.h \
@@ -51,8 +46,7 @@ FORMS    += cclientmainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
     startingDialog/cstartingdialog.ui \
     clientActionsWidget/cclientactionswidget.ui \
-    ../../common/dateDialog/cdatedialog.ui \
-    clientActionSceneWidget/cclientactionscenewidget.ui
+    ../../common/dateDialog/cdatedialog.ui
 
 RESOURCES += \
     ../../common/connectionWidget/connectionwidget_res.qrc \

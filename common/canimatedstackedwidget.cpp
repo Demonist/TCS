@@ -3,7 +3,7 @@
 //public:
 
 CAnimatedStackedWidget::CAnimatedStackedWidget(QWidget *parent) :
-    QStackedWidget(parent)
+	QStackedWidget(parent)
 {
 	mNextWidget = 0;
 
@@ -23,9 +23,15 @@ CAnimatedStackedWidget::~CAnimatedStackedWidget()
 
 void CAnimatedStackedWidget::setCurrentWidgetAnimated(QWidget *widget, const Direction direction, const int duration)
 {
-	if(widget && widget != currentWidget())
+	if(widget
+	   && (widget != currentWidget()
+		   || mNextWidget))
 	{
 		mAnimationOut.stop();
+		mAnimationIn.stop();
+
+		if(mNextWidget)
+			setCurrentWidget(mNextWidget);
 
 		mDirection = direction;
 		mNextWidget = widget;

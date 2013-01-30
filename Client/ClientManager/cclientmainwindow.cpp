@@ -20,7 +20,7 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 	{
 		CImages::instance(mConnectionName);
 		ui->wActions->setConnectionName(mConnectionName);
-		ui->wSceneActions->setConnectionName(mConnectionName);
+
 		show();
 	}
 	else
@@ -43,7 +43,6 @@ void CClientMainWindow::on_listWidget_currentRowChanged(int currentRow)
 	switch(currentRow)
 	{
 		case 0: ui->wActions->updateData(); break;
-		case 1: ui->wSceneActions->updateData(); break;
 	}
 
 	ui->stackedWidget->setCurrentIndexAnimatedVertical(currentRow);

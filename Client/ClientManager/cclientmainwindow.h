@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtSql>
 #include "cstartingdialog.h"
+#include "cimages.h"
 
 namespace Ui {
 	class CClientMainWindow;
