@@ -54,7 +54,8 @@ void MainWindow::createTables()
 				   "name                 TEXT NULL, "
 				   "birthDate            DATE NULL,  "
 				   "login                TEXT NULL,  "
-				   "passwordHash         TEXT NULL  "
+                   "passwordHash         TEXT NULL,  "
+                   "clientsPhone         TEXT NULL  "
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 

@@ -15,7 +15,9 @@ INCLUDEPATH += ../../common/ \
 		../../common/graphics/ \
 		../../common/dateDialog/ \
 		startingDialog/ \
-		clientActionsWidget/
+                clientActionsWidget/ \
+                clientRegistrationWidget/
+
 
 SOURCES += main.cpp\
         cclientmainwindow.cpp \
@@ -28,7 +30,8 @@ SOURCES += main.cpp\
     ../../common/graphics/cgraphicsview.cpp \
     ../../common/cimages.cpp \
     ../../common/graphics/cabstractgraphicsitem.cpp \
-    ../../common/canimatedstackedwidget.cpp
+    ../../common/canimatedstackedwidget.cpp \
+    clientRegistrationWidget/cclientregistrationwidget.cpp
 
 HEADERS  += cclientmainwindow.h \
     ../../common/commonWidget/cabstractcommonwidget.h \
@@ -40,13 +43,15 @@ HEADERS  += cclientmainwindow.h \
     ../../common/graphics/cgraphicsview.h \
     ../../common/cimages.h \
     ../../common/graphics/cabstractgraphicsitem.h \
-    ../../common/canimatedstackedwidget.h
+    ../../common/canimatedstackedwidget.h \
+    clientRegistrationWidget/cclientregistrationwidget.h
 
 FORMS    += cclientmainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
     startingDialog/cstartingdialog.ui \
     clientActionsWidget/cclientactionswidget.ui \
-    ../../common/dateDialog/cdatedialog.ui
+    ../../common/dateDialog/cdatedialog.ui \
+    clientRegistrationWidget/cclientregistrationwidget.ui
 
 RESOURCES += \
     ../../common/connectionWidget/connectionwidget_res.qrc \

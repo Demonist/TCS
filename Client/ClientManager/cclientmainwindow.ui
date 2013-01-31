@@ -23,7 +23,7 @@
       <property name="childrenCollapsible">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QListWidget" name="listWidget">
@@ -103,7 +103,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="page_actions">
         <layout class="QGridLayout" name="gridLayout_2">
@@ -126,7 +126,16 @@
         </layout>
        </widget>
        <widget class="QWidget" name="page_3"/>
-       <widget class="QWidget" name="page_4"/>
+       <widget class="QWidget" name="page_registration">
+        <layout class="QGridLayout" name="gridLayout_4">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="CClientRegistrationWidget" name="wRegistration" native="true"/>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -145,6 +154,12 @@
    <class>CClientActionsWidget</class>
    <extends>QWidget</extends>
    <header>cclientactionswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CClientRegistrationWidget</class>
+   <extends>QWidget</extends>
+   <header>cclientregistrationwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
