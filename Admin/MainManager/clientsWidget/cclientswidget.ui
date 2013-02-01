@@ -50,6 +50,11 @@
           <string>Пароль</string>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string>Телефон</string>
+         </property>
+        </column>
        </widget>
       </item>
       <item row="0" column="1">
@@ -108,6 +113,7 @@
   </layout>
  </widget>
  <resources>
+  <include location="../main_res.qrc"/>
   <include location="../main_res.qrc"/>
  </resources>
  <connections/>

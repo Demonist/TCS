@@ -5,5 +5,8 @@
         <file>clientImages/clear.png</file>
         <file>clientImages/categoriesImages/imActions.png</file>
         <file>clientImages/background.jpg</file>
+        <file>clientImages/categoriesImages/imClients.png</file>
+        <file>clientImages/categoriesImages/imReserved.png</file>
+        <file>clientImages/categoriesImages/imReturn.png</file>
     </qresource>
 </RCC>

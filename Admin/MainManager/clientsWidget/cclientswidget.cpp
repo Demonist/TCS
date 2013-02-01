@@ -6,6 +6,7 @@
 #define BIRTHDATE 2
 #define LOGIN 3
 #define PASSWORD 4
+#define PHONE 5
 
 CClientsWidget::CClientsWidget(QWidget *parent) :
 	CAbstractCommonWidget(parent),
@@ -18,6 +19,7 @@ CClientsWidget::CClientsWidget(QWidget *parent) :
 	ui->twClients->setColumnWidth(BIRTHDATE, 200);
 	ui->twClients->setColumnWidth(LOGIN, 200);
 	ui->twClients->setColumnWidth(PASSWORD, 200);
+    ui->twClients->setColumnWidth(PHONE, 200);
 }
 
 CClientsWidget::~CClientsWidget()
@@ -28,7 +30,7 @@ CClientsWidget::~CClientsWidget()
 void CClientsWidget::updateData()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	if(query.exec("SELECT id, name, birthDate, login, passwordHash FROM Clients;"))
+    if(query.exec("SELECT id, name, birthDate, login, passwordHash, clientsPhone FROM Clients;"))
 	{
 		ui->twClients->clear();
 		uint count = 0;
@@ -43,6 +45,7 @@ void CClientsWidget::updateData()
 				item->setText(BIRTHDATE, query.value(2).toString());
 				item->setText(LOGIN, query.value(3).toString());
 				item->setText(PASSWORD, query.value(4).toString());
+                item->setText(PHONE, query.value(5).toString());
 
 				ui->twClients->addTopLevelItem(item);
 				count++;

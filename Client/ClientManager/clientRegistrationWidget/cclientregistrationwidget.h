@@ -25,12 +25,10 @@ public slots:
 private slots:
     void on_pbnSave_clicked();
 
-    void on_tbnBirthDate_clicked();
-
 private:
     Ui::CClientRegistrationWidget *ui;
     bool validateLogin(QString login);
-    QString generatePassword(QString hs);
+    QString generatePassword();
 };
 
 #endif // CCLIENTREGISTRATIONWIDGET_H

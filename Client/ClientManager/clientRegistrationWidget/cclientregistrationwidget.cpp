@@ -6,7 +6,6 @@ CClientRegistrationWidget::CClientRegistrationWidget(QWidget *parent) :
     ui(new Ui::CClientRegistrationWidget)
 {
     ui->setupUi(this);
-    generatePassword("dgh56uyjmyjm");
 }
 
 CClientRegistrationWidget::~CClientRegistrationWidget()
@@ -27,9 +26,9 @@ void CClientRegistrationWidget::on_pbnSave_clicked()
     {
         query.prepare("INSERT INTO Clients VALUES(NULL, :name, :birthDate, :login, :passwordHash, :clientsPhone);");
         query.bindValue(":name", ui->leFIO->text());
-        query.bindValue(":birthDate", ui->leBirthDate->text());
+        query.bindValue(":birthDate", ui->cwBDate->selectedDate().toString("dd.MM.yyyy"));
         query.bindValue(":login", ui->leLogin->text());
-        //query.bindValue(":passwordHash", generatePassword());
+        query.bindValue(":passwordHash", generatePassword());
         query.bindValue(":clientsPhone", ui->lePhone->text());
         query.exec();
     }
@@ -54,35 +53,14 @@ bool CClientRegistrationWidget::validateLogin(QString login)
     }
 }
 
-QString CClientRegistrationWidget::generatePassword(QString hs)
+QString CClientRegistrationWidget::generatePassword()
 {
-    QList<QString> charsTable;
-    charsTable << "A" << "B" << "C" << "D" << "E" << "F" << "G" << "H" << "I" << "J" << "K" << "L" << "M"
-               << "N" << "O" << "P" << "Q" << "R" << "S" << "T" << "U" << "V" << "W" << "X" << "Y" << "Z"
-               << "a" << "b" << "c" << "d" << "e" << "f" << "g" << "h" << "i" << "j" << "k" << "l" << "m"
-               << "n" << "o" << "p" << "q" << "r" << "s" << "t" << "u" << "v" << "w" << "x" << "y" << "z"
-               << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "0";
-
-    int passwordLenght = qrand();
-
-   // QByteArray md5Hash = QCryptographicHash::hash("rfgnfgm", QCryptographicHash::Md5);
-
-
-
-    QString s = QString::number(passwordLenght);
-    qDebug(qPrintable(s));
-    return s;
-
-}
-
-void CClientRegistrationWidget::on_tbnBirthDate_clicked()
-{
-    CDateDialog dateDialog(this);
-    if(ui->leBirthDate->text().isEmpty() == false)
-        dateDialog.setDate(QDate::fromString(ui->leBirthDate->text(), "dd.MM.yyyy"));
-    dateDialog.exec();
-    if(dateDialog.result())
-    {
-        ui->leBirthDate->setText(dateDialog.selectedDate().toString("dd.MM.yyyy"));
-    }
+    const static char* const dict = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const static int dictLen = qstrlen(dict);
+    qsrand(QTime::currentTime().msec());
+    int len = 6 + qrand() % 5;
+    QString pass;
+    for(int i = 0; i < len; i++)
+        pass.append(dict[qrand() % dictLen]);
+    return pass;
 }

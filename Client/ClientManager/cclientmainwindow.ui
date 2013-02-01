@@ -58,15 +58,27 @@
            <property name="text">
             <string>Бронь</string>
            </property>
+           <property name="icon">
+            <iconset resource="clinet_res.qrc">
+             <normaloff>:/clientImages/categoriesImages/imReserved.png</normaloff>:/clientImages/categoriesImages/imReserved.png</iconset>
+           </property>
           </item>
           <item>
            <property name="text">
             <string>Возврат билета</string>
            </property>
+           <property name="icon">
+            <iconset resource="clinet_res.qrc">
+             <normaloff>:/clientImages/categoriesImages/imReturn.png</normaloff>:/clientImages/categoriesImages/imReturn.png</iconset>
+           </property>
           </item>
           <item>
            <property name="text">
             <string>Регистрация</string>
+           </property>
+           <property name="icon">
+            <iconset resource="clinet_res.qrc">
+             <normaloff>:/clientImages/categoriesImages/imClients.png</normaloff>:/clientImages/categoriesImages/imClients.png</iconset>
            </property>
           </item>
          </widget>
