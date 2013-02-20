@@ -96,6 +96,19 @@ void CActionTicketsManagement::paintLenend(QPainter *painter, const QSize &viewS
 	painter->setPen(pen);
 	CSeatItem seatItem;
 	seatItem.setBrushColor(QColor(200, 200, 200));
+
+
+	//Фан зона:
+	if(mFanCount > 0)
+	{
+		seatItem.setPenColor(QColor(100, 100, 255));
+		seatItem.setText(QString::number(mFanPrice));
+		seatItem.paint(painter, 0, 0);
+
+		painter->drawText(-50, 20, 100, 50, Qt::AlignHCenter | Qt::AlignTop, tr("Фан зона"));
+		painter->translate(100, 0);
+	}
+
 	for(int i = 0; i < ui->twPriceGroups->topLevelItemCount(); i++)
 	{
 		QTreeWidgetItem *item = ui->twPriceGroups->topLevelItem(i);
@@ -144,7 +157,24 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	query.prepare("SELECT Actions.title, Places.title, Actions.performer, Actions.dateTime, Places.id, Places.id_background,  Places.backgroundWidth, Places.backgroundHeight, Actions.fanPrice, Actions.fanPenalty, Actions.fanCount FROM Actions, Places WHERE Actions.id = :id AND Actions.id_place = Places.id;");
+	query.prepare("SELECT"
+				  " Actions.title,"
+				  " Places.title,"
+				  " Actions.performer,"
+				  " Actions.dateTime,"
+				  " Places.id,"
+				  " Places.id_background,"
+				  " Places.backgroundWidth,"
+				  " Places.backgroundHeight,"
+				  " Actions.fanPrice,"
+				  " Actions.fanPenalty,"
+				  " Actions.fanCount "
+				  "FROM"
+				  " Actions,"
+				  " Places "
+				  "WHERE"
+				  " Actions.id = :id AND"
+				  " Actions.id_place = Places.id;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
 	{
@@ -158,9 +188,12 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 		if(query.isNull(5) == false)
 			mScene.setBackgroundImage(CImages::instance()->image(query.value(5).toInt()));
 		mScene.setSceneRect(0.0f, 0.0f, query.value(6).toReal(), query.value(7).toReal());
-		ui->lFanPrice->setText(tr("Цена: %1 р.").arg(query.value(8).toInt()));
+		mFanPrice = query.value(8).toInt();
+		mFanCount = query.value(10).toInt();
+		ui->lFanPrice->setText(tr("Цена: %1 р.").arg(mFanPrice));
 		ui->lFanPenalty->setText(tr("Неустойка: %1 р.").arg(query.value(9).toInt()));
-		ui->lFanCount->setText(tr("Количество: %1 шт.").arg(query.value(10).toInt()));
+		ui->lFanCount->setText(tr("Количество: %1 шт.").arg(mFanCount));
+
 	}
 
 	query.prepare("SELECT id, name, price, penalty, color FROM ActionPriceGroups WHERE id_action = :actId;");
@@ -503,5 +536,7 @@ void CActionTicketsManagement::on_pbnFan_clicked()
 		ui->lFanPrice->setText(tr("Цена: %1 р.").arg(fanDialog.price()));
 		ui->lFanPenalty->setText(tr("Неустойка: %1 р.").arg(fanDialog.penalty()));
 		ui->lFanCount->setText(tr("Количество: %1 шт.").arg(fanDialog.count()));
+		mFanPrice = fanDialog.price();
+		mFanCount = fanDialog.count();
 	}
 }

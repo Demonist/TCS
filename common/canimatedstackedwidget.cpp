@@ -21,6 +21,8 @@ CAnimatedStackedWidget::~CAnimatedStackedWidget()
 
 }
 
+//public slots:
+
 void CAnimatedStackedWidget::setCurrentWidgetAnimated(QWidget *widget, const Direction direction, const int duration)
 {
 	if(widget
@@ -85,6 +87,38 @@ void CAnimatedStackedWidget::setCurrentWidgetAnimatedHorizontal(QWidget *widget,
 			exactlyDirection = indexOf(widget) > currentIndex() ? DirectionLeft : DirectionRight; break;
 	}
 	setCurrentWidgetAnimated(widget, exactlyDirection, duration);
+}
+
+void CAnimatedStackedWidget::slideVerticalNext(const int duration)
+{
+	if(currentIndex() + 1 < count())
+		setCurrentIndexAnimated(currentIndex() + 1, DirectionUp, duration);
+	else
+		qWarning("CAnimatedStackedWidget::slideVerticalNext. No next index.");
+}
+
+void CAnimatedStackedWidget::slideVerticalPrev(const int duration)
+{
+	if(currentIndex() > 0)
+		setCurrentIndexAnimated(currentIndex() - 1, DirectionDown, duration);
+	else
+		qWarning("CAnimatedStackedWidget::slideVerticalPrev. No prev index.");
+}
+
+void CAnimatedStackedWidget::slideHorizontalNext(const int duration)
+{
+	if(currentIndex() + 1 < count())
+		setCurrentIndexAnimated(currentIndex() + 1, DirectionLeft, duration);
+	else
+		qWarning("CAnimatedStackedWidget::slideHorizontalNext. No next index.");
+}
+
+void CAnimatedStackedWidget::slideHorizontalPrev(const int duration)
+{
+	if(currentIndex() > 0)
+		setCurrentIndexAnimated(currentIndex() - 1, DirectionRight, duration);
+	else
+		qWarning("CAnimatedStackedWidget::slideHorizontalPrev. No prev index.");
 }
 
 //private slots:

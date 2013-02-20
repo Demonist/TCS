@@ -8,5 +8,6 @@
         <file>clientImages/categoriesImages/imClients.png</file>
         <file>clientImages/categoriesImages/imReserved.png</file>
         <file>clientImages/categoriesImages/imReturn.png</file>
+        <file>clientImages/shield.png</file>
     </qresource>
 </RCC>

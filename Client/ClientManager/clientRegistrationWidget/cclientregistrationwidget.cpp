@@ -26,7 +26,7 @@ void CClientRegistrationWidget::on_pbnSave_clicked()
     {
         query.prepare("INSERT INTO Clients VALUES(NULL, :name, :birthDate, :login, :passwordHash, :clientsPhone);");
         query.bindValue(":name", ui->leFIO->text());
-        query.bindValue(":birthDate", ui->cwBDate->selectedDate().toString("dd.MM.yyyy"));
+		query.bindValue(":birthDate", ui->cwBDate->selectedDate());
         query.bindValue(":login", ui->leLogin->text());
         query.bindValue(":passwordHash", generatePassword());
         query.bindValue(":clientsPhone", ui->lePhone->text());
@@ -42,22 +42,17 @@ void CClientRegistrationWidget::on_pbnSave_clicked()
 bool CClientRegistrationWidget::validateLogin(QString login)
 {
     QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    if(query.exec("SELECT COUNT(id) AS id FROM Clients WHERE login = '" + login + "';"))
-    {
-        while(query.next())
-        {
-            if(query.value(0).toInt() == 0)
-                return true;
-            return false;
-        }
-    }
+	if(query.exec("SELECT COUNT(id) FROM Clients WHERE login = '" + login + "';") && query.first()
+	   && query.value(0).toInt() == 0)
+		return true;
+	return false;
 }
 
 QString CClientRegistrationWidget::generatePassword()
 {
     const static char* const dict = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     const static int dictLen = qstrlen(dict);
-    qsrand(QTime::currentTime().msec());
+
     int len = 6 + qrand() % 5;
     QString pass;
     for(int i = 0; i < len; i++)

@@ -290,7 +290,21 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>pbnDbConnect</tabstop>
+  <tabstop>rbnDbServer</tabstop>
+  <tabstop>rbnDbFile</tabstop>
+  <tabstop>cbxDbFileName</tabstop>
+  <tabstop>tbnDbFile</tabstop>
+  <tabstop>leDbLogin</tabstop>
+  <tabstop>leDbPassword</tabstop>
+  <tabstop>chbxDbRemember</tabstop>
+  <tabstop>pbnDbExit</tabstop>
+  <tabstop>cbxDbHost</tabstop>
+  <tabstop>leDbName</tabstop>
+ </tabstops>
  <resources>
+  <include location="connectionwidget_res.qrc"/>
   <include location="connectionwidget_res.qrc"/>
  </resources>
  <connections/>

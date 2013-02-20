@@ -28,6 +28,9 @@ protected:
 	int mId;		//! Идентификатор мероприятия.
 	int mPlaceId;	//! Идентификатор концертной площадки, на которой будет происходить данное мероприятие.
 
+	int mFanPrice;
+	int mFanCount;
+
 	CGraphicsScene mScene;
 	EditType mEditType;
 	qreal mScale;

@@ -71,6 +71,11 @@ public slots:
 	inline void setCurrentIndexAnimatedVertical(const int index, const int duration);
 	inline void setCurrentIndexAnimatedHorizontal(const int index, const int duration);
 
+	void slideVerticalNext(const int duration = 500);
+	void slideVerticalPrev(const int duration = 500);
+	void slideHorizontalNext(const int duration = 500);
+	void slideHorizontalPrev(const int duration = 500);
+
 private slots:
 	void firstAnimationFinished();
 	void secondAnimationFinished();

@@ -83,28 +83,6 @@
           </item>
          </widget>
         </item>
-        <item>
-         <widget class="QGraphicsView" name="gvPreview">
-          <property name="maximumSize">
-           <size>
-            <width>150</width>
-            <height>150</height>
-           </size>
-          </property>
-          <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
-          </property>
-          <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
-          </property>
-          <property name="interactive">
-           <bool>false</bool>
-          </property>
-          <property name="renderHints">
-           <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
       <widget class="CAnimatedStackedWidget" name="stackedWidget">
@@ -159,7 +137,7 @@
   <customwidget>
    <class>CAnimatedStackedWidget</class>
    <extends>QStackedWidget</extends>
-   <header location="global">canimatedstackedwidget.h</header>
+   <header>canimatedstackedwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

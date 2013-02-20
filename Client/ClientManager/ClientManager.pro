@@ -14,9 +14,10 @@ INCLUDEPATH += ../../common/ \
 		../../common/connectionWidget/ \
 		../../common/graphics/ \
 		../../common/dateDialog/ \
+		../../common/ticketIdentifier/ \
 		startingDialog/ \
-                clientActionsWidget/ \
-                clientRegistrationWidget/
+		clientActionsWidget/ \
+		clientRegistrationWidget/
 
 
 SOURCES += main.cpp\
@@ -31,7 +32,13 @@ SOURCES += main.cpp\
     ../../common/cimages.cpp \
     ../../common/graphics/cabstractgraphicsitem.cpp \
     ../../common/canimatedstackedwidget.cpp \
-    clientRegistrationWidget/cclientregistrationwidget.cpp
+    clientRegistrationWidget/cclientregistrationwidget.cpp \
+	clientActionsWidget/cclientactionseatitem.cpp \
+    ../../common/graphics/cseatitem.cpp \
+    clientActionsWidget/cclientactiondialog.cpp \
+    ../../common/graphics/cabstractlegend.cpp \
+    ../../common/ticketIdentifier/cticketidentifier.cpp
+
 
 HEADERS  += cclientmainwindow.h \
     ../../common/commonWidget/cabstractcommonwidget.h \
@@ -44,14 +51,21 @@ HEADERS  += cclientmainwindow.h \
     ../../common/cimages.h \
     ../../common/graphics/cabstractgraphicsitem.h \
     ../../common/canimatedstackedwidget.h \
-    clientRegistrationWidget/cclientregistrationwidget.h
+	clientRegistrationWidget/cclientregistrationwidget.h \
+    clientActionsWidget/cclientactionseatitem.h \
+    ../../common/graphics/cseatitem.h \
+    clientActionsWidget/cclientactiondialog.h \
+    ../../common/graphics/cabstractlegend.h \
+    ../../common/ticketIdentifier/cticketidentifier.h
 
 FORMS    += cclientmainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
     startingDialog/cstartingdialog.ui \
     clientActionsWidget/cclientactionswidget.ui \
     ../../common/dateDialog/cdatedialog.ui \
-    clientRegistrationWidget/cclientregistrationwidget.ui
+	clientRegistrationWidget/cclientregistrationwidget.ui \
+    clientActionsWidget/cactionseatswidget.ui \
+    clientActionsWidget/cclientactiondialog.ui
 
 RESOURCES += \
     ../../common/connectionWidget/connectionwidget_res.qrc \

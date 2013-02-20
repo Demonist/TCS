@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>489</width>
+    <width>574</width>
     <height>308</height>
    </rect>
   </property>
@@ -107,7 +107,7 @@
         <item>
          <widget class="QPushButton" name="pbnSave">
           <property name="text">
-           <string>Сохранить</string>
+           <string>Зарегистрировать</string>
           </property>
          </widget>
         </item>

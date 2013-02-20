@@ -79,8 +79,7 @@ void MainWindow::createTables()
 				   "id_action            INTEGER NOT NULL, "
 				   "id_placeScheme       INTEGER NOT NULL, "
 				   "state				 INTEGER DEFAULT 0, "
-				   "id_priceGroup        INTEGER NULL, "
-				   "id_reservation       INTEGER NULL, "
+				   "id_priceGroup        INTEGER NULL "
 				   "PRIMARY KEY (id_action, id_placeScheme)"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
@@ -105,6 +104,23 @@ void MainWindow::createTables()
 				   "id                   INTEGER " + autoincExpr +
 				   "image                MEDIUMBLOB NULL, "
 				   "dateTime             DATETIME NULL"
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Tickets( "
+				   "id                   INTEGER " + autoincExpr +
+				   "id_action            INTEGER NULL, "
+				   "id_placeScheme       INTEGER NULL, "
+				   "id_client            INTEGER NULL, "
+				   "identifier           TEXT NULL"
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Reservations( "
+				   "id                   INTEGER " + autoincExpr +
+				   "id_ticket            INTEGER NOT NULL, "
+				   "id_client            INTEGER NULL, "
+				   "dateTIme             DATETIME NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 }
@@ -173,6 +189,7 @@ void MainWindow::connected(QString connectionName)
 	CImages::instance(mConnectionName);
 
 	ui->stackedWidget->setCurrentIndexAnimatedHorizontal(1, 750);
+	QTimer::singleShot(780, this, SLOT(showMaximized()));
 }
 
 void MainWindow::on_lwSettings_currentRowChanged(int currentRow)

@@ -102,6 +102,8 @@ CGraphicsView::~CGraphicsView()
 	mScaleAnimation.stop();
 }
 
+//public slots:
+
 void CGraphicsView::setDragEnabled(const bool enableDrag)
 {
 	mDrag = enableDrag;

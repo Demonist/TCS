@@ -26,7 +26,7 @@ CStartingDialog::~CStartingDialog()
 void CStartingDialog::connected(const QString &connectionName)
 {
 	mConnectionName = connectionName;
-	ui->stackedWidget->setCurrentIndexAnimatedHorizontal(1);
+	ui->stackedWidget->slideHorizontalNext();
 }
 
 void CStartingDialog::on_pbnExit_clicked()
