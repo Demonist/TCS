@@ -13,19 +13,21 @@ void CClientMainWindow::closeEvent(QCloseEvent *event)
 
 	if(QMessageBox::Yes == QMessageBox::question(this, tr("Хотите выйти?"), tr("Вы действительно хотите завершить работу данной программы?"), QMessageBox::Yes, QMessageBox::No))
 	{
-		if(mActionDialog.isVisible())
-			mActionDialog.close();
+		mActionDialog.setCanClose(true);
+		mActionDialog.close();
 		event->accept();
 	}
 	else
 		event->ignore();
 }
 
+
 //public:
 
 CClientMainWindow::CClientMainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::CClientMainWindow)
+	ui(new Ui::CClientMainWindow),
+	mActionDialog(this)
 {
 	ui->setupUi(this);
 	ui->stackedWidget->setCurrentIndex(0);
@@ -49,8 +51,10 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 		ui->wActions->setConnectionName(mConnectionName);
         ui->wRegistration->setConnectionName(mConnectionName);
 
+		mActionDialog.setSourceView(ui->wActions->view());
+		mActionDialog.showMinimized();
+
 		showMaximized();
-////		mActionDialog.show(ui->wActions->view());
 		mCanClose = false;
 	}
 	else

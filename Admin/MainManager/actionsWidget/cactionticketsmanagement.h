@@ -33,13 +33,11 @@ protected:
 
 	CGraphicsScene mScene;
 	EditType mEditType;
-	qreal mScale;
 
 	//methods:
 protected:
 	bool eventFilter(QObject *obj, QEvent *event);
 	void mouseSceneEvent(QMouseEvent *event);
-	void updateScaleText();
 	void paintLenend(QPainter *painter, const QSize &viewSize);
 
 public:

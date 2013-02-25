@@ -217,7 +217,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Вид [100%]</string>
+          <string>Вид</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_10">
           <item row="0" column="0">

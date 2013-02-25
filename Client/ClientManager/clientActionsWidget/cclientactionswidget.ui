@@ -20,7 +20,7 @@
    <item row="0" column="0">
     <widget class="CAnimatedStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_actions">
       <layout class="QGridLayout" name="gridLayout_8">
@@ -252,7 +252,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="CGraphicsView" name="gvScene">
+        <widget class="CSourceGraphicsView" name="gvScene">
          <property name="renderHints">
           <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
          </property>
@@ -552,9 +552,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>CGraphicsView</class>
+   <class>CSourceGraphicsView</class>
    <extends>QGraphicsView</extends>
-   <header>cgraphicsview.h</header>
+   <header>csourcegraphicsview.h</header>
   </customwidget>
  </customwidgets>
  <resources>

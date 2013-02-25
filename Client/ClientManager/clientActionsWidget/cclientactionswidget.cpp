@@ -34,7 +34,7 @@ CClientActionsWidget::~CClientActionsWidget()
 	delete ui;
 }
 
-CGraphicsView* CClientActionsWidget::view()
+CSourceGraphicsView* CClientActionsWidget::view()
 {
 	return ui->gvScene;
 }
@@ -70,21 +70,28 @@ void CClientActionsWidget::paintLenend(QPainter *painter, const QSize &viewSize)
 		case 2:
 		case 3:
 		case 4:
-			if(selectedTicketCount > 20)
+			if(selectedTicketCount < 10 || selectedTicketCount > 20)
 				tickets = tr("а");
 			break;
 	}
 
+	painter->save();
 	pen.setColor(QColor(255, 255, 255));
 	painter->setPen(pen);
-	painter->drawText(QRect(0, 2, viewSize.width() - 12, 20), Qt::AlignRight | Qt::AlignTop, tr("Выбрано: %1 билет%2 на сумму %3 руб").arg(selectedTicketCount).arg(tickets).arg(selectedTicketTotalPrice));
+	QFont font = painter->font();
+	font.setPointSize(font.pointSize() + 4);
+	font.setFamily("Helvetica [Cronyx]");
+	painter->setFont(font);
+	painter->drawText(QRect(0, 2, viewSize.width() - 12, 50), Qt::AlignRight | Qt::AlignTop, tr("Выбрано: %1 билет%2 на сумму %3 руб").arg(selectedTicketCount).arg(tickets).arg(selectedTicketTotalPrice));
+	painter->restore();
 
 	//:
 	painter->translate(50, 30);
-	pen.setColor(qRgb(255, 255, 255));
+	pen.setColor(QColor(255, 255, 255));
 	painter->setPen(pen);
 	CSeatItem seatItem;
 	seatItem.setBrushColor(QColor(200, 200, 200));
+	seatItem.setPenWidth(5);
 
 	//Фан зона:
 	if(mFanCountForCurrentAction > 0)
@@ -93,7 +100,12 @@ void CClientActionsWidget::paintLenend(QPainter *painter, const QSize &viewSize)
 		seatItem.setText(QString::number(mFanPriceForCurrentAction));
 		seatItem.paint(painter, 0, 0);
 
+		font = painter->font();
+		font.setItalic(true);
+		painter->save();
+		painter->setFont(font);
 		painter->drawText(-50, 20, 100, 50, Qt::AlignHCenter | Qt::AlignTop, tr("Фан зона"));
+		painter->restore();
 		painter->translate(100, 0);
 	}
 
@@ -219,6 +231,7 @@ void CClientActionsWidget::on_pbnSoldTicket_clicked()
 		ui->lAction->setText(actionTitle);
 		ui->lAction2->setText(actionTitle);
 		ui->sbxFanSellCount->setValue(0);
+		ui->gvScene->setScale(1.0f);
 
 		mScene.clear();
 		mPriceGroupsForCurrentAction.clear();
@@ -404,9 +417,6 @@ void CClientActionsWidget::on_pbnBackToActions_clicked()
 
 void CClientActionsWidget::on_pbnStartSelling_clicked()
 {
-	QMessageBox::warning(this, tr("Ahtung!"), tr("Данный раздел закрыт на реконструкцию"));
-	return;	////
-
 	if(mSelectedSeats.count() || ui->sbxFanSellCount->value())
 	{
 		if(ui->sbxFanSellCount->value())
@@ -444,6 +454,9 @@ void CClientActionsWidget::on_pbnBackToSeats_clicked()
 
 void CClientActionsWidget::on_pbnPrintTickets_clicked()
 {
+	QMessageBox::warning(this, tr("Ahtung"), tr("Данный раздел закрыт на реконструкцию.\nПотерпите немного."));
+	return;
+
 	//TODO: генерация штрих кода, запись в БД, печать, проверка печати, повторная печать, отмена продажи.
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));

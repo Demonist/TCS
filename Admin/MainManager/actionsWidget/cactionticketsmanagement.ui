@@ -98,7 +98,7 @@
        <item>
         <widget class="QGroupBox" name="gbxScale">
          <property name="title">
-          <string>Вид [100%]</string>
+          <string>Вид</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="1" column="0">

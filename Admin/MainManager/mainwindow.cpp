@@ -79,7 +79,7 @@ void MainWindow::createTables()
 				   "id_action            INTEGER NOT NULL, "
 				   "id_placeScheme       INTEGER NOT NULL, "
 				   "state				 INTEGER DEFAULT 0, "
-				   "id_priceGroup        INTEGER NULL "
+				   "id_priceGroup        INTEGER NULL, "
 				   "PRIMARY KEY (id_action, id_placeScheme)"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
@@ -120,7 +120,7 @@ void MainWindow::createTables()
 				   "id                   INTEGER " + autoincExpr +
 				   "id_ticket            INTEGER NOT NULL, "
 				   "id_client            INTEGER NULL, "
-				   "dateTIme             DATETIME NULL"
+				   "dateTime             DATETIME NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 }
@@ -189,7 +189,7 @@ void MainWindow::connected(QString connectionName)
 	CImages::instance(mConnectionName);
 
 	ui->stackedWidget->setCurrentIndexAnimatedHorizontal(1, 750);
-	QTimer::singleShot(780, this, SLOT(showMaximized()));
+	QTimer::singleShot(800, this, SLOT(showMaximized()));
 }
 
 void MainWindow::on_lwSettings_currentRowChanged(int currentRow)

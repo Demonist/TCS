@@ -1,5 +1,51 @@
 #include "cgraphicsview.h"
 
+#define SCALLING_TABLE_SIZE 19
+const static qreal gScallingTable[SCALLING_TABLE_SIZE] = {
+	0.2f, 0.4f, 0.6f, 0.8f,
+	1.0f,
+	1.2f, 1.4f, 1.6f, 1.9f, 2.2f, 2.6f, 3.1f, 3.7f, 4.4f, 5.2f, 6.2f, 7.4f, 8.8f, 10.0f
+};
+
+qreal CGraphicsView::roundScale(const qreal &scale) const
+{
+	int left = 0;
+	int right = SCALLING_TABLE_SIZE - 1;
+
+	if(scale < gScallingTable[left])
+		return gScallingTable[left];
+	else if(scale > gScallingTable[right])
+		return gScallingTable[right];
+	else
+	{
+		int midle = right / 2;
+
+		while(midle != left && midle != right)
+		{
+			if(scale < gScallingTable[midle])
+				right = midle;
+			else
+				left = midle;
+			midle = (right + left) / 2;
+		}
+
+		if(qAbs(gScallingTable[left] - scale) <= qAbs(gScallingTable[right] - scale))
+		{
+			if(gScallingTable[left] != mScale)
+				return gScallingTable[left];
+			else
+				return gScallingTable[right];
+		}
+		else
+		{
+			if(gScallingTable[right] != mScale)
+				return gScallingTable[right];
+			else
+				return gScallingTable[left];
+		}
+	}
+}
+
 //protected:
 
 void CGraphicsView::paintEvent(QPaintEvent *event)
@@ -70,9 +116,9 @@ void CGraphicsView::wheelEvent(QWheelEvent *event)
 		if(event->orientation() == Qt::Vertical)
 		{
 			if(event->delta() > 0)
-				emit wheelUp();
+				scaleUp();
 			else
-				emit wheelDown();
+				scaleDown();
 		}
 	}
 	else
@@ -89,6 +135,7 @@ CGraphicsView::CGraphicsView(QWidget *parent) :
 	mDragging = false;
 	mDrag = false;
 	mWheelScalling = true;
+	mWheelScallingAnimated = true;
 	mScale = 1.0f;
 	mLegend = 0;
 
@@ -100,6 +147,42 @@ CGraphicsView::CGraphicsView(QWidget *parent) :
 CGraphicsView::~CGraphicsView()
 {
 	mScaleAnimation.stop();
+}
+
+void CGraphicsView::scaleUp()
+{
+	if(mScale < gScallingTable[SCALLING_TABLE_SIZE - 1])
+	{
+		qreal newScale = mScale;
+		if(mScaleAnimation.state() == QPropertyAnimation::Running
+		   && mScaleAnimation.startValue().toReal() < mScaleAnimation.endValue().toReal())
+			newScale = mScaleAnimation.endValue().toReal();
+		newScale *= 1.2f;
+		newScale = roundScale(newScale);
+		if(mWheelScallingAnimated)
+			setScaleAnimated(newScale);
+		else
+			setScale(newScale);
+		viewport()->repaint();
+	}
+}
+
+void CGraphicsView::scaleDown()
+{
+	if(mScale > gScallingTable[0])
+	{
+		qreal newScale = mScale;
+		if(mScaleAnimation.state() == QPropertyAnimation::Running
+		   && mScaleAnimation.startValue().toReal() > mScaleAnimation.endValue().toReal())
+			newScale = mScaleAnimation.endValue().toReal();
+		newScale *= 0.8f;
+		newScale = roundScale(newScale);
+		if(mWheelScallingAnimated)
+			setScaleAnimated(newScale);
+		else
+			setScale(newScale);
+		viewport()->repaint();
+	}
 }
 
 //public slots:

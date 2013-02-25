@@ -2,7 +2,7 @@
 #define CCLIENTACTIONDIALOG_H
 
 #include <QtGui>
-#include "cgraphicsview.h"
+#include "csourcegraphicsview.h"
 
 namespace Ui {
 	class CClientActionDialog;
@@ -12,23 +12,30 @@ class CClientActionDialog : public QDialog
 {
 	Q_OBJECT
 	
-private:
-	bool eventFilter(QObject *object, QEvent *event);
+protected:
+	void closeEvent(QCloseEvent *event);
 
 public:
 	explicit CClientActionDialog(QWidget *parent = 0);
 	~CClientActionDialog();
-	
-private slots:
-	void on_pushButton_clicked();
-	void on_pushButton_2_clicked();
+
+	void setSourceView(CSourceGraphicsView *sourceView);
 
 public slots:
-	void show(CGraphicsView *view);
+	void setScale(const qreal scale);
+	void drag(int x, int y);
+	inline void setCanClose(const bool canClose);
 
 private:
 	Ui::CClientActionDialog *ui;
-	QGraphicsView *mView;
+	bool mCanClose;
 };
+
+//inline implementation:
+
+inline void CClientActionDialog::setCanClose(const bool canClose)
+{
+	mCanClose = canClose;
+}
 
 #endif // CCLIENTACTIONDIALOG_H

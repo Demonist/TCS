@@ -69,11 +69,6 @@ void CActionTicketsManagement::mouseSceneEvent(QMouseEvent *event)
 	}
 }
 
-void CActionTicketsManagement::updateScaleText()	//Данная функция не inline т.е. в заголовочном файле ui не виден.
-{
-	ui->gbxScale->setTitle(tr("Вид [%1%]").arg(mScale * 100));
-}
-
 void CActionTicketsManagement::paintLenend(QPainter *painter, const QSize &viewSize)
 {
 	const int h = 80;
@@ -144,14 +139,14 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 
 	mConnectionName = connectionName;
 	mId = id;
-	mScale = 1.0f;
 
 	mScene.setSceneRect(0.0f, 0.0f, 1020.0f, 730.0f);
+	mScene.setDrawBounds(true);
+
 	ui->gvScene->setScene(&mScene);
 	ui->gvScene->viewport()->installEventFilter(this);
 	ui->gvScene->setLegend(this);
-	connect(ui->gvScene, SIGNAL(wheelUp()), this, SLOT(on_tbnZoomIn_clicked()));
-	connect(ui->gvScene, SIGNAL(wheelDown()), this, SLOT(on_tbnZoomOut_clicked()));
+
 	ui->cbxShowBackground->setChecked(mScene.isDrawBackground());
 	ui->cbxShowLegend->setChecked(ui->gvScene->isLegend());
 
@@ -237,7 +232,6 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 			}
 
 			mScene.addItem(item);
-
 			item->showAnimated(2000);
 		}
 	}
@@ -408,35 +402,17 @@ void CActionTicketsManagement::on_tbnPricePaint_toggled(bool checked)
 
 void CActionTicketsManagement::on_tbnZoomIn_clicked()
 {
-	if(mScale < 10)
-	{
-		if(mScale >= 1.0f)
-			mScale += qRound(mScale + 1.0f) * 0.2f;
-		else
-			mScale += 0.2f;
-		ui->gvScene->setScaleAnimated(mScale);
-		updateScaleText();
-	}
+	ui->gvScene->scaleUp();
 }
 
 void CActionTicketsManagement::on_tbnZoomOut_clicked()
 {
-	if(mScale > 0.2000001f)
-	{
-		if(mScale >= 1.0f)
-			mScale -= qRound(mScale + 1.0f) * 0.2f;
-		else
-			mScale -= 0.2f;
-		ui->gvScene->setScaleAnimated(mScale);
-		updateScaleText();
-	}
+	ui->gvScene->scaleDown();
 }
 
 void CActionTicketsManagement::on_tbnZoomDefault_clicked()
 {
-	mScale = 1.0f;
-	ui->gvScene->setScaleAnimated(mScale);
-	updateScaleText();
+	ui->gvScene->setScaleAnimated(1.0f);
 }
 
 void CActionTicketsManagement::on_cbxShowBackground_toggled(bool checked)

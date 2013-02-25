@@ -461,11 +461,6 @@ void CPlaceSchemeDialog::updateSeatsCountText()
 	ui->lTotalSeatCount->setText(tr("Максимальное число мест в зале: %1").arg(mSeatsCount));
 }
 
-void CPlaceSchemeDialog::updateScaleText()
-{
-	ui->gbxScale->setTitle(tr("Вид [%1%]").arg(mScale*100));
-}
-
 //public:
 
 CPlaceSchemeDialog::CPlaceSchemeDialog(const QString &connectionName, const int placeId, QWidget *parent) :
@@ -480,7 +475,6 @@ CPlaceSchemeDialog::CPlaceSchemeDialog(const QString &connectionName, const int 
 	setWindowState(windowState() | Qt::WindowMaximized);
 
 	mEditType = None;
-	mScale = 1.0f;
 	mSeatsCount = 0;
 	mSelectedItem = 0;
 
@@ -488,10 +482,9 @@ CPlaceSchemeDialog::CPlaceSchemeDialog(const QString &connectionName, const int 
 	mId = placeId;
 
 	mScene.setSceneRect(0.0, 0.0, 1020.0f, 730.0f);
+	mScene.setDrawBounds(true);
 	ui->gvScheme->setScene(&mScene);
 	ui->gvScheme->viewport()->installEventFilter(this);
-	connect(ui->gvScheme, SIGNAL(wheelUp()), this, SLOT(on_tbnZoomIn_clicked()));
-	connect(ui->gvScheme, SIGNAL(wheelDown()), this, SLOT(on_tbnZoomOut_clicked()));
 
 	ui->chbxShowAxis->setChecked(mScene.isDrawAxis());
 	ui->chbxShowBackground->setChecked(mScene.isDrawBackground());
@@ -636,35 +629,17 @@ void CPlaceSchemeDialog::on_pbnApply_clicked()
 
 void CPlaceSchemeDialog::on_tbnZoomIn_clicked()
 {
-	if(mScale < 10)
-	{
-		if(mScale >= 1.0f)
-			mScale += qRound(mScale + 1.0f) * 0.2f;
-		else
-			mScale += 0.2f;
-		ui->gvScheme->setScaleAnimated(mScale);
-		updateScaleText();
-	}
+	ui->gvScheme->scaleUp();
 }
 
 void CPlaceSchemeDialog::on_tbnZoomOut_clicked()
 {
-	if(mScale > 0.2000001f)
-	{
-		if(mScale >= 1.0f)
-			mScale -= qRound(mScale + 1.0f) * 0.2f;
-		else
-			mScale -= 0.2f;
-		ui->gvScheme->setScaleAnimated(mScale);
-		updateScaleText();
-	}
+	ui->gvScheme->scaleDown();
 }
 
 void CPlaceSchemeDialog::on_tbnZoomDefault_clicked()
 {
-	mScale = 1.0f;
-	ui->gvScheme->setScaleAnimated(mScale);
-	updateScaleText();
+	ui->gvScheme->setScaleAnimated(1.0f);
 }
 
 void CPlaceSchemeDialog::on_tbnSelect_clicked(bool checked)

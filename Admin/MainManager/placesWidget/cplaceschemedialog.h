@@ -25,7 +25,6 @@ private:
 	int mId;	//! Идентификатор концертной площадки.
 	QList<int> mDeletedIds;
 
-	qreal mScale;
 	int mSeatsCount;
 
 	CGraphicsScene mScene;
@@ -50,7 +49,6 @@ private:
 
 	bool eventFilter(QObject *obj, QEvent *event);
 	void updateSeatsCountText();
-	void updateScaleText();
 
 public:
 	explicit CPlaceSchemeDialog(const QString &connectionName, const int placeId, QWidget *parent = 0);

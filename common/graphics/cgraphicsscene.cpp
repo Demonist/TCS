@@ -52,5 +52,5 @@ CGraphicsScene::CGraphicsScene(QObject *parent) :
 {
 	mDrawBackground = true;
 	mDrawAxis = false;
-	mDrawBounds = true;
+	mDrawBounds = false;
 }

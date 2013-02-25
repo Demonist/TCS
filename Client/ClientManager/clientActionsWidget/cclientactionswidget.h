@@ -9,7 +9,7 @@
 #include "cgraphicsscene.h"
 #include "cclientactionseatitem.h"
 #include "cimages.h"
-#include "cgraphicsview.h"
+#include "csourcegraphicsview.h"
 
 namespace Ui {
 	class CClientActionsWidget;
@@ -45,7 +45,7 @@ private:
 public:
 	explicit CClientActionsWidget(QWidget *parent = 0);
 	~CClientActionsWidget();
-	CGraphicsView* view();
+	CSourceGraphicsView* view();
 	void paintLenend(QPainter *painter, const QSize &viewSize);
 	
 private slots:

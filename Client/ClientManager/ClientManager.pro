@@ -37,7 +37,8 @@ SOURCES += main.cpp\
     ../../common/graphics/cseatitem.cpp \
     clientActionsWidget/cclientactiondialog.cpp \
     ../../common/graphics/cabstractlegend.cpp \
-    ../../common/ticketIdentifier/cticketidentifier.cpp
+    ../../common/ticketIdentifier/cticketidentifier.cpp \
+    clientActionsWidget/csourcegraphicsview.cpp
 
 
 HEADERS  += cclientmainwindow.h \
@@ -56,7 +57,8 @@ HEADERS  += cclientmainwindow.h \
     ../../common/graphics/cseatitem.h \
     clientActionsWidget/cclientactiondialog.h \
     ../../common/graphics/cabstractlegend.h \
-    ../../common/ticketIdentifier/cticketidentifier.h
+    ../../common/ticketIdentifier/cticketidentifier.h \
+    clientActionsWidget/csourcegraphicsview.h
 
 FORMS    += cclientmainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -64,7 +66,6 @@ FORMS    += cclientmainwindow.ui \
     clientActionsWidget/cclientactionswidget.ui \
     ../../common/dateDialog/cdatedialog.ui \
 	clientRegistrationWidget/cclientregistrationwidget.ui \
-    clientActionsWidget/cactionseatswidget.ui \
     clientActionsWidget/cclientactiondialog.ui
 
 RESOURCES += \

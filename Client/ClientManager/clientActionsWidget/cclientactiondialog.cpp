@@ -1,18 +1,12 @@
 #include "cclientactiondialog.h"
 #include "ui_cclientactiondialog.h"
 
-bool CClientActionDialog::eventFilter(QObject *object, QEvent *event)
+void CClientActionDialog::closeEvent(QCloseEvent *event)
 {
-	if(event->type() == QEvent::Paint)
-	{
-		if(mView)
-		{
-			QPainter painter(ui->graphicsView->viewport());
-			mView->render(&painter, mView->scene()->sceneRect().toRect(), mView->scene()->sceneRect().toRect());
-			return true;
-		}
-	}
-	return false;
+	if(mCanClose)
+		event->accept();
+	else
+		event->ignore();
 }
 
 CClientActionDialog::CClientActionDialog(QWidget *parent) :
@@ -20,8 +14,24 @@ CClientActionDialog::CClientActionDialog(QWidget *parent) :
 	ui(new Ui::CClientActionDialog)
 {
 	ui->setupUi(this);
-	mView = 0;
-	ui->graphicsView->viewport()->installEventFilter(this);
+	mCanClose = true;
+	QDesktopWidget *desktop = QApplication::desktop();
+	if(desktop)
+	{
+		if(desktop->screenCount() > 1)
+		{
+			for(int i = 0; i < desktop->screenCount(); i++)
+				if(i != desktop->primaryScreen())	//Находим второстепенный экран
+				{
+					QRect secondaryScreenGeometry = desktop->screenGeometry(i);
+					move(secondaryScreenGeometry.topLeft());
+					resize(secondaryScreenGeometry.size());
+					setWindowFlags(Qt::Window|Qt::FramelessWindowHint);
+					mCanClose = false;
+					break;
+				}
+		}
+	}
 }
 
 CClientActionDialog::~CClientActionDialog()
@@ -29,21 +39,26 @@ CClientActionDialog::~CClientActionDialog()
 	delete ui;
 }
 
-void CClientActionDialog::on_pushButton_clicked()
+void CClientActionDialog::setSourceView(CSourceGraphicsView *sourceView)
 {
-	setWindowFlags(Qt::Window|Qt::FramelessWindowHint);
-	showMaximized();
+	if(sourceView)
+	{
+		ui->graphicsView->setScene(sourceView->scene());
+		ui->graphicsView->setLegend(sourceView->legend());
+		connect(sourceView, SIGNAL(scaleChanged(qreal)), this, SLOT(setScale(qreal)));
+		connect(sourceView, SIGNAL(dragChanged(int,int)), this, SLOT(drag(int,int)));
+	}
 }
 
-void CClientActionDialog::on_pushButton_2_clicked()
+void CClientActionDialog::setScale(const qreal scale)
 {
-	setWindowFlags(Qt::Window);
-	showNormal();
+	ui->graphicsView->setScale(scale);
 }
 
-void CClientActionDialog::show(CGraphicsView *view)
+void CClientActionDialog::drag(int x, int y)
 {
-	if(view)
-		mView = view;
-	QDialog::show();
+	if(ui->graphicsView->horizontalScrollBar())
+		ui->graphicsView->horizontalScrollBar()->setValue(x);
+	if(ui->graphicsView->verticalScrollBar())
+		ui->graphicsView->verticalScrollBar()->setValue(y);
 }
