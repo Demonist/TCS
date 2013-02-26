@@ -17,8 +17,8 @@ public:
     ~ControlManagerMainWindow();
     
 private slots:
-   // void on_lineEdit_returnPressed();
-
+    void on_leGetBarcode_returnPressed();
+    void openDataBase();
 private:
     Ui::ControlManagerMainWindow *ui;
 };

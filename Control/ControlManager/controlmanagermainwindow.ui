@@ -6,24 +6,58 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>485</width>
-    <height>341</height>
+    <width>569</width>
+    <height>446</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ControlManagerMainWindow</string>
+   <string>Программа контроля билетов</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QLineEdit" name="leGetBarcode">
-      <property name="readOnly">
-       <bool>false</bool>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>База данных билетов не открыта</string>
       </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QTreeWidget" name="twBarcodeControl">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <column>
+          <property name="text">
+           <string>Билеты</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLineEdit" name="leGetBarcode">
+           <property name="readOnly">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="wOutResult" native="true"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QWidget" name="wOutResult" native="true"/>
     </item>
    </layout>
   </widget>
@@ -32,7 +66,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>485</width>
+     <width>569</width>
      <height>21</height>
     </rect>
    </property>

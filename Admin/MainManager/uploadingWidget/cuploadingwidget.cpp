@@ -88,17 +88,16 @@ void CUploadingWidget::on_tbClearDate_clicked()
 
 void CUploadingWidget::on_pbnUploading_clicked()
 {
+    //TODO! Проверка выбрано ли мероприятие
     QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия ") + tActionName, QDir::currentPath(), tr("Файл базы данных(.sqlite)"));
     QFile file(pth);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     file.close();
-
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "myConnection");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "uploadingConnection");
     db.setDatabaseName(pth);
     if(db.open())
     {
-        QSqlQuery createDBQuery(db);
-        createDBQuery.exec(createDBScheme());
+        createDBScheme();
         QSqlQuery selectDataQuery(QSqlDatabase::database(mConnectionName));
         if(selectDataQuery.exec("SELECT * FROM Actions WHERE id = " + ui->twActions->currentItem()->text(ID)))
         {
@@ -117,18 +116,51 @@ void CUploadingWidget::on_pbnUploading_clicked()
                 insertDataQuery.bindValue(":id_cat", selectDataQuery.value(9).toString());
                 insertDataQuery.exec();
             }
-
-
-
         }
-
+        if(selectDataQuery.exec("SELECT * FROM Tickets WHERE id_action = " + ui->twActions->currentItem()->text(ID)))
+        {
+            QSqlQuery insertDataQuery(db);
+            insertDataQuery.exec("INSERT INTO Tickets VALUES(NULL, :id_action, :id_placeScheme, :id_client, :identifier);");
+            while(selectDataQuery.next())
+            {
+                insertDataQuery.bindValue(":id_action", selectDataQuery.value(1).toString());
+                insertDataQuery.bindValue(":id_placeScheme", selectDataQuery.value(2).toString());
+                insertDataQuery.bindValue(":id_client", selectDataQuery.value(3).toString());
+                insertDataQuery.bindValue(":identifier", selectDataQuery.value(4).toString());
+                insertDataQuery.exec();
+                if(!selectDataQuery.value(3).isNull())
+                {
+                    QSqlQuery selectDataClients(QSqlDatabase::database(mConnectionName));
+                    if(selectDataClients.exec("SELECT * FROM Clients WHERE id = " + selectDataQuery.value(3).toString()))
+                    {
+                        QSqlQuery insertDataClients(db);
+                        insertDataClients.exec("INSERT INTO Clients VALUES(:id, :name, :birthDate, :login, :passwordHash, :clientsPhone)");
+                        while(selectDataClients.next())
+                        {
+                            insertDataClients.bindValue(":id", selectDataClients.value(0).toString());
+                            insertDataClients.bindValue(":name", selectDataClients.value(1).toString());
+                            insertDataClients.bindValue(":birthDate", selectDataClients.value(2).toString());
+                            insertDataClients.bindValue(":login", selectDataClients.value(3).toString());
+                            insertDataClients.bindValue(":passwordHash", selectDataClients.value(4).toString());
+                            insertDataClients.bindValue(":clientsPhone", selectDataClients.value(5).toString());
+                            insertDataClients.exec();
+                        }
+                    }
+                }
+            }
+        }
+        db.close();
+        QMessageBox::information(this, tr("Выгрузка успешно завершена"), tr("Выгрузка в файл ") + pth + tr(" успешно завершена"));
 
     }
 }
 
-QString CUploadingWidget::createDBScheme()
+void CUploadingWidget::createDBScheme()
 {
-    return "CREATE TABLE IF NOT EXISTS Actions( "
+    QSqlDatabase db = QSqlDatabase::database("uploadingConnection");
+    QSqlQuery createDBQuery(db);
+    if(!createDBQuery.exec(
+         "CREATE TABLE IF NOT EXISTS Actions( "
                        "id                   INTEGER PRIMARY KEY AUTOINCREMENT, "
                        "title                TEXT NULL, "
                        "performer            TEXT NULL, "
@@ -139,8 +171,31 @@ QString CUploadingWidget::createDBScheme()
                        "fanCount             INTEGER DEFAULT 0, "
                        "id_place             INTEGER NULL, "
                        "id_category          INTEGER NULL"
-                       ");";
-
+                       "); "
+                ))
+        qDebug(qPrintable(createDBQuery.lastError().text()));
+    if(!createDBQuery.exec(
+         "CREATE TABLE IF NOT EXISTS Tickets( "
+                       "id                   INTEGER PRIMARY KEY AUTOINCREMENT, "
+                       "id_action            INTEGER NULL, "
+                       "id_placeScheme       INTEGER NULL, "
+                       "id_client            INTEGER NULL, "
+                       "identifier           TEXT NULL, "
+                       "passedFlag           BOOLEAN DEFAULT FALSE"
+                       ");"
+                ))
+        qDebug(qPrintable(createDBQuery.lastError().text()));
+    if(!createDBQuery.exec(
+         "CREATE TABLE IF NOT EXISTS Clients( "
+                       "id                   INTEGER NULL, "
+                       "name                 TEXT NULL, "
+                       "birthDate            DATE NULL,  "
+                       "login                TEXT NULL,  "
+                       "passwordHash         TEXT NULL,  "
+                       "clientsPhone         TEXT NULL  "
+                       ");"
+                ))
+        qDebug(qPrintable(createDBQuery.lastError().text()));
 }
 
 void CUploadingWidget::on_tbnSearchClear_clicked()

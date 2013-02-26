@@ -283,7 +283,7 @@ void CActionTicketsManagement::on_pbnApply_clicked()
 					}
 					else
 					{
-						query.prepare("INSERT INTO ActionScheme VALUES(:actId, :seatId, :state, :priceGroup, NULL);");
+                        query.prepare("INSERT INTO ActionScheme VALUES(:actId, :seatId, :state, :priceGroup);");
 						query.bindValue(":actId", mId);
 						query.bindValue(":seatId", seatItem->id());
 						query.bindValue(":state", (int)seatItem->seatState());
