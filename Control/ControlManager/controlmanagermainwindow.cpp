@@ -18,12 +18,9 @@ ControlManagerMainWindow::~ControlManagerMainWindow()
 void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 {
     QSqlDatabase db = QSqlDatabase::database("controlDataBase");
-
-    bool st = db.isOpen();
-    qDebug(qPrintable(st));
-
     if(db.isOpen())
     {
+
         QSqlQuery query(db);
         query.prepare("SELECT COUNT(identifier), passedFlag, id FROM Tickets WHERE identifier = :identifier;");
         query.bindValue(":identifier", ui->leGetBarcode->text());
@@ -87,6 +84,7 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
     else
     {
         QMessageBox::critical(this, tr("База данных не открыта!"), tr("База данных не открыта!\nОткройте базу данных"));
+        ui->leGetBarcode->setText("");
     }
 }
 
@@ -102,14 +100,14 @@ void ControlManagerMainWindow::openDataBase()
     else
     {
         QSqlQuery query(db);
-        query.exec("SELECT COUNT (*) AS mCount FROM Tickets GROUP BY identifier ORDER BY mCount");
+        query.exec("SELECT COUNT (*) AS mCount FROM Tickets GROUP BY identifier ORDER BY mCount DESC");
         if(query.first())
         {
             if(query.value(0).toInt() > 1)
             {
-                  QMessageBox::critical(this, tr("База не валидна!"), tr("База данных не валидна!"));
+                  QMessageBox::critical(this, tr("База не валидна!"), tr("База данных не валидна.\nНайдено совпадение штрихкодов"));
                   db.close();
-                  qDebug("Err");
+                  db.removeDatabase("controlDataBase");
             }
             else
             {

@@ -23,6 +23,8 @@ private:
     QString tDate;
     QString tActionName;
     void createDBScheme();
+    bool openConnection();
+    bool validateDataBase();
 
 public slots:
     void updateData();
