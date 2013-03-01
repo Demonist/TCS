@@ -98,9 +98,10 @@ void CUploadingWidget::on_pbnUploading_clicked()
         if(selectDataQuery.exec("SELECT * FROM Actions WHERE id = " + ui->twActions->currentItem()->text(ID)))
         {
             QSqlQuery insertDataQuery(db);
-            insertDataQuery.exec("INSERT INTO Actions VALUES(NULL, :title, :performer, :description, :date, :state, :fanPrice, :fanCount, :id_place, :id_cat);");
+            insertDataQuery.exec("INSERT INTO Actions VALUES(:id, :title, :performer, :description, :date, :state, :fanPrice, :fanCount, :id_place, :id_cat);");
             while(selectDataQuery.next())
             {
+                insertDataQuery.bindValue(":id", selectDataQuery.value(0).toString());
                 insertDataQuery.bindValue(":title", selectDataQuery.value(1).toString());
                 insertDataQuery.bindValue(":performer", selectDataQuery.value(2).toString());
                 insertDataQuery.bindValue(":description", selectDataQuery.value(3).toString());
@@ -148,12 +149,12 @@ void CUploadingWidget::on_pbnUploading_clicked()
         }
         QMessageBox::information(this, tr("Выгрузка успешно завершена"), tr("Выгрузка в файл ") + tr(" успешно завершена\nБаза валидна."));
         db.close();
-        db.removeDatabase("uploadingConnection");
     }
     else
     {
         //QMessageBox::critical(this, tr("Ошибка при открытии базы данных"), tr("Невозможно открыть базу данных, либо не выбрано мероприятие."));
     }
+    QSqlDatabase::removeDatabase("uploadingConnection");
 }
 
 void CUploadingWidget::createDBScheme()
@@ -162,7 +163,7 @@ void CUploadingWidget::createDBScheme()
     QSqlQuery createDBQuery(db);
     if(!createDBQuery.exec(
                 "CREATE TABLE IF NOT EXISTS Actions( "
-                "id                   INTEGER PRIMARY KEY AUTOINCREMENT, "
+                "id                   INTEGER NOT NULL, "
                 "title                TEXT NULL, "
                 "performer            TEXT NULL, "
                 "description          TEXT NULL, "
@@ -188,7 +189,7 @@ void CUploadingWidget::createDBScheme()
         qDebug(qPrintable(createDBQuery.lastError().text()));
     if(!createDBQuery.exec(
                 "CREATE TABLE IF NOT EXISTS Clients( "
-                "id                   INTEGER NULL, "
+                "id                   INTEGER NOT NULL, "
                 "name                 TEXT NULL, "
                 "birthDate            DATE NULL,  "
                 "login                TEXT NULL,  "
@@ -225,9 +226,6 @@ bool CUploadingWidget::openConnection()
     if(validateDataBase())
     {
         QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия ") + tActionName, QDir::currentPath(), tr("Файл базы данных(.sqlite)"));
-        QFile file(pth);
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        file.close();
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "uploadingConnection");
         db.setDatabaseName(pth);
         if(db.open())

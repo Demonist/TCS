@@ -18,7 +18,7 @@ ControlManagerMainWindow::~ControlManagerMainWindow()
 void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 {
     QSqlDatabase db = QSqlDatabase::database("controlDataBase");
-    if(db.isOpen())
+    if(db.isOpen() && db.isValid())
     {
 
         QSqlQuery query(db);
@@ -107,7 +107,6 @@ void ControlManagerMainWindow::openDataBase()
             {
                   QMessageBox::critical(this, tr("База не валидна!"), tr("База данных не валидна.\nНайдено совпадение штрихкодов"));
                   db.close();
-                  db.removeDatabase("controlDataBase");
             }
             else
             {
