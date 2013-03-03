@@ -7,7 +7,7 @@ CClientDialog::CClientDialog(const QString &connectionName, QWidget *parent) :
 {
 	ui->setupUi(this);
 	mConnectionName = connectionName;
-	setWindowTitle(tr("Добавление категории"));
+	setWindowTitle(tr("Добавление клиента"));
 	mType = Add;
 }
 
@@ -17,12 +17,12 @@ CClientDialog::CClientDialog(const QString &connectionName, const int id, QWidge
 {
 	ui->setupUi(this);
 	mConnectionName = connectionName;
-	setWindowTitle(tr("Редактирование категории"));
+	setWindowTitle(tr("Редактирование клиента"));
 	mType = Edit;
 	mId = id;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    query.prepare("SELECT name, birthDate, login, passwordHash, clientsPhone FROM Clients WHERE id = :id;");
+	query.prepare("SELECT name, birthDate, login, passwordHash, phone FROM Clients WHERE id = :id;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
 	{
@@ -48,12 +48,12 @@ void CClientDialog::on_buttonBox_accepted()
 	{
         if(validateLogin(ui->leClientLogin->text(), Add))
         {
-            query.prepare("INSERT INTO Clients VALUES(NULL, :name, :birthDate, :login, :passwordHash, :clientsPhone);");
+			query.prepare("INSERT INTO Clients VALUES(NULL, :name, :birthDate, :login, :passwordHash, :phone);");
             query.bindValue(":name", ui->leClientFIO->text());
             query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate().toString("dd.MM.yyyy"));
             query.bindValue(":login", ui->leClientLogin->text());
             query.bindValue(":passwordHash", ui->leClientPassword->text());
-            query.bindValue(":clientsPhone", ui->leClientPhone->text());
+			query.bindValue(":phone", ui->leClientPhone->text());
             query.exec();
             emit dataWasUpdated();
             close();
@@ -68,12 +68,12 @@ void CClientDialog::on_buttonBox_accepted()
 	{
         if(validateLogin(ui->leClientLogin->text(), Edit, mId))
         {
-            query.prepare("UPDATE Clients SET name = :name, birthDate = :birthDate, login = :login, passwordHash = :passwordHash, clientsPhone = :clientsPhone WHERE id = :id;");
+			query.prepare("UPDATE Clients SET name = :name, birthDate = :birthDate, login = :login, passwordHash = :passwordHash, phone = :phone WHERE id = :id;");
             query.bindValue(":name", ui->leClientFIO->text());
             query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate().toString("dd.MM.yyyy"));
             query.bindValue(":login", ui->leClientLogin->text());
             query.bindValue(":passwordHash", ui->leClientPassword->text());
-            query.bindValue(":clientsPhone", ui->leClientPhone->text());
+			query.bindValue(":phone", ui->leClientPhone->text());
             query.bindValue(":id", mId);
             query.exec();
             emit dataWasUpdated();

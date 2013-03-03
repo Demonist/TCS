@@ -132,7 +132,7 @@ void CUploadingWidget::on_pbnUploading_clicked()
                     if(selectDataClients.exec("SELECT * FROM Clients WHERE id = " + selectDataQuery.value(3).toString()))
                     {
                         QSqlQuery insertDataClients(db);
-                        insertDataClients.exec("INSERT INTO Clients VALUES(:id, :name, :birthDate, :login, :passwordHash, :clientsPhone)");
+						insertDataClients.exec("INSERT INTO Clients VALUES(:id, :name, :birthDate, :login, :passwordHash, :phone)");
                         while(selectDataClients.next())
                         {
                             insertDataClients.bindValue(":id", selectDataClients.value(0).toString());
@@ -140,7 +140,7 @@ void CUploadingWidget::on_pbnUploading_clicked()
                             insertDataClients.bindValue(":birthDate", selectDataClients.value(2).toString());
                             insertDataClients.bindValue(":login", selectDataClients.value(3).toString());
                             insertDataClients.bindValue(":passwordHash", selectDataClients.value(4).toString());
-                            insertDataClients.bindValue(":clientsPhone", selectDataClients.value(5).toString());
+							insertDataClients.bindValue(":phone", selectDataClients.value(5).toString());
                             insertDataClients.exec();
                         }
                     }
@@ -194,7 +194,7 @@ void CUploadingWidget::createDBScheme()
                 "birthDate            DATE NULL,  "
                 "login                TEXT NULL,  "
                 "passwordHash         TEXT NULL,  "
-                "clientsPhone         TEXT NULL  "
+				"phone                TEXT NULL  "
                 ");"
                 ))
         qDebug(qPrintable(createDBQuery.lastError().text()));

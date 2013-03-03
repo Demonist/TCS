@@ -17,11 +17,13 @@ INCLUDEPATH += ../../common/ \
 		../../common/ticketIdentifier/ \
 		startingDialog/ \
 		clientActionsWidget/ \
-		clientRegistrationWidget/
+		clientRegistrationWidget/ \
+		returnTicketWidget/
 
 
 SOURCES += main.cpp\
         cclientmainwindow.cpp \
+	../../common/global.cpp \
     ../../common/commonWidget/cabstractcommonwidget.cpp \
     ../../common/connectionWidget/cdatabaseconnectionwidget.cpp \
     startingDialog/cstartingdialog.cpp \
@@ -39,10 +41,12 @@ SOURCES += main.cpp\
     ../../common/graphics/cabstractlegend.cpp \
     ../../common/ticketIdentifier/cticketidentifier.cpp \
     clientActionsWidget/csourcegraphicsview.cpp \
-    ../../common/ticketIdentifier/ean13.cpp
+    ../../common/ticketIdentifier/ean13.cpp \
+    returnTicketWidget/creturnticketwidget.cpp \
 
 
 HEADERS  += cclientmainwindow.h \
+	../../common/global.h \
     ../../common/commonWidget/cabstractcommonwidget.h \
     ../../common/connectionWidget/cdatabaseconnectionwidget.h \
     startingDialog/cstartingdialog.h \
@@ -60,7 +64,9 @@ HEADERS  += cclientmainwindow.h \
     ../../common/graphics/cabstractlegend.h \
     ../../common/ticketIdentifier/cticketidentifier.h \
     clientActionsWidget/csourcegraphicsview.h \
-    ../../common/ticketIdentifier/ean13.h
+    ../../common/ticketIdentifier/ean13.h \
+    returnTicketWidget/creturnticketwidget.h \
+
 
 FORMS    += cclientmainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -68,7 +74,8 @@ FORMS    += cclientmainwindow.ui \
     clientActionsWidget/cclientactionswidget.ui \
     ../../common/dateDialog/cdatedialog.ui \
 	clientRegistrationWidget/cclientregistrationwidget.ui \
-    clientActionsWidget/cclientactiondialog.ui
+    clientActionsWidget/cclientactiondialog.ui \
+    returnTicketWidget/creturnticketwidget.ui
 
 RESOURCES += \
     ../../common/connectionWidget/connectionwidget_res.qrc \

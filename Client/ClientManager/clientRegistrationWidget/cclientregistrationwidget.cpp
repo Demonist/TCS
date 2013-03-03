@@ -24,15 +24,22 @@ void CClientRegistrationWidget::on_pbnSave_clicked()
     QSqlQuery query(QSqlDatabase::database(mConnectionName));
     if(validateLogin(ui->leLogin->text()))
     {
-        query.prepare("INSERT INTO Clients VALUES(NULL, :name, :birthDate, :login, :passwordHash, :clientsPhone);");
+		query.prepare("INSERT INTO Clients VALUES(NULL, :name, :birthDate, :login, :passwordHash, :phone);");
         query.bindValue(":name", ui->leFIO->text());
 		query.bindValue(":birthDate", ui->cwBDate->selectedDate());
         query.bindValue(":login", ui->leLogin->text());
         query.bindValue(":passwordHash", generatePassword());
-        query.bindValue(":clientsPhone", ui->lePhone->text());
-        query.exec();
+		query.bindValue(":phone", ui->lePhone->text());
+		if(query.exec())
+		{
+			ui->leFIO->clear();
+			ui->leLogin->clear();
+			ui->lePhone->clear();
+			QMessageBox::information(this, tr("Успех"), tr("Новый пользователь успешно зарегистрирован."));
+		}
+		else
+			qDebug(qPrintable(query.lastError().text()));
     }
-
     else
     {
         QMessageBox::Yes == QMessageBox::question(this, tr("Предупреждение"), tr("Пользователь с таким логином уже существует!"), QMessageBox::Yes);

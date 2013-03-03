@@ -93,7 +93,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="page_actions">
         <layout class="QGridLayout" name="gridLayout_2">
@@ -115,7 +115,13 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="page_3"/>
+       <widget class="QWidget" name="page_3">
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="CReturnTicketWidget" name="wReturnTicket" native="true"/>
+         </item>
+        </layout>
+       </widget>
        <widget class="QWidget" name="page_registration">
         <layout class="QGridLayout" name="gridLayout_4">
          <property name="margin">
@@ -137,7 +143,7 @@
   <customwidget>
    <class>CAnimatedStackedWidget</class>
    <extends>QStackedWidget</extends>
-   <header>canimatedstackedwidget.h</header>
+   <header location="global">canimatedstackedwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -150,6 +156,12 @@
    <class>CClientRegistrationWidget</class>
    <extends>QWidget</extends>
    <header>cclientregistrationwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CReturnTicketWidget</class>
+   <extends>QWidget</extends>
+   <header>creturnticketwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -48,6 +48,7 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 		qsrand((uint)QDateTime::currentMSecsSinceEpoch());
 		CImages::instance(mConnectionName);
 		ui->wActions->setConnectionName(mConnectionName);
+		ui->wReturnTicket->setConnectionName(mConnectionName);
         ui->wRegistration->setConnectionName(mConnectionName);
 
 		mActionDialog.setSourceView(ui->wActions->view());

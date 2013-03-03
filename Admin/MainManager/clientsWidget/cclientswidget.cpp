@@ -30,7 +30,7 @@ CClientsWidget::~CClientsWidget()
 void CClientsWidget::updateData()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    if(query.exec("SELECT id, name, birthDate, login, passwordHash, clientsPhone FROM Clients;"))
+	if(query.exec("SELECT id, name, birthDate, login, passwordHash, phone FROM Clients;"))
 	{
 		ui->twClients->clear();
 		uint count = 0;

@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CReturnTicketWidget</class>
+ <widget class="QWidget" name="CReturnTicketWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>620</width>
+    <height>517</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_17">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Возврат билета</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_16">
+      <item row="2" column="0" colspan="3">
+       <widget class="QGroupBox" name="groupBox_13">
+        <property name="title">
+         <string>Информация о клиенте</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_13">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>4</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="groupBox_14">
+           <property name="title">
+            <string>ФИО</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_11">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="leClientName">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QGroupBox" name="groupBox_15">
+           <property name="title">
+            <string>Телефон</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_12">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="leClientPhone">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="3">
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="title">
+         <string>Информация о билете</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_15">
+         <item row="0" column="0" colspan="3">
+          <widget class="QGroupBox" name="groupBox_4">
+           <property name="title">
+            <string>Мероприятие</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="leAction">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="3" colspan="2">
+          <widget class="QGroupBox" name="groupBox_5">
+           <property name="title">
+            <string>Площадка</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="lePlace">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QGroupBox" name="groupBox_7">
+           <property name="title">
+            <string>Статус мероприятия</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="leActionState">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QGroupBox" name="groupBox_11">
+           <property name="title">
+            <string>Место</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_9">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="leSeat">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <widget class="QGroupBox" name="groupBox_12">
+           <property name="title">
+            <string>Ряд</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_10">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="leRow">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QGroupBox" name="groupBox_8">
+           <property name="title">
+            <string>Стоимость билета</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="lePrice">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QGroupBox" name="groupBox_9">
+           <property name="title">
+            <string>Неустойка</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="lePenalty">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="2">
+          <widget class="QGroupBox" name="groupBox_6">
+           <property name="title">
+            <string>Время проведения</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="leDateTime">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="2" column="3" colspan="2">
+          <widget class="QGroupBox" name="groupBox_16">
+           <property name="title">
+            <string>Ценовая группа</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_14">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLineEdit" name="lePriceGroup">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="title">
+         <string>Идентификатор билета</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QLineEdit" name="leIdentifier"/>
+         </item>
+         <item row="0" column="1">
+          <widget class="QToolButton" name="tbnClearIdentifier">
+           <property name="icon">
+            <iconset resource="../clinet_res.qrc">
+             <normaloff>:/clientImages/clear.png</normaloff>:/clientImages/clear.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="QLabel" name="lIdentifierState">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QGroupBox" name="groupBox_10">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="title">
+         <string>Сумма выплаты клиенту</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_8">
+         <item row="0" column="0">
+          <widget class="QLineEdit" name="lePayment">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="3">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbnReturnTicket">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Вернуть билет</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="0" colspan="3">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../clinet_res.qrc"/>
+ </resources>
+ <connections/>
+</ui>
