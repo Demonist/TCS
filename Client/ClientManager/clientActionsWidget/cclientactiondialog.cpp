@@ -14,6 +14,8 @@ CClientActionDialog::CClientActionDialog(QWidget *parent) :
 	ui(new Ui::CClientActionDialog)
 {
 	ui->setupUi(this);
+	ui->graphicsView->setDragByRightButtonEnabled(false);
+	ui->graphicsView->setWheelScalling(false);
 	mCanClose = true;
 	QDesktopWidget *desktop = QApplication::desktop();
 	if(desktop)
@@ -27,6 +29,8 @@ CClientActionDialog::CClientActionDialog(QWidget *parent) :
 					move(secondaryScreenGeometry.topLeft());
 					resize(secondaryScreenGeometry.size());
 					setWindowFlags(Qt::Window|Qt::FramelessWindowHint);
+					showMaximized();
+					showFullScreen();
 					mCanClose = false;
 					break;
 				}

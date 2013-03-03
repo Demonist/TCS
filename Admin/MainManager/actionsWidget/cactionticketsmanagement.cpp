@@ -19,7 +19,32 @@ bool CActionTicketsManagement::eventFilter(QObject *obj, QEvent *event)
 	if(event->type() == QEvent::MouseButtonRelease)
 	{
 		if(static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton)
+		{
 			pressed = false;
+
+			//Дополнительная обработка для уже занятых мест:
+			QGraphicsItem *item = mScene.itemAt(ui->gvScene->mapToScene(static_cast<QMouseEvent*>(event)->pos()));
+			if(item && item->data(0).toString() == CActionSeatItem::itemName())
+			{
+				CActionSeatItem *seatItem = static_cast<CActionSeatItem*>(item);
+				if( (seatItem->seatState() == Global::SeatReserved || seatItem->seatState() == Global::SeatSolded)
+				   && (mEditType == Avaible || mEditType == NotAvaible || mEditType == Hide || mEditType == Show) )
+				{
+					QString seatStr = seatItem->seatState() == Global::SeatSolded ? tr("проданного") : tr("забронированного");
+					if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите изменить состояние уже %1 места?").arg(seatStr), QMessageBox::Yes, QMessageBox::No))
+					{
+						if(mEditType == Hide)
+							seatItem->setSeatStateAnimated(Global::SeatHided, 1000);
+						else if(mEditType == Show)
+							seatItem->setSeatStateAnimated(Global::SeatNotAvaible, 1000);
+						else if(mEditType == Avaible)
+							seatItem->setSeatStateAnimated(Global::SeatFree, 1000);
+						else if(mEditType == NotAvaible)
+							seatItem->setSeatStateAnimated(Global::SeatNotAvaible, 1000);
+					}
+				}
+			}
+		}
 	}
 	else if(event->type() == QEvent::MouseButtonPress)
 	{
@@ -49,15 +74,19 @@ void CActionTicketsManagement::mouseSceneEvent(QMouseEvent *event)
 	if(item && item->data(0).toString() == CActionSeatItem::itemName())
 	{
 		CActionSeatItem *seatItem = static_cast<CActionSeatItem*>(item);
-		if(mEditType == Hide)
-			seatItem->setSeatStateAnimated(Global::SeatHided, 1000);
-		else if(mEditType == Show)
-			seatItem->setSeatStateAnimated(Global::SeatNotAvaible, 1000);
-		else if(mEditType == Avaible)
-			seatItem->setSeatStateAnimated(Global::SeatFree, 1000);
-		else if(mEditType == NotAvaible)
-			seatItem->setSeatStateAnimated(Global::SeatNotAvaible, 1000);
-		else if(mEditType == Paint)
+		if(seatItem->seatState() != Global::SeatReserved && seatItem->seatState() != Global::SeatSolded)
+		{
+			if(mEditType == Hide)
+				seatItem->setSeatStateAnimated(Global::SeatHided, 1000);
+			else if(mEditType == Show)
+				seatItem->setSeatStateAnimated(Global::SeatNotAvaible, 1000);
+			else if(mEditType == Avaible)
+				seatItem->setSeatStateAnimated(Global::SeatFree, 1000);
+			else if(mEditType == NotAvaible)
+				seatItem->setSeatStateAnimated(Global::SeatNotAvaible, 1000);
+		}
+
+		if(mEditType == Paint)
 		{
 			QTreeWidgetItem *priceItem = ui->twPriceGroups->currentItem();
 			if(priceItem && seatItem->priceGroupId() != priceItem->text(ID).toInt())
@@ -190,10 +219,13 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 		ui->lFanCount->setText(tr("Количество: %1 шт.").arg(mFanCount));
 
 	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
 
 	query.prepare("SELECT id, name, price, penalty, color FROM ActionPriceGroups WHERE id_action = :actId;");
 	query.bindValue(":actId", mId);
 	if(query.exec())
+	{
 		while(query.next())
 		{
 			QTreeWidgetItem *item = new QTreeWidgetItem();
@@ -207,6 +239,9 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 				ui->twPriceGroups->addTopLevelItem(item);
 			}
 		}
+	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
 
 	query.prepare("SELECT id FROM PlaceSchemes WHERE id_place = :id;");
 	query.bindValue(":id", mPlaceId);
@@ -235,6 +270,8 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 			item->showAnimated(2000);
 		}
 	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
 }
 
 CActionTicketsManagement::~CActionTicketsManagement()
@@ -283,14 +320,19 @@ void CActionTicketsManagement::on_pbnApply_clicked()
 					}
 					else
 					{
-                        query.prepare("INSERT INTO ActionScheme VALUES(:actId, :seatId, :state, :priceGroup);");
+						query.prepare("INSERT INTO ActionScheme VALUES(:actId, :seatId, :state, :priceGroup);");
+
 						query.bindValue(":actId", mId);
 						query.bindValue(":seatId", seatItem->id());
 						query.bindValue(":state", (int)seatItem->seatState());
 						query.bindValue(":priceGroup", seatItem->priceGroupId());
 					}
 				}
-				query.exec();
+				if(!query.exec())
+				{
+					qDebug(qPrintable(query.lastError().text()));
+					break;
+				}
 			}
 		}
 		progressDialog.setValue(i);

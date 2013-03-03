@@ -67,8 +67,8 @@ void CGraphicsView::paintEvent(QPaintEvent *event)
 
 void CGraphicsView::mousePressEvent(QMouseEvent *event)
 {
-	if(event->button() == Qt::RightButton
-	   || (mDrag && event->button() == Qt::LeftButton))
+	if( (mDragByRightButton && event->button() == Qt::RightButton)
+	   || (mDrag && event->button() == Qt::LeftButton) )
 	{
 		mDragging = true;
 		mDragPos = event->pos();
@@ -81,8 +81,8 @@ void CGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
 	if(mDragging)
 	{
-		if(event->button() == Qt::RightButton
-		   || (mDrag && event->button() == Qt::LeftButton))
+		if( (mDragByRightButton && event->button() == Qt::RightButton)
+		   || (mDrag && event->button() == Qt::LeftButton) )
 		{
 			mDragging = false;
 			if(mDrag)
@@ -104,7 +104,6 @@ void CGraphicsView::mouseMoveEvent(QMouseEvent *event)
 		if(verticalScrollBar())
 			verticalScrollBar()->setValue(verticalScrollBar()->value() + scroll.y());
 		mDragPos = event->pos();
-		viewport()->repaint();
 	}
 	QGraphicsView::mouseMoveEvent(event);
 }
@@ -132,8 +131,12 @@ CGraphicsView::CGraphicsView(QWidget *parent) :
 {
 	viewport()->setMouseTracking(true);
 
+	connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(scrollBarValueChanged(int)));
+	connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(scrollBarValueChanged(int)));
+
 	mDragging = false;
 	mDrag = false;
+	mDragByRightButton = true;
 	mWheelScalling = true;
 	mWheelScallingAnimated = true;
 	mScale = 1.0f;
@@ -163,7 +166,7 @@ void CGraphicsView::scaleUp()
 			setScaleAnimated(newScale);
 		else
 			setScale(newScale);
-		viewport()->repaint();
+		viewport()->update();
 	}
 }
 
@@ -181,8 +184,15 @@ void CGraphicsView::scaleDown()
 			setScaleAnimated(newScale);
 		else
 			setScale(newScale);
-		viewport()->repaint();
+		viewport()->update();
 	}
+}
+
+//protected slots:
+
+void CGraphicsView::scrollBarValueChanged(const int newValue)
+{
+	viewport()->update();
 }
 
 //public slots:
@@ -190,6 +200,19 @@ void CGraphicsView::scaleDown()
 void CGraphicsView::setDragEnabled(const bool enableDrag)
 {
 	mDrag = enableDrag;
+
+	if(mDrag)
+		setCursor(Qt::OpenHandCursor);
+	else
+	{
+		mDragging = false;
+		setCursor(Qt::ArrowCursor);
+	}
+}
+
+void CGraphicsView::setDragByRightButtonEnabled(const bool enableDrag)
+{
+	mDragByRightButton = enableDrag;
 
 	if(mDrag)
 		setCursor(Qt::OpenHandCursor);

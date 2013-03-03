@@ -37,7 +37,7 @@ void CClientActionSeatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 //public:
 
-CClientActionSeatItem::CClientActionSeatItem(const QString &connectionName, const int id, const int price) :
+CClientActionSeatItem::CClientActionSeatItem(const QString &connectionName, const int id) :
 	CSeatItem()
 {
 	mConnectionName = connectionName;
@@ -47,7 +47,8 @@ CClientActionSeatItem::CClientActionSeatItem(const QString &connectionName, cons
 	setData(0, itemName());
 	setPenWidth(2);
 	mId = id;
-	mPrice = price;
+	mPrice = 0;
+	mPenalty = 0;
 }
 
 void CClientActionSeatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

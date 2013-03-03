@@ -71,7 +71,7 @@ void MainWindow::createTables()
 				   "fanCount             INTEGER DEFAULT 0, "
 				   "id_place             INTEGER NULL, "
 				   "id_category          INTEGER NULL, "
-				   "id_logoImage         INTEGER NULL"
+				   "id_ticketSubstrate   INTEGER NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 

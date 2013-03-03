@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>465</width>
-    <height>413</height>
+    <height>415</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -156,7 +156,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Логотип мероприятия</string>
+      <string>Подложка билета</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_9">
       <item row="0" column="0">

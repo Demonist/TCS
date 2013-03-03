@@ -10,6 +10,7 @@
 #include "cclientactionseatitem.h"
 #include "cimages.h"
 #include "csourcegraphicsview.h"
+#include "cticketidentifier.h"
 
 namespace Ui {
 	class CClientActionsWidget;

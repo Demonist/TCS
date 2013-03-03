@@ -16,6 +16,7 @@ protected:
 	QPoint mDragPos;
 
 	bool mDrag;
+	bool mDragByRightButton;
 	bool mWheelScalling;	//! Флаг, разрешающий изменение масштаба роликом мыши. По умолчанию равен \a true. Если равен \a false, то сингналы \a wheelUp и \a wheelDown не посылаются.
 	bool mWheelScallingAnimated;
 	qreal mScale;
@@ -40,14 +41,19 @@ public:
 	void scaleDown();
 	
 	inline bool dragEnabled() const;
+	inline bool dragByRightButtonEnabled() const;
 	inline bool wheelScalling() const;
 	inline bool isWheelScallingAnimated() const;
 	inline qreal scale() const;
 	inline CAbstractLegend* legend() const;
 	inline bool isLegend() const;
 	
+protected slots:
+	virtual void scrollBarValueChanged(const int newValue);
+
 public slots:
 	void setDragEnabled(const bool enableDrag);
+	void setDragByRightButtonEnabled(const bool enableDrag);
 	inline void setWheelScalling(const bool enalbeWheelScaling);
 	inline void setWheelScallingAnimated(const bool animatedScalling = true);
 	virtual void setScale(const qreal scale);
@@ -61,6 +67,11 @@ public slots:
 inline bool CGraphicsView::dragEnabled() const
 {
 	return mDrag;
+}
+
+inline bool CGraphicsView::dragByRightButtonEnabled() const
+{
+	return mDragByRightButton;
 }
 
 inline qreal CGraphicsView::scale() const

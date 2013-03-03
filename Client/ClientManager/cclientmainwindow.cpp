@@ -21,7 +21,6 @@ void CClientMainWindow::closeEvent(QCloseEvent *event)
 		event->ignore();
 }
 
-
 //public:
 
 CClientMainWindow::CClientMainWindow(QWidget *parent) :
@@ -46,7 +45,7 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 
 	if(startingDialog.isLogined())
 	{
-		qsrand(QTime::currentTime().msec());
+		qsrand((uint)QDateTime::currentMSecsSinceEpoch());
 		CImages::instance(mConnectionName);
 		ui->wActions->setConnectionName(mConnectionName);
         ui->wRegistration->setConnectionName(mConnectionName);

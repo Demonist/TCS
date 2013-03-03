@@ -36,8 +36,11 @@ void CStartingDialog::on_pbnExit_clicked()
 
 void CStartingDialog::on_pbnLogin_clicked()
 {
+	if(mLogined)
+		return;
+
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	query.prepare("SELECT id FROM Users WHERE login = :login AND passwordCrypt = :password;");
+	query.prepare("SELECT id, name FROM Users WHERE login = :login AND passwordCrypt = :password;");
 	query.bindValue(":login", ui->leLogin->text());
 	query.bindValue(":password", ui->lePassword->text());
 	if(query.exec())
@@ -47,7 +50,8 @@ void CStartingDialog::on_pbnLogin_clicked()
 			ui->lStatus->setText(tr("Вход выполнен"));
 			mLogined = true;
 			mLoginedId = query.value(0).toInt();
-			close();
+			ui->lWelcome->setText(tr("<html><head/><body><p align=\"center\"><span style=\" font-size:10pt;\">Добро пожаловать </span><span style=\" font-size:10pt; font-weight:600;\">%1</span><span style=\" font-size:10pt;\">!</span></p></body></html>").arg(query.value(1).toString()));
+			QTimer::singleShot(1000, this, SLOT(close()));
 		}
 		else
 			ui->lStatus->setText(tr("Ошибка входа"));

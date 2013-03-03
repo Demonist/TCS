@@ -17,6 +17,9 @@ signals:
 	void scaleChanged(qreal newScale);
 	void dragChanged(int horizontalBarValue, int vertiacalBarValue);
 
+protected slots:
+	void scrollBarValueChanged(const int newValue);
+
 public slots:
 	void setScale(const qreal scale);
 };

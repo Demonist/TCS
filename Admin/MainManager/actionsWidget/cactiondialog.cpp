@@ -74,6 +74,12 @@ CActionDialog::CActionDialog(const QString &connectionName, const int id, QWidge
 		ui->cbxState->addItems(Global::actionStates());
 		ui->cbxState->setCurrentIndex(ui->cbxState->findText(Global::actionStateToText(query.value(3).toInt())));
 
+		if(Global::ActionInactive != query.value(3).toInt())
+		{
+			ui->pbnTicketsManagement->setEnabled(false);
+			ui->pbnTicketsManagement->setToolTip(tr("Данный функционал доступен только для неактивных мероприятий"));
+		}
+
 		int catId = query.value(4).toInt();
 		int placeId = query.value(1).toInt();
 		int index = 0;
@@ -185,7 +191,7 @@ void CActionDialog::on_pbnTicketsManagement_clicked()
 
 void CActionDialog::on_pbnLogoImage_clicked()
 {
-	CImageDialog imageDialog(mConnectionName, "Actions", "id_logoImage", tr("id = %1").arg(mId));
-	imageDialog.setWindowTitle(tr("Логотип мероприятия"));
+	CImageDialog imageDialog(mConnectionName, "Actions", "id_ticketSubstrate", tr("id = %1").arg(mId));
+	imageDialog.setWindowTitle(tr("Подложка билета"));
 	imageDialog.exec();
 }

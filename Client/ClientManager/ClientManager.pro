@@ -38,7 +38,8 @@ SOURCES += main.cpp\
     clientActionsWidget/cclientactiondialog.cpp \
     ../../common/graphics/cabstractlegend.cpp \
     ../../common/ticketIdentifier/cticketidentifier.cpp \
-    clientActionsWidget/csourcegraphicsview.cpp
+    clientActionsWidget/csourcegraphicsview.cpp \
+    ../../common/ticketIdentifier/ean13.cpp
 
 
 HEADERS  += cclientmainwindow.h \
@@ -58,7 +59,8 @@ HEADERS  += cclientmainwindow.h \
     clientActionsWidget/cclientactiondialog.h \
     ../../common/graphics/cabstractlegend.h \
     ../../common/ticketIdentifier/cticketidentifier.h \
-    clientActionsWidget/csourcegraphicsview.h
+    clientActionsWidget/csourcegraphicsview.h \
+    ../../common/ticketIdentifier/ean13.h
 
 FORMS    += cclientmainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \

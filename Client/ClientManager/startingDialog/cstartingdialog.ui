@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="CAnimatedStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_connection">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -34,17 +34,18 @@
           <string>Авторизация</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox">
-            <property name="title">
-             <string>Логин</string>
+          <item row="2" column="0">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
-            <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="0">
-              <widget class="QLineEdit" name="leLogin"/>
-             </item>
-            </layout>
-           </widget>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>472</width>
+              <height>38</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item row="1" column="0">
            <widget class="QGroupBox" name="groupBox_2">
@@ -62,20 +63,7 @@
             </layout>
            </widget>
           </item>
-          <item row="2" column="0">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>5</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -166,6 +154,21 @@
             </item>
            </layout>
           </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="lWelcome"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Логин</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="QLineEdit" name="leLogin"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -189,6 +192,12 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>leLogin</tabstop>
+  <tabstop>lePassword</tabstop>
+  <tabstop>pbnLogin</tabstop>
+  <tabstop>pbnExit</tabstop>
+ </tabstops>
  <resources>
   <include location="../../../common/connectionWidget/connectionwidget_res.qrc"/>
   <include location="../../../common/connectionWidget/connectionwidget_res.qrc"/>

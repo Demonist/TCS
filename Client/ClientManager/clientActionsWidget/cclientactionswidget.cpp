@@ -292,6 +292,8 @@ void CClientActionsWidget::on_pbnSoldTicket_clicked()
 						"ActionScheme.state, "
 						"ActionPriceGroups.color, "
 						"ActionPriceGroups.price, "
+						"ActionPriceGroups.penalty, "
+						"ActionPriceGroups.name, "
 						"PlaceSchemes.x, "
 						"PlaceSchemes.y, "
 						"PlaceSchemes.seatNumber, "
@@ -313,16 +315,20 @@ void CClientActionsWidget::on_pbnSoldTicket_clicked()
 			CClientActionSeatItem *item;
 			while(query.next())
 			{
-				item = new CClientActionSeatItem(mConnectionName, query.value(0).toInt(), query.value(3).toInt());
+				item = new CClientActionSeatItem(mConnectionName, query.value(0).toInt());
 				if(item)
 				{
+					item->setPrice(query.value(3).toInt());
+					item->setPenalty(query.value(4).toInt());
+					item->setPriceGroupTitle(query.value(5).toString());
 					item->setSeatState((Global::SeatState)query.value(1).toInt());
 					item->setBrushColor(QColor(query.value(2).toString()));
-					item->setPos(query.value(4).toInt(), query.value(5).toInt());
-					item->setText(query.value(6).toString());
-					item->setRow(query.value(7).toString());
+					item->setPos(query.value(6).toInt(), query.value(7).toInt());
+					item->setText(query.value(8).toString());
+					item->setRow(query.value(9).toString());
 					item->updateForSeat();
-					connect(item, SIGNAL(selectionChanged(CClientActionSeatItem*,bool)), this, SLOT(seatSelectionChanged(CClientActionSeatItem*,bool)));
+					if((Global::SeatState)query.value(1).toInt() == Global::SeatFree)
+						connect(item, SIGNAL(selectionChanged(CClientActionSeatItem*,bool)), this, SLOT(seatSelectionChanged(CClientActionSeatItem*,bool)));
 					mScene.addItem(item);
 				}
 			}
@@ -454,35 +460,296 @@ void CClientActionsWidget::on_pbnBackToSeats_clicked()
 
 void CClientActionsWidget::on_pbnPrintTickets_clicked()
 {
-	QMessageBox::warning(this, tr("Ahtung"), tr("Данный раздел закрыт на реконструкцию.\nПотерпите немного."));
-	return;
-
-	//TODO: генерация штрих кода, запись в БД, печать, проверка печати, повторная печать, отмена продажи.
-
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	query.exec("BEGIN TRANSACTION;");
 
-	query.prepare("INSERT INTO Tickets VALUES(NULL, :actId, NULL, NULL, :identifier);");
-	query.bindValue(":actId", mCurrentActionId);
-	for(int i = 0; i < ui->sbxFanSellCount->value(); i++)
+	QPrinter printer;
+	printer.setOrientation(QPrinter::Portrait);
+	printer.setPaperSize(QPrinter::A4);
+	printer.setFullPage(true);
+
+	QPrintDialog printDialog(&printer, this);
+	printDialog.setWindowTitle(tr("Печать билетов"));
+	printDialog.setOptions(QAbstractPrintDialog::PrintToFile);
+	printDialog.setPrintRange(QAbstractPrintDialog::AllPages);
+	if(printDialog.exec() == QDialog::Accepted)
 	{
-		query.bindValue(":identifier", "123123");
-		query.exec();
+		int fanPenalty = 0;
+		int ticketSubstrateId = 0;
+		query.prepare("SELECT fanCount, fanPenalty, id_ticketSubstrate FROM Actions WHERE id = :id;");
+		query.bindValue(":id", mCurrentActionId);
+		if(query.exec() && query.first())
+		{
+			QString error;
+			fanPenalty = query.value(1).toInt();
+			ticketSubstrateId = query.value(2).toInt();
+			if(query.value(0).toInt() < ui->sbxFanSellCount->value())
+			{
+				mFanCountForCurrentAction = query.value(0).toInt();
+				ui->sbxFanSellCount->setValue(mFanCountForCurrentAction);
+				ui->leFanAvaible->setText(tr("%1 шт.").arg(mFanCountForCurrentAction));
+				error = tr("В фан зоне доступно только %1 мест.\n").arg(mFanCountForCurrentAction);
+			}
+
+			int failedSeats = 0;
+			query.prepare("SELECT state FROM ActionScheme WHERE id_action = :actId AND id_placeScheme = :seatId;");
+			query.bindValue(":actId", mCurrentActionId);
+			for(int i = 0; i < mSelectedSeats.count(); i++)
+			{
+				query.bindValue(":seatId", mSelectedSeats[i]->id());
+				if(query.exec() && query.first())
+				{
+					if(query.value(0).toInt() != Global::SeatFree)
+					{
+						error += tr("Место %1 в ряду %2 занято.\n").arg(mSelectedSeats[i]->text()).arg(mSelectedSeats[i]->row());
+						failedSeats++;
+					}
+				}
+			}
+
+			if(error.isEmpty() == false)
+			{
+				error.chop(1);	//remove \n from end.
+				QMessageBox::warning(this, tr("Внимание! Некоторые места заняты"), error + tr("\n\nСейчас произойдет обновление"));
+
+				//updating:
+				qDebug("updating");////
+				QList<int> seatsSelectedIds;
+				for(int i = 0; i < mSelectedSeats.count(); i++)
+					seatsSelectedIds.append(mSelectedSeats[i]->id());
+
+				mSelectedSeats.clear();
+				mScene.clear();
+
+				query.prepare("SELECT "
+								"ActionScheme.id_placeScheme, "
+								"ActionScheme.state, "
+								"ActionPriceGroups.color, "
+								"ActionPriceGroups.price, "
+								"ActionPriceGroups.penalty, "
+								"ActionPriceGroups.name, "
+								"PlaceSchemes.x, "
+								"PlaceSchemes.y, "
+								"PlaceSchemes.seatNumber, "
+								"PlaceSchemes.row "
+							  "FROM "
+								"ActionScheme, "
+								"ActionPriceGroups, "
+								"PlaceSchemes "
+							  "WHERE "
+								"ActionPriceGroups.id = ActionScheme.id_priceGroup AND "
+								"PlaceSchemes.id = ActionScheme.id_placeScheme AND "
+								"ActionScheme.state != :stateHided AND "
+								"ActionScheme.id_action = :id;"
+							  );
+				query.bindValue(":stateHided", Global::SeatHided);
+				query.bindValue(":id", mCurrentActionId);
+				if(query.exec())
+				{
+					CClientActionSeatItem *item;
+					while(query.next())
+					{
+						item = new CClientActionSeatItem(mConnectionName, query.value(0).toInt());
+						if(item)
+						{
+							item->setPrice(query.value(3).toInt());
+							item->setPenalty(query.value(4).toInt());
+							item->setSeatState((Global::SeatState)query.value(1).toInt());
+							item->setBrushColor(QColor(query.value(2).toString()));
+							item->setPos(query.value(6).toInt(), query.value(7).toInt());
+							item->setText(query.value(8).toString());
+							item->setRow(query.value(9).toString());
+							item->updateForSeat();
+							if((Global::SeatState)query.value(1).toInt() == Global::SeatFree)
+							{
+								connect(item, SIGNAL(selectionChanged(CClientActionSeatItem*,bool)), this, SLOT(seatSelectionChanged(CClientActionSeatItem*,bool)));
+								int index = seatsSelectedIds.indexOf(item->id());
+								if(index >= 0)
+								{
+									item->setSelected(true);
+									mSelectedSeats.append(item);
+									seatsSelectedIds.removeAt(index);
+								}
+							}
+							mScene.addItem(item);
+						}
+					}
+				}
+				else
+					qDebug(qPrintable(query.lastError().text()));
+
+				ui->stackedWidget->slideHorizontalPrev();
+			}
+			else
+			{
+				QList<QString> fanTickets;
+				QList<QString> seatTickets;
+
+				for(int i = 0; i < ui->sbxFanSellCount->value(); i++)
+					fanTickets.append(CTicketIdentifier::generate().data());
+
+				for(int i = 0; i < mSelectedSeats.count(); i++)
+					seatTickets.append(CTicketIdentifier::generate().data());
+
+				//printing:
+
+				bool queryError = false;
+
+				if(query.exec("BEGIN TRANSACTION;"))
+				{
+					query.prepare("INSERT INTO Tickets VALUES(NULL, :actId, NULL, NULL, :identifier);");
+					query.bindValue(":actId", mCurrentActionId);
+					for(int i = 0; i < fanTickets.count() && !queryError; i++)
+					{
+						query.bindValue(":identifier", fanTickets[i]);
+						if(!query.exec())
+							queryError = true;
+					}
+
+					if(!queryError)
+					{
+						query.prepare("UPDATE Actions SET fanCount = fanCount - :fanSold WHERE id = :id;");
+						query.bindValue(":id", mCurrentActionId);
+						query.bindValue(":fanSold", ui->sbxFanSellCount->value());
+						if(!query.exec())
+							queryError = true;
+					}
+
+					if(!queryError)
+					{
+						query.prepare("INSERT INTO Tickets VALUES(NULL, :actId, :seatId, NULL, :identifier);");
+						query.bindValue(":actId", mCurrentActionId);
+						for(int i = 0; i < seatTickets.count() && !queryError; i++)
+						{
+							query.bindValue(":seatId", mSelectedSeats[i]->id());
+							query.bindValue(":identifier", seatTickets[i]);
+							if(!query.exec())
+								queryError = true;
+						}
+					}
+
+					if(!queryError)
+					{
+						query.prepare("UPDATE ActionScheme SET state = :state WHERE id_action = :actId AND id_placeScheme = :seatId;");
+						query.bindValue(":state", Global::SeatSolded);
+						query.bindValue(":actId", mCurrentActionId);
+						for(int i = 0; i < mSelectedSeats.count() && !queryError; i++)
+						{
+							query.bindValue(":seatId", mSelectedSeats[i]->id());
+							if(!query.exec())
+								queryError = true;
+						}
+					}
+
+					if(queryError)
+					{
+						query.exec("ROLLBACK TRANSACTION;");
+						QMessageBox::critical(this, tr("Ошибка"), tr("Произошла ошибка при работе с сервером базы данных. Печать отменена.\nПроверьте подключение к интернету."));
+					}
+					else
+					{
+						query.exec("COMMIT TRANSACTION;");
+
+						const static QPixmap printerBackground(":/clientImages/background.png");
+						const static QPoint substratePoint(20, 375);
+						const static QRect penaltyRect(635, 379, 135, 45);
+						const static QRect priceRect(635, 660, 135, 40);
+						const static QPoint translatePoint(553, 700);
+						const static QRect titleRect(0, 0, 320, 20);
+						const static QRect placeRect(0, 20, 320, 20);
+						const static QRect dateTimeRect(0, 41, 320, 20);
+						const static QRect seatRect(0, 61, 320, 20);
+						const static QPoint barCodeTranslatePoint(45, 85);
+						const static QSize barCodeRenderSize(230, 130);
+
+						QPainter painter;
+						painter.begin(&printer);
+						QFont font = painter.font();
+						font.setFamily("Arial");
+						for(int i = 0; i < fanTickets.count(); i++)
+						{
+							painter.drawPixmap(0, 0, printerBackground);
+							if(ticketSubstrateId)
+								painter.drawPixmap(substratePoint, CImages::instance()->image(ticketSubstrateId));
+
+							font.setBold(true);
+							font.setPointSize(9);
+							painter.setFont(font);
+
+							painter.drawText(penaltyRect, Qt::AlignCenter, tr("При возврате билета\nудерживается сумма\nв размере %1 руб").arg(fanPenalty));
+							painter.drawText(priceRect, Qt::AlignCenter, tr("Стоимость билета\n%1 руб").arg(mFanPriceForCurrentAction));
+
+							font.setBold(false);
+							painter.setFont(font);
+
+							painter.save();
+							painter.translate(translatePoint);
+							painter.rotate(-90.0f);
+
+							painter.drawText(titleRect, Qt::AlignCenter, ui->twActions->currentItem()->text(TITLE));
+							painter.drawText(placeRect, Qt::AlignCenter, ui->twActions->currentItem()->text(PLACE));
+							painter.drawText(dateTimeRect, Qt::AlignCenter, ui->twActions->currentItem()->text(DATETIME).left(16));	//16 - dd.MM.yyyy hh:mm
+							painter.drawText(seatRect, Qt::AlignCenter, tr("Место: фан-зона"));
+
+							painter.translate(barCodeTranslatePoint);
+							CTicketIdentifier::generate(fanTickets[i]).render(barCodeRenderSize, &painter);
+							painter.restore();
+
+							if(i < fanTickets.count() - 1)	//if not last page
+								printer.newPage();
+						}
+						if(seatTickets.count())
+							printer.newPage();
+						for(int i = 0; i < seatTickets.count(); i++)
+						{
+							painter.drawPixmap(0, 0, printerBackground);
+							if(ticketSubstrateId)
+								painter.drawPixmap(substratePoint, CImages::instance()->image(ticketSubstrateId));
+
+							font.setBold(true);
+							font.setPointSize(9);
+							painter.setFont(font);
+
+							painter.drawText(penaltyRect, Qt::AlignCenter, tr("При возврате билета\nудерживается сумма\nв размере %1 руб").arg(mSelectedSeats[i]->penalty()));
+							painter.drawText(priceRect, Qt::AlignCenter, tr("Стоимость билета\n%1 руб").arg(mSelectedSeats[i]->price()));
+
+							font.setBold(false);
+							painter.setFont(font);
+
+							painter.save();
+							painter.translate(translatePoint);
+							painter.rotate(-90.0f);
+
+							painter.drawText(titleRect, Qt::AlignCenter, ui->twActions->currentItem()->text(TITLE));
+							painter.drawText(placeRect, Qt::AlignCenter, ui->twActions->currentItem()->text(PLACE));
+							painter.drawText(dateTimeRect, Qt::AlignCenter, ui->twActions->currentItem()->text(DATETIME).left(16));	//16 - dd.MM.yyyy hh:mm
+
+							QString seat;
+							if(mSelectedSeats[i]->text().isEmpty() == false)
+								seat = tr("Место: ") + mSelectedSeats[i]->text();
+							if(mSelectedSeats[i]->row().isEmpty() == false)
+								seat += tr(" Ряд: ") + mSelectedSeats[i]->row();
+							if(seat.isEmpty())
+								seat = mSelectedSeats[i]->priceGroupTitle();
+							else
+								seat += " (" + mSelectedSeats[i]->priceGroupTitle() + ')';
+							painter.drawText(seatRect, Qt::AlignCenter, seat);
+
+							painter.translate(barCodeTranslatePoint);
+							CTicketIdentifier::generate(seatTickets[i]).render(barCodeRenderSize, &painter);
+							painter.restore();
+
+							if(i < seatTickets.count() - 1)	//if not last page
+								printer.newPage();
+						}
+						painter.end();
+
+						emit showLeftPanel();
+						ui->stackedWidget->setCurrentIndexAnimatedHorizontal(0);
+					}
+				}
+			}
+		}
 	}
-
-	query.prepare("INSERT INTO Tickets VALUES(NULL, :actId, :seatId, NULL, :identifier);");
-	query.bindValue(":actId", mCurrentActionId);
-	for(int i = 0; i < mSelectedSeats.count(); i++)
-	{
-		query.bindValue(":seatId", mSelectedSeats[i]->id());
-		query.bindValue(":identifier", "123123");
-		query.exec();
-	}
-
-	query.exec("COMMIT TRANSACTION;");
-
-	emit showLeftPanel();
-	ui->stackedWidget->setCurrentIndexAnimatedHorizontal(0);
 }
 
 void CClientActionsWidget::on_sbxFanSellCount_valueChanged(int arg1)

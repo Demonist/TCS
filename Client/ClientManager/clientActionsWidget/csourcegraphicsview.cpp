@@ -17,6 +17,17 @@ CSourceGraphicsView::CSourceGraphicsView(QWidget *parent) :
 {
 }
 
+//protected slots:
+
+void CSourceGraphicsView::scrollBarValueChanged(const int newValue)
+{
+	if(horizontalScrollBar() && verticalScrollBar())
+		emit dragChanged(horizontalScrollBar()->value(), verticalScrollBar()->value());
+	viewport()->update();
+}
+
+//public slots:
+
 void CSourceGraphicsView::setScale(const qreal scale)	//Do not make inline. Never! Otherwise recursion arise.
 {
 	CGraphicsView::setScale(scale);

@@ -19,6 +19,12 @@
    </property>
    <item row="0" column="0">
     <widget class="CGraphicsView" name="graphicsView">
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
      <property name="interactive">
       <bool>false</bool>
      </property>
