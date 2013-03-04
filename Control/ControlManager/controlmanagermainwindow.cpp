@@ -7,7 +7,6 @@ ControlManagerMainWindow::ControlManagerMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->aExit, SIGNAL(activated()), this, SLOT(close()));
-    connect(ui->aOpenNewDB, SIGNAL(activated()), this, SLOT(openDataBase()));
 }
 
 ControlManagerMainWindow::~ControlManagerMainWindow()
@@ -20,10 +19,11 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
     QSqlDatabase db = QSqlDatabase::database("controlDataBase");
     if(db.isOpen() && db.isValid())
     {
-
+        CTicketIdentifier *ticketIdentifier = new CTicketIdentifier(ui->leGetBarcode->text());
+        QString barcode = ticketIdentifier->data();
         QSqlQuery query(db);
         query.prepare("SELECT COUNT(identifier), passedFlag, id FROM Tickets WHERE identifier = :identifier;");
-        query.bindValue(":identifier", ui->leGetBarcode->text());
+        query.bindValue(":identifier", barcode);
         if(query.exec() && query.first())
         {
             if((query.value(0).toInt() == 1) && (query.value(1).toBool() == false))
@@ -88,11 +88,16 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
     }
 }
 
-void ControlManagerMainWindow::openDataBase()
+void ControlManagerMainWindow::on_tbnOpenDB_clicked()
 {
     QString pth = QFileDialog::getOpenFileName(this, tr("Выберите базу данных"), QDir::currentPath(), tr("Файл базы данных(*.sqlite)"));
+    ui->cbxDBPath->addItem(pth);
+}
+
+void ControlManagerMainWindow::on_pbnConnectDB_clicked()
+{
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "controlDataBase");
-    db.setDatabaseName(pth);
+    db.setDatabaseName(ui->cbxDBPath->currentText());
     if(!db.open())
     {
         QMessageBox::critical(this, tr("Ошибка в открытии базы данных!"), tr("База данных не открыта!\nОшибка в открытии базы данных!"));
@@ -113,6 +118,7 @@ void ControlManagerMainWindow::openDataBase()
                 query.prepare("SELECT title, performer, dateTime FROM Actions");
                 if(query.exec() && query.first())
                 {
+                   ui->stackedWidget->setCurrentIndex(1);
                    ui->groupBox->setTitle(tr("База данных концерта: ") + query.value(0).toString() + tr(", Исполнитель: ") + query.value(1).toString() + tr(", Дата проведения концерта: ") + query.value(2).toString());
                 }
             }

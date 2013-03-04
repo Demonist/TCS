@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QtSql>
+#include "cticketidentifier.h"
 
 namespace Ui {
 class ControlManagerMainWindow;
@@ -18,7 +19,9 @@ public:
     
 private slots:
     void on_leGetBarcode_returnPressed();
-    void openDataBase();
+    void on_tbnOpenDB_clicked();
+    void on_pbnConnectDB_clicked();
+
 private:
     Ui::ControlManagerMainWindow *ui;
 };
