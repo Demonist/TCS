@@ -43,6 +43,8 @@ SOURCES += main.cpp\
     clientActionsWidget/csourcegraphicsview.cpp \
     ../../common/ticketIdentifier/ean13.cpp \
     returnTicketWidget/creturnticketwidget.cpp \
+    ../../common/cstatistics.cpp \
+    cmarket.cpp
 
 
 HEADERS  += cclientmainwindow.h \
@@ -66,6 +68,8 @@ HEADERS  += cclientmainwindow.h \
     clientActionsWidget/csourcegraphicsview.h \
     ../../common/ticketIdentifier/ean13.h \
     returnTicketWidget/creturnticketwidget.h \
+    ../../common/cstatistics.h \
+    cmarket.h
 
 
 FORMS    += cclientmainwindow.ui \

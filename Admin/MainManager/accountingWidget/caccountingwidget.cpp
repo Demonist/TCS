@@ -1,6 +1,10 @@
 #include "caccountingwidget.h"
 #include "ui_caccountingwidget.h"
 
+#define RETURNED_MARKET 0
+#define RETURNED_SELLER 1
+#define RETURNED_ACTION 2
+
 CAccountingWidget::CAccountingWidget(QWidget *parent) :
     CAbstractCommonWidget(parent),
     ui(new Ui::CAccountingWidget)
@@ -15,57 +19,39 @@ CAccountingWidget::~CAccountingWidget()
 
 void CAccountingWidget::updateData()
 {
-   /* ui->cbxMarkets->clear();
-    ui->cbxUsers->clear();
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    if(query.exec("SELECT ID, address From Markets;"))
-    {
-        while(query.next())
-        {
-            ui->cbxMarkets->addItem(query.value(1).toString(), query.value(0).toString());
-        }
-
-    }
-    else qDebug(qPrintable(query.lastError().text()));
-
-    if(query.exec("SELECT ID, name From Users;"))
-    {
-        while(query.next())
-        {
-            ui->cbxUsers->addItem(query.value(1).toString(), query.value(0).toString());
-        }
-
-    }
-    else qDebug(qPrintable(query.lastError().text()));*/
+	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+	query.prepare("SELECT data FROM Statistics WHERE type = :type;");
+	query.bindValue(":type", CStatistics::TypeTicketReturned);
+	if(query.exec())
+	{
+		QTreeWidgetItem *item;
+		while(query.next())
+		{
+			CStatisticTicketReturnedType *type = (CStatisticTicketReturnedType*)CStatistics::fromByteArray(query.value(0).toByteArray());
+			if(type && type->isValid())
+			{
+				item = new QTreeWidgetItem();
+				if(item)
+				{
+					QSqlQuery query2(QSqlDatabase::database(mConnectionName));
+					query2.prepare("SELECT Markets.address, Users.name, Actions.title FROM Markets, Users, Actions WHERE Markets.id = :marketId AND Users.id = :userId AND Actions.id = :actId;");
+					query2.bindValue(":marketId", type->marketId);
+					query2.bindValue(":userId", type->sellerId);
+					query2.bindValue(":actId", type->actionId);
+					if(query2.exec() && query2.first())
+					{
+						item->setText(RETURNED_MARKET, query2.value(0).toString());
+						item->setText(RETURNED_SELLER, query2.value(1).toString());
+						item->setText(RETURNED_ACTION, query2.value(2).toString());
+						ui->twReturnedTickets->addTopLevelItem(item);
+					}
+					else
+						qDebug(qPrintable(query2.lastError().text()));
+				}
+			}
+		}
+	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
 }
 
-/*void CAccountingWidget::on_tbnActions_clicked()
-{
-    CAccountingActionsDialog caccountingactionsdialog(mConnectionName, this);
-    caccountingactionsdialog.exec();
-    if(caccountingactionsdialog.result())
-    {
-
-    }
-}
-
-void CAccountingWidget::on_tbnS_clicked()
-{
-    CDateDialog dateDialog(this);
-    if(ui->leSDate->text().isEmpty() == false)
-        dateDialog.setDate(QDate::fromString(ui->leSDate->text(), "dd.MM.yyyy"));
-    dateDialog.exec();
-    if(dateDialog.result())
-        ui->leSDate->setText(dateDialog.selectedDate().toString("dd.MM.yyyy"));
-}
-
-void CAccountingWidget::on_tbnDo_clicked()
-{
-    CDateDialog dateDialog(this);
-    if(ui->leDoDate->text().isEmpty() == false)
-        dateDialog.setDate(QDate::fromString(ui->leDoDate->text(), "dd.MM.yyyy"));
-    dateDialog.exec();
-    if(dateDialog.result())
-        ui->leDoDate->setText(dateDialog.selectedDate().toString("dd.MM.yyyy"));
-}
-*/

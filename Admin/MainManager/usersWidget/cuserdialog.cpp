@@ -34,7 +34,7 @@ CUserDialog::CUserDialog(const QString &connectionName, const int id, QWidget *p
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-    query.prepare("SELECT login, passwordCrypt, name, address, Markets.ID FROM Users, Markets WHERE Users.id = :id AND marketsID = Markets.ID;");
+	query.prepare("SELECT login, passwordCrypt, name, address, Markets.ID FROM Users, Markets WHERE Users.id = :id AND marketId = Markets.ID;");
 	query.bindValue(":id", mId);    
 	if(query.exec() && query.first())
 	{
@@ -44,7 +44,7 @@ CUserDialog::CUserDialog(const QString &connectionName, const int id, QWidget *p
         ui->cbxMarkets->addItem(query.value(3).toString());
         ui->cbxMarkets->setItemData(ui->cbxMarkets->currentIndex(), query.value(4).toString());
     }
-    query.exec("SELECT id, address FROM Markets WHERE id <> (SELECT marketsid FROM Users WHERE id = " + QString::number(mId) + ");");
+	query.exec("SELECT id, address FROM Markets WHERE id <> (SELECT marketId FROM Users WHERE id = " + QString::number(mId) + ");");
     int cIndex = 1;
     while(query.next())
     {
@@ -93,7 +93,7 @@ void CUserDialog::on_buttonBox_accepted()
 	}
 	else if(mType == Edit)
 	{
-        query.prepare("UPDATE Users SET passwordCrypt = :password, name = :name, marketsID = :marketsID WHERE id = :id;");
+		query.prepare("UPDATE Users SET passwordCrypt = :password, name = :name, marketId = :marketsID WHERE id = :id;");
 		query.bindValue(":password", ui->lePassword->text());
 		query.bindValue(":name", ui->leName->text());
         query.bindValue(":marketsID", ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toInt());

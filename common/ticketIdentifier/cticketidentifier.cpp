@@ -127,8 +127,6 @@ bool CTicketIdentifier::isValidIdentifier(const QString &identifier)
 			if(conversion == true)
 			{
 				const char master = identifier.mid(2, 1).toInt();
-				if(10 - master != identifier.mid(slavePosition(master), 1).toInt())
-					qDebug("%d %d %d", master, slavePosition(master), identifier.mid(slavePosition(master), 1).toInt());
 				return 10 - master == identifier.mid(slavePosition(master), 1).toInt();
 			}
 		}

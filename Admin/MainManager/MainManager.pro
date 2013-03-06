@@ -58,7 +58,8 @@ SOURCES += main.cpp\
     imageDialog/cimagedialog.cpp \
     ../../common/graphics/cabstractgraphicsitem.cpp \
     actionsWidget/cfandialog.cpp \
-    ../../common/canimatedstackedwidget.cpp
+    ../../common/canimatedstackedwidget.cpp \
+    ../../common/cstatistics.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -95,7 +96,8 @@ HEADERS  += mainwindow.h \
     imageDialog/cimagedialog.h \
     ../../common/graphics/cabstractgraphicsitem.h \
     actionsWidget/cfandialog.h \
-    ../../common/canimatedstackedwidget.h
+    ../../common/canimatedstackedwidget.h \
+    ../../common/cstatistics.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \

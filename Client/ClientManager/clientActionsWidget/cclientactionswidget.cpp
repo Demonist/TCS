@@ -585,10 +585,32 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 				QList<QString> seatTickets;
 
 				for(int i = 0; i < ui->sbxFanSellCount->value(); i++)
-					fanTickets.append(CTicketIdentifier::generate().data());
+				{
+					CTicketIdentifier ticketIdetifier = CTicketIdentifier::generate();
+					fanTickets.append(ticketIdetifier.data());
+
+					CStatisticTicketSoldedType type;
+					type.marketId = CMarket::instance()->marketId();
+					type.sellerId = CMarket::instance()->sellerId();
+					type.actionId = mCurrentActionId;
+					type.barCode = ticketIdetifier.identifier();
+					type.ticketIdentifier = ticketIdetifier.data();
+					CStatistics::instance()->write(type);
+				}
 
 				for(int i = 0; i < mSelectedSeats.count(); i++)
-					seatTickets.append(CTicketIdentifier::generate().data());
+				{
+					CTicketIdentifier ticketIdetifier = CTicketIdentifier::generate();
+					seatTickets.append(ticketIdetifier.data());
+
+					CStatisticTicketSoldedType type;
+					type.marketId = CMarket::instance()->marketId();
+					type.sellerId = CMarket::instance()->sellerId();
+					type.actionId = mCurrentActionId;
+					type.barCode = ticketIdetifier.identifier();
+					type.ticketIdentifier = ticketIdetifier.data();
+					CStatistics::instance()->write(type);
+				}
 
 				//printing:
 
@@ -650,10 +672,11 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 						query.exec("COMMIT TRANSACTION;");
 
 						const static QPixmap printerBackground(":/clientImages/background.png");
-						const static QPoint substratePoint(20, 375);
-						const static QRect penaltyRect(635, 379, 135, 45);
-						const static QRect priceRect(635, 660, 135, 40);
-						const static QPoint translatePoint(553, 700);
+						const static QPoint substratePoint(48, 378);
+//						const static QRect substrateRect(48, 378, 478, 324);
+						const static QRect penaltyRect(617, 379, 135, 46);
+						const static QRect priceRect(617, 660, 135, 40);
+						const static QPoint translatePoint(535, 700);
 						const static QRect titleRect(0, 0, 320, 20);
 						const static QRect placeRect(0, 20, 320, 20);
 						const static QRect dateTimeRect(0, 41, 320, 20);
@@ -688,7 +711,7 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 							painter.drawText(titleRect, Qt::AlignCenter, ui->twActions->currentItem()->text(TITLE));
 							painter.drawText(placeRect, Qt::AlignCenter, ui->twActions->currentItem()->text(PLACE));
 							painter.drawText(dateTimeRect, Qt::AlignCenter, ui->twActions->currentItem()->text(DATETIME).left(16));	//16 - dd.MM.yyyy hh:mm
-							painter.drawText(seatRect, Qt::AlignCenter, tr("Место: фан-зона"));
+							painter.drawText(seatRect, Qt::AlignCenter, tr("Фан-зона"));
 
 							painter.translate(barCodeTranslatePoint);
 							CTicketIdentifier::generate(fanTickets[i]).render(barCodeRenderSize, &painter);

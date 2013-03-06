@@ -15,7 +15,7 @@ void CReturnTicketWidget::clear()
 	ui->lePriceGroup->clear();
 	ui->leRow->clear();
 	ui->leSeat->clear();
-	mTicketIdentifier = 0;
+	mTicketId = 0;
 	ui->pbnReturnTicket->setEnabled(false);
 }
 
@@ -24,7 +24,7 @@ CReturnTicketWidget::CReturnTicketWidget(QWidget *parent) :
 	ui(new Ui::CReturnTicketWidget)
 {
 	ui->setupUi(this);
-	mTicketIdentifier = 0;
+	mTicketId = 0;
 }
 
 CReturnTicketWidget::~CReturnTicketWidget()
@@ -48,7 +48,7 @@ void CReturnTicketWidget::on_leIdentifier_textChanged(const QString &arg1)
 	{
 		ui->lIdentifierState->setStyleSheet("QLabel{color:green;};");
 		ui->lIdentifierState->setText(tr("Нажмите 'ВВОД'"));
-		mTicketIdentifier = 0;
+		mTicketId = 0;
 	}
 	else
 	{
@@ -97,10 +97,10 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 			{
 				uint payment = 0;
 				int price;
-				mTicketIdentifier = query.value(0).toInt();
+				mTicketId = query.value(0).toInt();
 				int placeSchemeId = query.value(1).toInt();
-				int clientId = query.value(2).toInt();
-				int actionId = query.value(3).toInt();
+				mClientId = query.value(2).toInt();
+				mActionId = query.value(3).toInt();
 				ui->leAction->setText(query.value(4).toString());
 				Global::ActionState actionState = (Global::ActionState)query.value(5).toInt();
 				ui->leActionState->setText(Global::actionStateToText(actionState));
@@ -135,7 +135,7 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 								  " PlaceSchemes.id = :placeId2"
 								  ";");
 					query.bindValue(":placeId", placeSchemeId);
-					query.bindValue(":actId", actionId);
+					query.bindValue(":actId", mActionId);
 					query.bindValue(":placeId2", placeSchemeId);
 					if(query.exec() && query.first())
 					{
@@ -151,10 +151,10 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 						qDebug(qPrintable(query.lastError().text()));
 				}
 
-				if(clientId)
+				if(mClientId)
 				{
 					query.prepare("SELECT name, phone FROM Clients WHERE id = :id;");
-					query.bindValue(":id", clientId);
+					query.bindValue(":id", mClientId);
 					if(query.exec() && query.first())
 					{
 						ui->leClientName->setText(query.value(0).toString());
@@ -169,7 +169,7 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 					case Global::ActionComplited:
 					case Global::ActionInactive:
 						ui->lePayment->setText(tr("Билет возврату не подлежит"));
-						mTicketIdentifier = 0;
+						mTicketId = 0;
 						break;
 					case Global::ActionCanceled:
 						ui->lePayment->setText(tr("%1 руб.").arg(price));
@@ -202,13 +202,24 @@ void CReturnTicketWidget::on_tbnClearIdentifier_clicked()
 
 void CReturnTicketWidget::on_pbnReturnTicket_clicked()
 {
-	if(mTicketIdentifier && QMessageBox::Yes == QMessageBox::question(this, tr("Подтвердите возврат"), tr("Вы действительно хотите возвратить данный билет?"), QMessageBox::Yes, QMessageBox::No))
+	if(mTicketId && QMessageBox::Yes == QMessageBox::question(this, tr("Подтвердите возврат"), tr("Вы действительно хотите возвратить данный билет?"), QMessageBox::Yes, QMessageBox::No))
 	{
 		QSqlQuery query(QSqlDatabase::database(mConnectionName));
 		query.prepare("DELETE FROM Tickets WHERE id = :id;");
-		query.bindValue(":id", mTicketIdentifier);
+		query.bindValue(":id", mTicketId);
 		if(query.exec())
 		{
+			CTicketIdentifier identifier(ui->leIdentifier->text());
+			CStatisticTicketReturnedType type;
+			type.marketId = CMarket::instance()->marketId();
+			type.sellerId = CMarket::instance()->sellerId();
+			type.actionId = mActionId;
+			type.ticketId = mTicketId;
+			type.barCode = identifier.identifier();
+			type.ticketIdentifier = identifier.data();
+			type.clientId = mClientId;
+			CStatistics::instance()->write(type);
+
 			clear();
 			ui->leIdentifier->clear();
 			ui->lIdentifierState->clear();

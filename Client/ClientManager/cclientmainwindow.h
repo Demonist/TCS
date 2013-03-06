@@ -5,7 +5,9 @@
 #include <QtSql>
 #include "cstartingdialog.h"
 #include "cimages.h"
+#include "cstatistics.h"
 #include "cclientactiondialog.h"
+#include "cmarket.h"
 
 namespace Ui {
 	class CClientMainWindow;

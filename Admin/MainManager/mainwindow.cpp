@@ -12,14 +12,15 @@
 void MainWindow::createTables()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	QString autoincExpr = ui->connectionWidget->connectionType() == CDataBaseConnectionWidget::ConnectionServer ? "AUTO_INCREMENT PRIMARY KEY, " : "PRIMARY KEY AUTOINCREMENT, ";   //Выражение автоинкремента меняется в зависимости от драйвера базы днных.
+	const bool isServer = ui->connectionWidget->connectionType() == CDataBaseConnectionWidget::ConnectionServer;
+	QString autoincExpr = isServer ? "AUTO_INCREMENT PRIMARY KEY, " : "PRIMARY KEY AUTOINCREMENT, ";   //Выражение автоинкремента меняется в зависимости от драйвера базы днных.
 
 	if(!query.exec("CREATE TABLE IF NOT EXISTS Users( "
 				   "id                   INTEGER " + autoincExpr +
 				   "login                TEXT NULL, "
 				   "passwordCrypt        TEXT NULL, "
 				   "name                 TEXT NULL, "
-				   "marketsID            INTEGER NOT NULL"
+				   "marketId             INTEGER NOT NULL"
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 
@@ -114,6 +115,24 @@ void MainWindow::createTables()
 				   "id_client            INTEGER NULL, "
 				   "identifier           TEXT NULL"
 				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Statistics( "
+				   "id                   INTEGER " + autoincExpr +
+				   "type                 INTEGER NOT NULL, "
+				   "text                 TEXT NULL, "
+				   "data                 BLOB NULL, "
+				   "dateTime             DATETIME NULL"
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
+	const QString nowExpr = isServer ? "NOW()" : "datetime('now')";
+
+	if(!query.exec("CREATE TRIGGER IF NOT EXISTS on_insertStatistics AFTER INSERT ON Statistics"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Statistics SET dateTime = " + nowExpr + " WHERE id = NEW.id;"
+				   " END"
+				   ";"))
 		qDebug(qPrintable(query.lastError().text()));
 
 	if(!query.exec("CREATE TABLE IF NOT EXISTS Reservations( "

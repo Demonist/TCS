@@ -29,6 +29,16 @@ CImages::CImages()
 	}
 }
 
+CImages::CImages(const CImages &obj)
+{
+
+}
+
+CImages& CImages::operator =(const CImages &obj)
+{
+	return *this;
+}
+
 //public:
 
 /**

@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtSql>
 #include "cdatabaseconnectionwidget.h"
+#include "cmarket.h"
 
 namespace Ui {
 	class CStartingDialog;

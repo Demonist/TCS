@@ -15,6 +15,9 @@ void CClientMainWindow::closeEvent(QCloseEvent *event)
 	{
 		mActionDialog.setCanClose(true);
 		mActionDialog.close();
+		delete CImages::instance();
+		delete CStatistics::instance();
+		delete CMarket::instance();
 		event->accept();
 	}
 	else
@@ -47,6 +50,7 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 	{
 		qsrand((uint)QDateTime::currentMSecsSinceEpoch());
 		CImages::instance(mConnectionName);
+		CStatistics::instance(mConnectionName);
 		ui->wActions->setConnectionName(mConnectionName);
 		ui->wReturnTicket->setConnectionName(mConnectionName);
         ui->wRegistration->setConnectionName(mConnectionName);

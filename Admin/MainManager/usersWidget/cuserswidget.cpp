@@ -34,7 +34,7 @@ void CUsersWidget::updateData()
 	if(query.exec("SELECT COUNT(id) FROM Markets;") && query.first())
 		mMarketsCount = query.value(0).toInt();
 
-	if(query.exec("SELECT Users.id, login, passwordCrypt, name, address FROM Users, Markets WHERE marketsID = Markets.ID;"))
+	if(query.exec("SELECT Users.id, login, passwordCrypt, name, address FROM Users, Markets WHERE marketId = Markets.id;"))
 	{
 		ui->twUsers->clear();
 

@@ -8,7 +8,7 @@
 Класс для работы с изображениями в базе данных.
 Данный класс выполнен в виде синглетона.
 
-Позволяет добавлять, изменить и удалять изображения из базы данных.
+Позволяет добавлять, изменить, удалять и получать изображения из базы данных.
 Все изображения кешируются.
 
 @author Demonist
@@ -20,7 +20,9 @@ private:
 	QMutex mInsertMutex;
 
 private:
-	explicit CImages();	//private constructor for singleton.
+	explicit CImages();							//private constructor for singleton.
+	explicit CImages(const CImages &obj);		//private copy constructor for singleton.
+	CImages& operator = (const CImages &obj);	//private operator = for singleton.
 
 public:
 	static CImages* instance();

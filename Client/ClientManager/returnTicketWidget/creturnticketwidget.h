@@ -6,6 +6,8 @@
 #include "cabstractcommonwidget.h"
 #include "cticketidentifier.h"
 #include "global.h"
+#include "cstatistics.h"
+#include "cmarket.h"
 
 namespace Ui {
 	class CReturnTicketWidget;
@@ -32,7 +34,9 @@ private slots:
 
 private:
 	Ui::CReturnTicketWidget *ui;
-	int mTicketIdentifier;
+	int mTicketId;
+	int mClientId;
+	int mActionId;
 };
 
 #endif // CRETURNTICKETWIDGET_H
