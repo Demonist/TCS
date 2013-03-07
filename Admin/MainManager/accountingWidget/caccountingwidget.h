@@ -25,8 +25,11 @@ public slots:
 
 private slots:
 
+    void on_cbxCategoriesSelect_currentIndexChanged(int index);
+
 private:
     Ui::CAccountingWidget *ui;
+    void sumPriceTicketsForAction();
 };
 
 #endif // CACCOUNTINGWIDGET_H

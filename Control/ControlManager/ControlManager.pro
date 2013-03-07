@@ -11,14 +11,24 @@ TEMPLATE = app
 
 INCLUDEPATH += ../../common/ \
                 ../../common/ticketIdentifier/ \
+                ../../common/commonWidget/ \
+                ../../common/connectionWidget/ \
 
 SOURCES += main.cpp\
         controlmanagermainwindow.cpp \
     ../../common/ticketIdentifier/cticketidentifier.cpp \
     ../../common/ticketIdentifier/ean13.cpp \
+    ../../common/global.cpp \
+    ../../common/connectionWidget/cdatabaseconnectionwidget.cpp \
 
 HEADERS  += controlmanagermainwindow.h \
+    ../../common/global.h \
     ../../common/ticketIdentifier/cticketidentifier.h \
     ../../common/ticketIdentifier/ean13.h \
+    ../../common/connectionWidget/cdatabaseconnectionwidget.h \
 
-FORMS    += controlmanagermainwindow.ui
+FORMS    += controlmanagermainwindow.ui \
+    ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
+
+RESOURCES += \
+    ../../common/connectionWidget/connectionwidget_res.qrc

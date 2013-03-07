@@ -19,11 +19,11 @@ public:
     
 private slots:
     void on_leGetBarcode_returnPressed();
-    void on_tbnOpenDB_clicked();
-    void on_pbnConnectDB_clicked();
+    void connected(QString connectionName);
 
 private:
     Ui::ControlManagerMainWindow *ui;
+    QString mConnectionName;
 };
 
 #endif // CONTROLMANAGERMAINWINDOW_H

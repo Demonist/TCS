@@ -225,7 +225,7 @@ bool CUploadingWidget::openConnection()
 {
     if(validateDataBase())
     {
-        QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия ") + tActionName, QDir::currentPath(), tr("Файл базы данных(.sqlite)"));
+        QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия ") + tActionName, QDir::currentPath(), tr("Файл базы данных(.db)"));
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "uploadingConnection");
         db.setDatabaseName(pth);
         if(db.open())

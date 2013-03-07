@@ -6,7 +6,11 @@ ControlManagerMainWindow::ControlManagerMainWindow(QWidget *parent) :
     ui(new Ui::ControlManagerMainWindow)
 {
     ui->setupUi(this);
+    ui->wConnection->setConnectionType(CDataBaseConnectionWidget::ConnectionFile);
+    ui->wConnection->setConnectionChoiceEnable(false);
     connect(ui->aExit, SIGNAL(activated()), this, SLOT(close()));
+    connect(ui->wConnection, SIGNAL(connectedToDatabase(QString)), this, SLOT(connected(QString)));
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 ControlManagerMainWindow::~ControlManagerMainWindow()
@@ -16,7 +20,7 @@ ControlManagerMainWindow::~ControlManagerMainWindow()
 
 void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 {
-    QSqlDatabase db = QSqlDatabase::database("controlDataBase");
+    QSqlDatabase db = QSqlDatabase::database(mConnectionName);
     if(db.isOpen() && db.isValid())
     {
         CTicketIdentifier *ticketIdentifier = new CTicketIdentifier(ui->leGetBarcode->text());
@@ -88,16 +92,10 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
     }
 }
 
-void ControlManagerMainWindow::on_tbnOpenDB_clicked()
+void ControlManagerMainWindow::connected(QString connectionName)
 {
-    QString pth = QFileDialog::getOpenFileName(this, tr("Выберите базу данных"), QDir::currentPath(), tr("Файл базы данных(*.sqlite)"));
-    ui->cbxDBPath->addItem(pth);
-}
-
-void ControlManagerMainWindow::on_pbnConnectDB_clicked()
-{
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "controlDataBase");
-    db.setDatabaseName(ui->cbxDBPath->currentText());
+    mConnectionName = connectionName;
+    QSqlDatabase db = QSqlDatabase::database(mConnectionName);
     if(!db.open())
     {
         QMessageBox::critical(this, tr("Ошибка в открытии базы данных!"), tr("База данных не открыта!\nОшибка в открытии базы данных!"));
@@ -120,6 +118,7 @@ void ControlManagerMainWindow::on_pbnConnectDB_clicked()
                 {
                    ui->stackedWidget->setCurrentIndex(1);
                    ui->groupBox->setTitle(tr("База данных концерта: ") + query.value(0).toString() + tr(", Исполнитель: ") + query.value(1).toString() + tr(", Дата проведения концерта: ") + query.value(2).toString());
+                   ui->aAddThisDB->setEnabled(true);
                 }
             }
         }
