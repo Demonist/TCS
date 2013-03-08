@@ -10,7 +10,6 @@ enum ActionState{
 	ActionActive = 1,		//! Мероприятие активно и еще не завершено.
 	ActionInactive = 0,		//! Мероприятие не активно.
 	ActionCanceled = 30,	//! Мероприятие отменено.
-	ActionMoved = 20,		//! Мероприятние перенесено.
 	ActionComplited = 100	//! Мероприятие завершено.
 };
 QString actionStateToText(const int actionState);
@@ -31,6 +30,9 @@ int seatStateFromText(const QString &seatStateText);
 QList<QString> seatStates();
 
 QString currentPath();
+
+QByteArray crypt(const QString &data);
+QString decrypt(const QByteArray &cryptedData);
 
 //inline implementation:
 inline QString actionStateToText(const ActionState actionState)

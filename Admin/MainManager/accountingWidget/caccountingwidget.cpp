@@ -12,6 +12,7 @@ CAccountingWidget::CAccountingWidget(QWidget *parent) :
     ui(new Ui::CAccountingWidget)
 {
     ui->setupUi(this);
+	ui->tabWidget->setCurrentIndex(0);
 	ui->twReturnedTickets->hideColumn(0);
 	ui->twReturnedTickets->setColumnWidth(0, 0);
 }
@@ -59,7 +60,6 @@ void CAccountingWidget::updateData()
 	else
 		qDebug(qPrintable(query.lastError().text()));
 }
-
 
 void CAccountingWidget::on_cbxActions_currentIndexChanged(int index)
 {

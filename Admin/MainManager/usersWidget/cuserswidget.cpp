@@ -24,6 +24,7 @@ CUsersWidget::CUsersWidget(QWidget *parent) :
 	ui->twAdmins->setColumnWidth(PASSWORD, 200);
 	ui->twAdmins->setColumnWidth(NAME, 200);
 	ui->twAdmins->setColumnWidth(MARKET, 200);
+	ui->tabWidget->setCurrentIndex(0);
 
 	mMarketsCount = 0;
 }

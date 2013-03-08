@@ -1,5 +1,7 @@
 #include "global.h"
 
+#define CRYPTED_KEY 0x6B
+
 namespace Global
 {
 
@@ -9,7 +11,6 @@ QString actionStateToText(const int actionState)
 	{
 	case ActionInactive: return QObject::tr("Неактивен");
 	case ActionActive: return QObject::tr("Активен");
-	case ActionMoved: return QObject::tr("Перенесен");
 	case ActionCanceled: return QObject::tr("Отменен");
 	case ActionComplited: return QObject::tr("Завершен");
 	default: return QObject::tr("Error");
@@ -22,8 +23,6 @@ int actionStateFromText(const QString &actionStateText)
 		return ActionInactive;
 	if(actionStateText == actionStateToText(ActionActive))
 		return ActionActive;
-	if(actionStateText == actionStateToText(ActionMoved))
-		return ActionMoved;
 	if(actionStateText == actionStateToText(ActionCanceled))
 		return ActionCanceled;
 	if(actionStateText == actionStateToText(ActionComplited))
@@ -37,7 +36,6 @@ QList<QString> actionStates()
 	states.append(actionStateToText(ActionActive));
 	states.append(actionStateToText(ActionInactive));
 	states.append(actionStateToText(ActionCanceled));
-	states.append(actionStateToText(ActionMoved));
 	states.append(actionStateToText(ActionComplited));
 	return states;
 }
@@ -91,6 +89,24 @@ QString currentPath()
 	QDir path(QCoreApplication::arguments().value(0));
 	path.cdUp();
 	return path.absolutePath();
+}
+
+QByteArray crypt(const QString &data)
+{
+	QByteArray _data = data.toLocal8Bit();
+	QByteArray crypted;
+	for(int i = 0;  i < _data.size(); i++)
+		crypted.append(((unsigned char)_data[i]) ^ CRYPTED_KEY);
+	return qCompress(crypted);
+}
+
+QString decrypt(const QByteArray &cryptedData)
+{
+	QByteArray crypted = qUncompress(cryptedData);
+	QByteArray decrypted;
+	for(int i = 0; i < crypted.size(); i++)
+		decrypted.append(((unsigned char)crypted[i]) ^ CRYPTED_KEY);
+	return QObject::tr(decrypted.constData());
 }
 
 } //namespace Global
