@@ -11,7 +11,6 @@
 #include "cimages.h"
 #include "csourcegraphicsview.h"
 #include "cticketidentifier.h"
-#include "cstatistics.h"
 #include "cmarket.h"
 
 namespace Ui {

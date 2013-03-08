@@ -4,8 +4,10 @@
 #include <QtGui>
 #include <QtSql>
 #include "cabstractcommonwidget.h"
-#include "global.h"
 #include "cdatedialog.h"
+#include "cstatistics.h"
+#include "cmarket.h"
+#include "global.h"
 
 namespace Ui {
 class CClientRegistrationWidget;

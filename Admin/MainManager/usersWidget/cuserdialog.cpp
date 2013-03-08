@@ -7,18 +7,13 @@ CUserDialog::CUserDialog(const QString &connectionName, QWidget *parent) :
 {
 	ui->setupUi(this);
 	mConnectionName = connectionName;
-	setWindowTitle(tr("Добавление пользователя"));
+	setWindowTitle(tr("Добавление кассира"));
 	mType = Add;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    query.exec("SELECT id, address FROM Markets");
-    int incrementIndex = 0;
-    while(query.next())
-    {
-        ui->cbxMarkets->addItem(query.value(1).toString());
-        ui->cbxMarkets->setItemData(incrementIndex, query.value(0).toString());
-        incrementIndex++;
-    }
+	if(query.exec("SELECT id, address FROM Markets"))
+		while(query.next())
+			ui->cbxMarkets->addItem(query.value(1).toString(), query.value(0).toString());
 }
 
 CUserDialog::CUserDialog(const QString &connectionName, const int id, QWidget *parent) :
@@ -27,31 +22,29 @@ CUserDialog::CUserDialog(const QString &connectionName, const int id, QWidget *p
 {
 	ui->setupUi(this);
 	mConnectionName = connectionName;
-	setWindowTitle(tr("Редактирование пользователя"));
+	setWindowTitle(tr("Редактирование кассира"));
 	ui->leLogin->setEnabled(false); //Запрещаем изменение логина.
 	mType = Edit;
 	mId = id;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	query.prepare("SELECT login, passwordCrypt, name, address, Markets.ID FROM Users, Markets WHERE Users.id = :id AND marketId = Markets.ID;");
+	query.prepare("SELECT Users.login, Users.passwordCrypt, Users.name, Markets.address, Markets.id FROM Users, Markets WHERE Users.id = :id AND Users.id_market = Markets.id;");
 	query.bindValue(":id", mId);    
 	if(query.exec() && query.first())
 	{
 		ui->leLogin->setText(query.value(0).toString());
-		ui->lePassword->setText(query.value(1).toString());
+		ui->lePassword->setText(Global::decrypt(query.value(1).toByteArray()));
 		ui->leName->setText(query.value(2).toString());
-        ui->cbxMarkets->addItem(query.value(3).toString());
-        ui->cbxMarkets->setItemData(ui->cbxMarkets->currentIndex(), query.value(4).toString());
+		ui->cbxMarkets->addItem(query.value(3).toString(), query.value(4));
     }
-	query.exec("SELECT id, address FROM Markets WHERE id <> (SELECT marketId FROM Users WHERE id = " + QString::number(mId) + ");");
-    int cIndex = 1;
-    while(query.next())
-    {
-        ui->cbxMarkets->addItem(query.value(1).toString());
-        ui->cbxMarkets->setItemData(cIndex, query.value(0).toString());
-        cIndex++;
-    }
+	query.prepare("SELECT Markets.id, Markets.address FROM Markets, Users WHERE Markets.id <> Users.id_market AND Users.id = :id;");
+	query.bindValue(":id", mId);
+	if(query.exec())
+		while(query.next())
+			ui->cbxMarkets->addItem(query.value(1).toString(), query.value(0));
+	else
+		qDebug(qPrintable(query.lastError().text()));
 }
 
 CUserDialog::~CUserDialog()
@@ -85,23 +78,23 @@ void CUserDialog::on_buttonBox_accepted()
 
 	if(mType == Add)
 	{
-        query.prepare("INSERT INTO Users VALUES(NULL, :login, :password, :name, :marketsID);");
+		query.prepare("INSERT INTO Users VALUES(NULL, :login, :password, :name, :marketsID);");
 		query.bindValue(":login", ui->leLogin->text());
-		query.bindValue(":password", ui->lePassword->text());
+		query.bindValue(":password", Global::crypt(ui->lePassword->text()));
 		query.bindValue(":name", ui->leName->text());
-        query.bindValue(":marketsID", ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toInt());
+		query.bindValue(":marketsID", ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toInt());
 	}
 	else if(mType == Edit)
 	{
-		query.prepare("UPDATE Users SET passwordCrypt = :password, name = :name, marketId = :marketsID WHERE id = :id;");
-		query.bindValue(":password", ui->lePassword->text());
+		query.prepare("UPDATE Users SET passwordCrypt = :password, name = :name, id_market = :marketsID WHERE id = :id;");
+		query.bindValue(":password", Global::crypt(ui->lePassword->text()));
 		query.bindValue(":name", ui->leName->text());
-        query.bindValue(":marketsID", ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toInt());
+		query.bindValue(":marketsID", ui->cbxMarkets->itemData(ui->cbxMarkets->currentIndex()).toInt());
 		query.bindValue(":id", mId);
 	}
 
-	////TODO: Добавить обработчик ошибок:
-	query.exec();
+	if(!query.exec())
+		qDebug(qPrintable(query.lastError().text()));
 
 	emit dataWasUpdated();
 	close();

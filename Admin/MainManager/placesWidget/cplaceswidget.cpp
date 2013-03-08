@@ -69,13 +69,24 @@ void CPlacesWidget::on_tbnPlacesDelete_clicked()
 	QTreeWidgetItem *selectedItem = ui->twPlaces->currentItem();
 	if(selectedItem)
 	{
-		if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите удалить выбранную площадку?"), QMessageBox::Yes, QMessageBox::No))
+		QSqlQuery query(QSqlDatabase::database(mConnectionName));
+		query.prepare("SELECT COUNT(id) FROM Actions WHERE id_place = :id;");
+		query.bindValue(":id", selectedItem->text(ID));
+		if(query.exec() && query.first())
 		{
-			QSqlQuery query(QSqlDatabase::database(mConnectionName));
-			query.prepare("DELETE FROM Places WHERE id = :id");
-			query.bindValue(":id", selectedItem->text(ID));
-			query.exec();
-			updateData();
+			if(query.value(0).toInt() > 0)
+			{
+				QMessageBox::warning(this, tr("Внимание"), tr("Невозможно удалить данную площадку так как к ней привязано %1 мероприятий.\nУдалите привязанные мероприятия или измените их статус на '%2'.").arg(query.value(0).toString()).arg(Global::actionStateToText(Global::ActionComplited)));
+				return;
+			}
+			else
+				if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите удалить выбранную площадку?"), QMessageBox::Yes, QMessageBox::No))
+				{
+					query.prepare("DELETE FROM Places WHERE id = :id");
+					query.bindValue(":id", selectedItem->text(ID));
+					query.exec();
+					updateData();
+				}
 		}
 	}
 }

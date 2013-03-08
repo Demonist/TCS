@@ -4,6 +4,8 @@
 #include <QtGui>
 #include "cuserdialog.h"
 #include "cabstractcommonwidget.h"
+#include "global.h"
+#include "cuseradmindialog.h"
 
 namespace Ui {
 class CUsersWidget;
@@ -27,6 +29,9 @@ private slots:
 	void on_tbnAdd_clicked();
 	void on_tbnEdit_clicked();
 	void on_tbnDel_clicked();
+	void on_tbnAdminAdd_clicked();
+	void on_tbnAdminEdit_clicked();
+	void on_tbnAdminDel_clicked();
 };
 
 #endif // CUSERSWIDGET_H

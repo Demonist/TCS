@@ -1,7 +1,7 @@
 #include "cstartingdialog.h"
 #include "ui_cstartingdialog.h"
 
-CStartingDialog::CStartingDialog(const QString connectionName, QWidget *parent) :
+CStartingDialog::CStartingDialog(const QString &connectionName, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::CStartingDialog)
 {
@@ -23,6 +23,11 @@ CStartingDialog::~CStartingDialog()
 	delete ui;
 }
 
+void CStartingDialog::setChangeUserOnly()
+{
+	ui->stackedWidget->setCurrentIndex(1);
+}
+
 void CStartingDialog::connected(const QString &connectionName)
 {
 	mConnectionName = connectionName;
@@ -40,9 +45,9 @@ void CStartingDialog::on_pbnLogin_clicked()
 		return;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	query.prepare("SELECT id, name, marketId FROM Users WHERE login = :login AND passwordCrypt = :password;");
+	query.prepare("SELECT id, name, id_market FROM Users WHERE login = :login AND passwordCrypt = :password;");
 	query.bindValue(":login", ui->leLogin->text());
-	query.bindValue(":password", ui->lePassword->text());
+	query.bindValue(":password", Global::crypt(ui->lePassword->text()));
 	if(query.exec())
 	{
 		if(query.first())
@@ -59,7 +64,10 @@ void CStartingDialog::on_pbnLogin_clicked()
 			ui->lStatus->setText(tr("Ошибка входа"));
 	}
 	else
+	{
 		ui->lStatus->setText(tr("Ошибка"));
+		qDebug(qPrintable(query.lastError().text()));
+	}
 }
 
 void CStartingDialog::on_leLogin_returnPressed()

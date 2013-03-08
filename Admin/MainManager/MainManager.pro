@@ -22,7 +22,8 @@ INCLUDEPATH += ../../common/ \
 		marketsWidget/ \
         accountingWidget/ \
 		uploadingWidget/ \
-		imageDialog/
+		imageDialog/ \
+		startingDialog/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -59,7 +60,10 @@ SOURCES += main.cpp\
     ../../common/graphics/cabstractgraphicsitem.cpp \
     actionsWidget/cfandialog.cpp \
     ../../common/canimatedstackedwidget.cpp \
-    ../../common/cstatistics.cpp
+    ../../common/cstatistics.cpp \
+    startingDialog/cadminstartingdialog.cpp \
+    admin.cpp \
+    usersWidget/cuseradmindialog.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -97,7 +101,10 @@ HEADERS  += mainwindow.h \
     ../../common/graphics/cabstractgraphicsitem.h \
     actionsWidget/cfandialog.h \
     ../../common/canimatedstackedwidget.h \
-    ../../common/cstatistics.h
+    ../../common/cstatistics.h \
+    startingDialog/cadminstartingdialog.h \
+    admin.h \
+    usersWidget/cuseradmindialog.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -121,7 +128,9 @@ FORMS    += mainwindow.ui \
     uploadingWidget/cuploadingwidget.ui \
     actionsWidget/cpricedialog.ui \
     imageDialog/cimagedialog.ui \
-    actionsWidget/cfandialog.ui
+    actionsWidget/cfandialog.ui \
+    startingDialog/cadminstartingdialog.ui \
+    usersWidget/cuseradmindialog.ui
 
 RESOURCES += \
 	../../common/connectionWidget/connectionwidget_res.qrc \

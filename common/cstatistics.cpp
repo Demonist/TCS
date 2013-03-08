@@ -50,9 +50,7 @@ CAbstractStatisticType* CStatistics::fromByteArray(const QByteArray &data)
 	stream >> type;
 	switch(type)
 	{
-		case TypeTicketSolded: ret = new CStatisticTicketSoldedType(); break;
-		case TypeTicketReturned: ret = new CStatisticTicketReturnedType(); break;
-		case TypeClientRegistered: ret = new CStatisticClientRegistered(); break;
+		case TypeClientRegistered: ret = new CStatisticClientRegisteredType(); break;
 	}
 
 	if(ret)

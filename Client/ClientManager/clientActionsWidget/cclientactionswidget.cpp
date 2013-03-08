@@ -357,9 +357,8 @@ void CClientActionsWidget::updateData()
 
 	ui->cbxPerformer->clear();
 	ui->cbxPerformer->addItem(tr("Все"), 0);
-	query.prepare("SELECT DISTINCT performer FROM Actions WHERE state = :state OR state = :state2;");
+	query.prepare("SELECT DISTINCT performer FROM Actions WHERE state = :state;");
 	query.bindValue(":state", Global::ActionActive);
-	query.bindValue(":state2", Global::ActionMoved);
 	if(query.exec())
 		while(query.next())
 			ui->cbxPerformer->addItem(query.value(0).toString());
@@ -372,9 +371,8 @@ void CClientActionsWidget::updateData()
 
 	ui->leDate->clear();
 
-	query.prepare("SELECT Actions.id, Actions.title, Actions.performer, Actions.dateTime, Places.title, Places.address, Places.id, Categories.name, Categories.id FROM Actions, Places, Categories WHERE Actions.id_place = Places.id AND Actions.id_category = Categories.id AND (Actions.state = :state OR Actions.state = :state2);");
+	query.prepare("SELECT Actions.id, Actions.title, Actions.performer, Actions.dateTime, Places.title, Places.address, Places.id, Categories.name, Categories.id FROM Actions, Places, Categories WHERE Actions.id_place = Places.id AND Actions.id_category = Categories.id AND Actions.state = :state;");
 	query.bindValue(":state", Global::ActionActive);
-	query.bindValue(":state2", Global::ActionMoved);
 	if(query.exec())
 	{
 		ui->twActions->clear();
@@ -588,28 +586,12 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 				{
 					CTicketIdentifier ticketIdetifier = CTicketIdentifier::generate();
 					fanTickets.append(ticketIdetifier.data());
-
-					CStatisticTicketSoldedType type;
-					type.marketId = CMarket::instance()->marketId();
-					type.sellerId = CMarket::instance()->sellerId();
-					type.actionId = mCurrentActionId;
-					type.barCode = ticketIdetifier.identifier();
-					type.ticketIdentifier = ticketIdetifier.data();
-					CStatistics::instance()->write(type);
 				}
 
 				for(int i = 0; i < mSelectedSeats.count(); i++)
 				{
 					CTicketIdentifier ticketIdetifier = CTicketIdentifier::generate();
 					seatTickets.append(ticketIdetifier.data());
-
-					CStatisticTicketSoldedType type;
-					type.marketId = CMarket::instance()->marketId();
-					type.sellerId = CMarket::instance()->sellerId();
-					type.actionId = mCurrentActionId;
-					type.barCode = ticketIdetifier.identifier();
-					type.ticketIdentifier = ticketIdetifier.data();
-					CStatistics::instance()->write(type);
 				}
 
 				//printing:
@@ -618,8 +600,11 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 
 				if(query.exec("BEGIN TRANSACTION;"))
 				{
-					query.prepare("INSERT INTO Tickets VALUES(NULL, :actId, NULL, NULL, :identifier);");
+					query.prepare("INSERT INTO Tickets VALUES(NULL, :actId, NULL, NULL, :identifier, :marketId, :sellerId, :price, NULL);");
 					query.bindValue(":actId", mCurrentActionId);
+					query.bindValue(":marketId", CMarket::instance()->marketId());
+					query.bindValue(":sellerId", CMarket::instance()->sellerId());
+					query.bindValue(":price", mFanPriceForCurrentAction);
 					for(int i = 0; i < fanTickets.count() && !queryError; i++)
 					{
 						query.bindValue(":identifier", fanTickets[i]);
@@ -638,12 +623,15 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 
 					if(!queryError)
 					{
-						query.prepare("INSERT INTO Tickets VALUES(NULL, :actId, :seatId, NULL, :identifier);");
+						query.prepare("INSERT INTO Tickets VALUES(NULL, :actId, :seatId, NULL, :identifier, :marketId, :sellerId, :price, NULL);");
 						query.bindValue(":actId", mCurrentActionId);
+						query.bindValue(":marketId", CMarket::instance()->marketId());
+						query.bindValue(":sellerId", CMarket::instance()->sellerId());
 						for(int i = 0; i < seatTickets.count() && !queryError; i++)
 						{
 							query.bindValue(":seatId", mSelectedSeats[i]->id());
 							query.bindValue(":identifier", seatTickets[i]);
+							query.bindValue(":price", mSelectedSeats[i]->price());
 							if(!query.exec())
 								queryError = true;
 						}

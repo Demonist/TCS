@@ -111,6 +111,7 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 				{
 					ui->lePriceGroup->setText(tr("Фан-зона"));
 					ui->lePrice->setText(tr("%1 руб.").arg(query.value(7).toString()));
+					mPenalty = query.value(8).toInt();
 					ui->lePenalty->setText(tr("%1 руб.").arg(query.value(8).toString()));
 					price = query.value(7).toInt();
 					payment = query.value(7).toInt() - query.value(8).toInt();
@@ -140,8 +141,9 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 					if(query.exec() && query.first())
 					{
 						ui->lePriceGroup->setText(query.value(0).toString());
-						ui->lePrice->setText(query.value(1).toString());
-						ui->lePenalty->setText(query.value(2).toString());
+						ui->lePrice->setText(tr("%1 руб.").arg(query.value(1).toString()));
+						mPenalty = query.value(2).toInt();
+						ui->lePenalty->setText(tr("%1 руб.").arg(query.value(2).toString()));
 						ui->leSeat->setText(query.value(3).toString());
 						ui->leRow->setText(query.value(4).toString());
 						payment = query.value(1).toInt() - query.value(2).toInt();
@@ -173,6 +175,7 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 						break;
 					case Global::ActionCanceled:
 						ui->lePayment->setText(tr("%1 руб.").arg(price));
+						ui->lePenalty->setText("0");
 						break;
 					default:
 						ui->lePayment->setText(tr("%1 руб.").arg(payment));
@@ -210,15 +213,15 @@ void CReturnTicketWidget::on_pbnReturnTicket_clicked()
 		if(query.exec())
 		{
 			CTicketIdentifier identifier(ui->leIdentifier->text());
-			CStatisticTicketReturnedType type;
-			type.marketId = CMarket::instance()->marketId();
-			type.sellerId = CMarket::instance()->sellerId();
-			type.actionId = mActionId;
-			type.ticketId = mTicketId;
-			type.barCode = identifier.identifier();
-			type.ticketIdentifier = identifier.data();
-			type.clientId = mClientId;
-			CStatistics::instance()->write(type);
+			query.prepare("INSERT INTO ReturnedTickets VALUES(NULL, :actId, :clientId, :identifier, :marketId, :sellerId, :penalty, NULL);");
+			query.bindValue(":actId", mActionId);
+			query.bindValue(":clientId", mClientId);
+			query.bindValue(":identifier", identifier.data());
+			query.bindValue(":marketId", CMarket::instance()->marketId());
+			query.bindValue(":sellerId", CMarket::instance()->sellerId());
+			query.bindValue(":penalty", mPenalty);
+			if(!query.exec())
+				qDebug(qPrintable(query.lastError().text()));
 
 			clear();
 			ui->leIdentifier->clear();

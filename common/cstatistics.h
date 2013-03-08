@@ -20,9 +20,7 @@ class CStatistics
 public:
 	enum Type{
 		TypeUnknown = 0,
-		TypeTicketSolded = 1,
-		TypeTicketReturned = 2,
-		TypeClientRegistered = 3
+		TypeClientRegistered = 1
 	};
 
 private:
@@ -128,121 +126,13 @@ public:
 	}
 };
 
-/**
-Интерфейс для создания статистики работы с билетами.
-*/
-class _CStatisticTicketTypePrivate : public _CStaticticClientTypePrivate
-{
-public:
-	QString barCode;
-	QString ticketIdentifier;
-	int clientId;
-
-protected:
-	virtual void dataToStream(QDataStream &stream) const
-	{
-		if(isValid())
-		{
-			_CStaticticClientTypePrivate::dataToStream(stream);
-			stream << barCode << ticketIdentifier << clientId;
-		}
-	}
-
-	virtual void dataFromStream(QDataStream &stream)
-	{
-		_CStaticticClientTypePrivate::dataFromStream(stream);
-		stream >> barCode >> ticketIdentifier >> clientId;
-	}
-
-public:
-	_CStatisticTicketTypePrivate()
-	{
-		mType = CStatistics::TypeUnknown;
-		clientId = 0;
-	}
-
-	virtual bool isValid() const
-	{
-		return _CStaticticClientTypePrivate::isValid()
-				&& barCode.isEmpty() == false
-				&& ticketIdentifier.isEmpty() == false;
-	}
-};
-
-class CStatisticTicketSoldedType : public _CStatisticTicketTypePrivate
-{
-public:
-	int actionId;
-
-protected:
-	virtual void dataToStream(QDataStream &stream) const
-	{
-		_CStatisticTicketTypePrivate::dataToStream(stream);
-		stream << actionId;
-	}
-
-	virtual void dataFromStream(QDataStream &stream)
-	{
-		_CStatisticTicketTypePrivate::dataFromStream(stream);
-		{
-			stream >> actionId;
-		}
-	}
-
-public:
-	CStatisticTicketSoldedType() :
-		_CStatisticTicketTypePrivate()
-	{
-		mType = CStatistics::TypeTicketSolded;
-		actionId = 0;
-	}
-
-	virtual bool isValid() const
-	{
-		return _CStatisticTicketTypePrivate::isValid() && actionId;
-	}
-};
-
-class CStatisticTicketReturnedType : public CStatisticTicketSoldedType
-{
-public:
-	int ticketId;
-
-protected:
-	virtual void dataToStream(QDataStream &stream) const
-	{
-		if(isValid())
-		{
-			CStatisticTicketSoldedType::dataToStream(stream);
-			stream << ticketId;
-		}
-	}
-
-	virtual void dataFromStream(QDataStream &stream)
-	{
-		CStatisticTicketSoldedType::dataFromStream(stream);
-		stream >> ticketId;
-	}
-
-public:
-	CStatisticTicketReturnedType() :
-		CStatisticTicketSoldedType()
-	{
-		mType = CStatistics::TypeTicketReturned;
-		ticketId = 0;
-	}
-
-	virtual bool isValid() const
-	{
-		return CStatisticTicketSoldedType::isValid() && ticketId;
-	}
-};
-
-class CStatisticClientRegistered : public CAbstractStatisticType
+class CStatisticClientRegisteredType : public _CStaticticClientTypePrivate
 {
 public:
 	QString clientName;
+	QString clientBirthDate;
 	QString clientLogin;
+	QString clientPassword;
 	QString clientPhone;
 
 protected:
@@ -250,24 +140,30 @@ protected:
 	{
 		if(isValid())
 		{
-			stream << clientName << clientLogin << clientPhone;
+			_CStaticticClientTypePrivate::dataToStream(stream);
+			stream << clientName << clientBirthDate << clientLogin << clientPassword << clientPhone;
 		}
 	}
 
 	virtual void dataFromStream(QDataStream &stream)
 	{
-		stream >> clientName >> clientLogin >> clientPhone;
+		_CStaticticClientTypePrivate::dataFromStream(stream);
+		stream >> clientName >> clientBirthDate >> clientLogin >> clientPassword >> clientPhone;
 	}
 
 public:
-	CStatisticClientRegistered()
+	CStatisticClientRegisteredType() :
+		_CStaticticClientTypePrivate()
 	{
 		mType = CStatistics::TypeClientRegistered;
 	}
 
 	virtual bool isValid() const
 	{
-		return clientName.isEmpty() == false && clientLogin.isEmpty() == false;
+		return _CStaticticClientTypePrivate::isValid()
+				&&clientName.isEmpty() == false
+				&& clientLogin.isEmpty() == false
+				&& clientPassword.isEmpty() == false;
 	}
 };
 

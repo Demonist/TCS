@@ -68,13 +68,24 @@ void CCategoriesWidget::on_tbnCategoriesDelete_clicked()
 	QTreeWidgetItem *selectedItem = ui->twCategories->currentItem();
 	if(selectedItem)
 	{
-		if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите удалить выбранную категорию?"), QMessageBox::Yes, QMessageBox::No))
+		QSqlQuery query(QSqlDatabase::database(mConnectionName));
+		query.prepare("SELECT COUNT(id) FROM Actions WHERE Actions.id_category = :catId;");
+		query.bindValue(":catId", selectedItem->text(ID));
+		if(query.exec() && query.first())
 		{
-			QSqlQuery query(QSqlDatabase::database(mConnectionName));
-			query.prepare("DELETE FROM Categories WHERE id = :id");
-			query.bindValue(":id", selectedItem->text(ID));
-			query.exec();
-			updateData();
+			if(query.value(0).toInt() > 0)
+			{
+				QMessageBox::warning(this, tr("Внимание"), tr("Невозможно удалить данную категорию так как к ней привязано %1 мероприятий.\nИзмените категорию у данных мероприятий или удалите их или измените их статус на '%2'.").arg(query.value(0).toString()).arg(Global::actionStateToText(Global::ActionComplited)));
+				return;
+			}
+			else
+				if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите удалить выбранную категорию?"), QMessageBox::Yes, QMessageBox::No))
+				{
+					query.prepare("DELETE FROM Categories WHERE id = :id");
+					query.bindValue(":id", selectedItem->text(ID));
+					query.exec();
+					updateData();
+				}
 		}
 	}
 }

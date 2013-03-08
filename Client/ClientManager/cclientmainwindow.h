@@ -26,7 +26,10 @@ public:
 	~CClientMainWindow();
 
 private slots:
+	void hideLeftPanel();
+	void showLeftPanel();
 	void on_listWidget_currentRowChanged(int currentRow);
+	void on_pbnChangeUser_clicked();
 
 private:
 	Ui::CClientMainWindow *ui;

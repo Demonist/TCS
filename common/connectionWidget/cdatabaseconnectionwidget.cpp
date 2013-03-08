@@ -141,7 +141,7 @@ void CDataBaseConnectionWidget::on_pbnDbConnect_clicked()
 					mCache->beginGroup(db.hostName());
 					mCache->setValue(INI_DBNAME, db.databaseName());
 					mCache->setValue(INI_LOGIN, db.userName());
-					mCache->setValue(INI_PASSWORD, qCompress( db.password().toUtf8() ));
+					mCache->setValue(INI_PASSWORD, Global::crypt(db.password()));
 					mCache->endGroup();
 				}
 			}
@@ -231,7 +231,7 @@ void CDataBaseConnectionWidget::on_cbxDbHost_currentIndexChanged(const QString &
 		{
 			ui->leDbName->setText(mCache->value(arg1 + '/' + INI_DBNAME).toString());
 			ui->leDbLogin->setText(mCache->value(arg1 + '/' + INI_LOGIN).toString());
-			ui->leDbPassword->setText(qUncompress( mCache->value(arg1 + '/' + INI_PASSWORD).toByteArray() ));
+			ui->leDbPassword->setText(Global::decrypt( mCache->value(arg1 + '/' + INI_PASSWORD).toByteArray() ));
 		}
 	}
 }

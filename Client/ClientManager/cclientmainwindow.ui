@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>TCS - Программа продавца</string>
+   <string>TCS - Программа продавца v0.6</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -83,6 +83,53 @@
           </item>
          </widget>
         </item>
+        <item>
+         <widget class="QGroupBox" name="gbxUser">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string>Пользователь</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_6">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLineEdit" name="leUser">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="pbnChangeUser">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Сменить</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="CAnimatedStackedWidget" name="stackedWidget">
@@ -93,7 +140,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="page_actions">
         <layout class="QGridLayout" name="gridLayout_2">
@@ -111,7 +158,7 @@
           <number>0</number>
          </property>
          <item row="0" column="0">
-          <widget class="QWidget" name="widget1" native="true"/>
+          <widget class="CClientReservationWidget" name="wReservation" native="true"/>
          </item>
         </layout>
        </widget>
@@ -146,7 +193,7 @@
   <customwidget>
    <class>CAnimatedStackedWidget</class>
    <extends>QStackedWidget</extends>
-   <header location="global">canimatedstackedwidget.h</header>
+   <header>canimatedstackedwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -165,6 +212,12 @@
    <class>CReturnTicketWidget</class>
    <extends>QWidget</extends>
    <header>creturnticketwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CClientReservationWidget</class>
+   <extends>QWidget</extends>
+   <header>cclientreservationwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -4,6 +4,7 @@
 #include <QtGui>
 #include "cabstractcommonwidget.h"
 #include "cplacedialog.h"
+#include "global.h"
 
 namespace Ui {
 class CPlacesWidget;

@@ -4,6 +4,7 @@
 #include <QtGui>
 #include "cabstractcommonwidget.h"
 #include "cimages.h"
+#include "cadminstartingdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,9 +25,7 @@ public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
-
 private slots:
-	void connected(QString connectionName);
 	void on_lwSettings_currentRowChanged(int currentRow);
 };
 

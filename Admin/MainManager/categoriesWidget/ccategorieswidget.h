@@ -4,6 +4,7 @@
 #include <QtGui>
 #include "cabstractcommonwidget.h"
 #include "ccategorydialog.h"
+#include "global.h"
 
 namespace Ui {
 class CCategoriesWidget;

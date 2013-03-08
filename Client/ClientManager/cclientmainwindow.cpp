@@ -37,8 +37,8 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 	ui->splitter->setStretchFactor(0, 1);
 	ui->splitter->setStretchFactor(1, 100);
 
-	connect(ui->wActions, SIGNAL(hideLeftPanel()), ui->listWidget, SLOT(hide()));
-	connect(ui->wActions, SIGNAL(showLeftPanel()), ui->listWidget, SLOT(show()));
+	connect(ui->wActions, SIGNAL(hideLeftPanel()), this, SLOT(hideLeftPanel()));
+	connect(ui->wActions, SIGNAL(showLeftPanel()), this, SLOT(showLeftPanel()));
 
 	mConnectionName = "dataBaseClient";
 	mCanClose = true;
@@ -54,6 +54,7 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 		ui->wActions->setConnectionName(mConnectionName);
 		ui->wReturnTicket->setConnectionName(mConnectionName);
         ui->wRegistration->setConnectionName(mConnectionName);
+		ui->leUser->setText(CMarket::instance()->seller());
 
 		mActionDialog.setSourceView(ui->wActions->view());
 		mActionDialog.showMinimized();
@@ -76,14 +77,38 @@ CClientMainWindow::~CClientMainWindow()
 	QSqlDatabase::removeDatabase(mConnectionName);
 }
 
+//private slots:
+
+void CClientMainWindow::hideLeftPanel()
+{
+	ui->listWidget->hide();
+	ui->gbxUser->hide();
+}
+
+void CClientMainWindow::showLeftPanel()
+{
+	ui->listWidget->show();
+	ui->gbxUser->show();
+}
+
 void CClientMainWindow::on_listWidget_currentRowChanged(int currentRow)
 {
 	switch(currentRow)
 	{
 		case 0: ui->wActions->updateData(); break;
+		case 1: ui->wReservation->updateData(); break;
 		case 3: ui->wRegistration->updateData(); break;
 	}
 
 	ui->wActions->showActions();
 	ui->stackedWidget->setCurrentIndexAnimatedVertical(currentRow);
+}
+
+void CClientMainWindow::on_pbnChangeUser_clicked()
+{
+	CStartingDialog startingDialog(mConnectionName, this);
+	startingDialog.setChangeUserOnly();
+	startingDialog.exec();
+	if(startingDialog.isLogined())
+		ui->leUser->setText(CMarket::instance()->seller());
 }

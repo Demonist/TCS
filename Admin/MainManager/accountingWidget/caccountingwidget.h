@@ -24,6 +24,7 @@ public slots:
     void updateData();
 
 private slots:
+	void on_cbxActions_currentIndexChanged(int index);
 
     void on_cbxCategoriesSelect_currentIndexChanged(int index);
 

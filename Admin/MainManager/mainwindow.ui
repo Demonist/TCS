@@ -11,227 +11,203 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>TCS - Программа администратора</string>
+   <string>TCS - Программа администратора v0.6</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
     <item row="0" column="0">
-     <widget class="CAnimatedStackedWidget" name="stackedWidget">
-      <property name="currentIndex">
-       <number>1</number>
+     <widget class="QSplitter" name="sSettings">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="page_connection">
-       <layout class="QGridLayout" name="gridLayout_7">
-        <item row="0" column="0">
-         <widget class="CDataBaseConnectionWidget" name="connectionWidget" native="true"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page_settings">
-       <layout class="QGridLayout" name="gridLayout_2">
-        <property name="margin">
-         <number>0</number>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="QListWidget" name="lwSettings">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::NoSelection</enum>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <item>
+        <property name="text">
+         <string>Пользователи</string>
         </property>
-        <item row="0" column="0">
-         <widget class="QSplitter" name="sSettings">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="childrenCollapsible">
-           <bool>false</bool>
-          </property>
-          <widget class="QListWidget" name="lwSettings">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>200</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="selectionMode">
-            <enum>QAbstractItemView::NoSelection</enum>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>22</width>
-             <height>22</height>
-            </size>
-           </property>
-           <item>
-            <property name="text">
-             <string>Пользователи</string>
-            </property>
-            <property name="icon">
-             <iconset resource="main_res.qrc">
-              <normaloff>:/images/categoriesImages/imUsers.png</normaloff>:/images/categoriesImages/imUsers.png</iconset>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Категории</string>
-            </property>
-            <property name="icon">
-             <iconset resource="main_res.qrc">
-              <normaloff>:/images/categoriesImages/imCategories.png</normaloff>:/images/categoriesImages/imCategories.png</iconset>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Концертные площадки</string>
-            </property>
-            <property name="icon">
-             <iconset resource="main_res.qrc">
-              <normaloff>:/images/categoriesImages/imAreas.png</normaloff>:/images/categoriesImages/imAreas.png</iconset>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Клиенты</string>
-            </property>
-            <property name="icon">
-             <iconset resource="main_res.qrc">
-              <normaloff>:/images/categoriesImages/imClients.png</normaloff>:/images/categoriesImages/imClients.png</iconset>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Мероприятия</string>
-            </property>
-            <property name="icon">
-             <iconset resource="main_res.qrc">
-              <normaloff>:/images/categoriesImages/imActions.png</normaloff>:/images/categoriesImages/imActions.png</iconset>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Торговые точки</string>
-            </property>
-            <property name="icon">
-             <iconset resource="main_res.qrc">
-              <normaloff>:/images/categoriesImages/imShops.png</normaloff>:/images/categoriesImages/imShops.png</iconset>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Отчеты</string>
-            </property>
-            <property name="icon">
-             <iconset resource="main_res.qrc">
-              <normaloff>:/images/categoriesImages/imReport.png</normaloff>:/images/categoriesImages/imReport.png</iconset>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Выгрузка базы</string>
-            </property>
-            <property name="icon">
-             <iconset resource="main_res.qrc">
-              <normaloff>:/images/categoriesImages/imUploading.png</normaloff>:/images/categoriesImages/imUploading.png</iconset>
-            </property>
-           </item>
-          </widget>
-          <widget class="CAnimatedStackedWidget" name="swSettings">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="currentIndex">
-            <number>1</number>
-           </property>
-           <widget class="QWidget" name="page_users">
-            <layout class="QGridLayout" name="gridLayout_3">
-             <property name="margin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="CUsersWidget" name="wUsers" native="true"/>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="page_categories">
-            <layout class="QGridLayout" name="gridLayout_4">
-             <property name="margin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="CCategoriesWidget" name="wCategories" native="true"/>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="page_places">
-            <layout class="QGridLayout" name="gridLayout_5">
-             <property name="margin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="CPlacesWidget" name="wPlaces" native="true"/>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="page_clients">
-            <layout class="QGridLayout" name="gridLayout_6">
-             <property name="margin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="CClientsWidget" name="wClients" native="true"/>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="page_actions">
-            <layout class="QGridLayout" name="gridLayout_8">
-             <property name="margin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="CActionsWidget" name="wActions" native="true"/>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="page_markets">
-            <layout class="QGridLayout" name="gridLayout_9">
-             <property name="margin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="CMarketsWidget" name="wMarkets" native="true"/>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="page_accounting">
-            <layout class="QGridLayout" name="gridLayout_10">
-             <property name="margin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="CAccountingWidget" name="wAccounting" native="true"/>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="page_uploading">
-            <layout class="QGridLayout" name="gridLayout_11">
-             <property name="margin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="CUploadingWidget" name="wUploading" native="true"/>
-             </item>
-            </layout>
-           </widget>
-          </widget>
-         </widget>
-        </item>
-       </layout>
+        <property name="icon">
+         <iconset resource="main_res.qrc">
+          <normaloff>:/images/categoriesImages/imUsers.png</normaloff>:/images/categoriesImages/imUsers.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Категории</string>
+        </property>
+        <property name="icon">
+         <iconset resource="main_res.qrc">
+          <normaloff>:/images/categoriesImages/imCategories.png</normaloff>:/images/categoriesImages/imCategories.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Концертные площадки</string>
+        </property>
+        <property name="icon">
+         <iconset resource="main_res.qrc">
+          <normaloff>:/images/categoriesImages/imAreas.png</normaloff>:/images/categoriesImages/imAreas.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Клиенты</string>
+        </property>
+        <property name="icon">
+         <iconset resource="main_res.qrc">
+          <normaloff>:/images/categoriesImages/imClients.png</normaloff>:/images/categoriesImages/imClients.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Мероприятия</string>
+        </property>
+        <property name="icon">
+         <iconset resource="main_res.qrc">
+          <normaloff>:/images/categoriesImages/imActions.png</normaloff>:/images/categoriesImages/imActions.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Торговые точки</string>
+        </property>
+        <property name="icon">
+         <iconset resource="main_res.qrc">
+          <normaloff>:/images/categoriesImages/imShops.png</normaloff>:/images/categoriesImages/imShops.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Отчеты</string>
+        </property>
+        <property name="icon">
+         <iconset resource="main_res.qrc">
+          <normaloff>:/images/categoriesImages/imReport.png</normaloff>:/images/categoriesImages/imReport.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Выгрузка базы</string>
+        </property>
+        <property name="icon">
+         <iconset resource="main_res.qrc">
+          <normaloff>:/images/categoriesImages/imUploading.png</normaloff>:/images/categoriesImages/imUploading.png</iconset>
+        </property>
+       </item>
+      </widget>
+      <widget class="CAnimatedStackedWidget" name="swSettings">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="page_users">
+        <layout class="QGridLayout" name="gridLayout_3">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="CUsersWidget" name="wUsers" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_categories">
+        <layout class="QGridLayout" name="gridLayout_4">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="CCategoriesWidget" name="wCategories" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_places">
+        <layout class="QGridLayout" name="gridLayout_5">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="CPlacesWidget" name="wPlaces" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_clients">
+        <layout class="QGridLayout" name="gridLayout_6">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="CClientsWidget" name="wClients" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_actions">
+        <layout class="QGridLayout" name="gridLayout_8">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="CActionsWidget" name="wActions" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_markets">
+        <layout class="QGridLayout" name="gridLayout_9">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="CMarketsWidget" name="wMarkets" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_accounting">
+        <layout class="QGridLayout" name="gridLayout_10">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="CAccountingWidget" name="wAccounting" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_uploading">
+        <layout class="QGridLayout" name="gridLayout_11">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="CUploadingWidget" name="wUploading" native="true"/>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -241,15 +217,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>CDataBaseConnectionWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">cdatabaseconnectionwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>CAnimatedStackedWidget</class>
    <extends>QStackedWidget</extends>
-   <header location="global">canimatedstackedwidget.h</header>
+   <header>canimatedstackedwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

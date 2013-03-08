@@ -21,8 +21,10 @@ private:
 	QString mConnectionName;
 
 public:
-	explicit CStartingDialog(const QString connectionName, QWidget *parent = 0);
+	explicit CStartingDialog(const QString &connectionName, QWidget *parent = 0);
 	~CStartingDialog();
+
+	void setChangeUserOnly();
 
 	inline QString connectionName() const;
 	inline bool isLogined() const;
@@ -35,6 +37,8 @@ private slots:
 	void on_leLogin_returnPressed();
 	void on_lePassword_returnPressed();
 };
+
+//inline implementation:
 
 inline QString CStartingDialog::connectionName() const
 {

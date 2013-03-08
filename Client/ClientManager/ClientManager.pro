@@ -18,15 +18,14 @@ INCLUDEPATH += ../../common/ \
 		startingDialog/ \
 		clientActionsWidget/ \
 		clientRegistrationWidget/ \
-		returnTicketWidget/
-
+		returnTicketWidget/ \
+		clientReservationWidget/
 
 SOURCES += main.cpp\
         cclientmainwindow.cpp \
 	../../common/global.cpp \
     ../../common/commonWidget/cabstractcommonwidget.cpp \
     ../../common/connectionWidget/cdatabaseconnectionwidget.cpp \
-    startingDialog/cstartingdialog.cpp \
     clientActionsWidget/cclientactionswidget.cpp \
     ../../common/dateDialog/cdatedialog.cpp \
     ../../common/graphics/cgraphicsscene.cpp \
@@ -44,14 +43,15 @@ SOURCES += main.cpp\
     ../../common/ticketIdentifier/ean13.cpp \
     returnTicketWidget/creturnticketwidget.cpp \
     ../../common/cstatistics.cpp \
-    cmarket.cpp
+    cmarket.cpp \
+    clientReservationWidget/cclientreservationwidget.cpp \
+    startingDialog/cstartingdialog.cpp
 
 
 HEADERS  += cclientmainwindow.h \
 	../../common/global.h \
     ../../common/commonWidget/cabstractcommonwidget.h \
     ../../common/connectionWidget/cdatabaseconnectionwidget.h \
-    startingDialog/cstartingdialog.h \
     clientActionsWidget/cclientactionswidget.h \
     ../../common/dateDialog/cdatedialog.h \
     ../../common/graphics/cgraphicsscene.h \
@@ -69,17 +69,20 @@ HEADERS  += cclientmainwindow.h \
     ../../common/ticketIdentifier/ean13.h \
     returnTicketWidget/creturnticketwidget.h \
     ../../common/cstatistics.h \
-    cmarket.h
+    cmarket.h \
+    clientReservationWidget/cclientreservationwidget.h \
+    startingDialog/cstartingdialog.h
 
 
 FORMS    += cclientmainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
-    startingDialog/cstartingdialog.ui \
     clientActionsWidget/cclientactionswidget.ui \
     ../../common/dateDialog/cdatedialog.ui \
 	clientRegistrationWidget/cclientregistrationwidget.ui \
     clientActionsWidget/cclientactiondialog.ui \
-    returnTicketWidget/creturnticketwidget.ui
+    returnTicketWidget/creturnticketwidget.ui \
+    clientReservationWidget/cclientreservationwidget.ui \
+    startingDialog/cstartingdialog.ui
 
 RESOURCES += \
     ../../common/connectionWidget/connectionwidget_res.qrc \

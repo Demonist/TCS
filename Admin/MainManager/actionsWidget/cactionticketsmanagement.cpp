@@ -129,7 +129,12 @@ void CActionTicketsManagement::paintLenend(QPainter *painter, const QSize &viewS
 		seatItem.setText(QString::number(mFanPrice));
 		seatItem.paint(painter, 0, 0);
 
+		QFont font = painter->font();
+		font.setItalic(true);
+		painter->setFont(font);
 		painter->drawText(-50, 20, 100, 50, Qt::AlignHCenter | Qt::AlignTop, tr("Фан зона"));
+		font.setItalic(false);
+		painter->setFont(font);
 		painter->translate(100, 0);
 	}
 
@@ -294,6 +299,18 @@ void CActionTicketsManagement::on_pbnApply_clicked()
 	progressDialog.setCancelButton(0);
 	progressDialog.setMinimumDuration(500);
 	progressDialog.setMaximum(items.count());
+
+	//Проверка на наличие ценовой группы:
+	for(int i = 0; i < items.size(); i++)
+		if(items[i]->data(0) == CActionSeatItem::itemName())
+		{
+			CActionSeatItem *seatItem = static_cast<CActionSeatItem*>(items[i]);
+			if(seatItem->priceGroupId() == 0 && seatItem->seatState() != Global::SeatHided)
+				if(QMessageBox::Yes == QMessageBox::warning(this, tr("Внимание"), tr("У некоторых мест отсутствует ценовая группа, такие места НЕ будут отображаться.\nВсе равно желаеете продолжить?"), QMessageBox::Yes, QMessageBox::No))
+					break;
+				else
+					return;
+		}
 
 	for(int i = 0; i < items.size(); i++)
 	{

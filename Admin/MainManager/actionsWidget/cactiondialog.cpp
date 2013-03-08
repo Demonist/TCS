@@ -44,6 +44,8 @@ CActionDialog::CActionDialog(const QString &connectionName, const int id, QWidge
 	ui->setupUi(this);
 	mConnectionName = connectionName;
 	setWindowTitle(tr("Редактирование мероприятия"));
+	ui->gbxPlace->setEnabled(false);
+	ui->gbxPlace->setToolTip(tr("Данный функционал доступен только при добавлении"));
 	mType = Edit;
 	mId = id;
 
@@ -144,27 +146,41 @@ void CActionDialog::on_pbnApply_clicked()
 		query.bindValue(":state", Global::actionStateFromText(ui->cbxState->currentText()));
 		query.bindValue(":id_place", ui->cbxPlace->itemData(ui->cbxPlace->currentIndex()));
 		query.bindValue(":id_cat", ui->cbxCategory->itemData(ui->cbxCategory->currentIndex()));
+		if(!query.exec())
+			qDebug(qPrintable(query.lastError().text()));
 	}
 	else if(mType == Edit)
 	{
-		query.prepare("UPDATE Actions SET title = :title, performer = :performer, description = :description, dateTime = :date, state = :state, id_place = :id_place, id_category = :id_cat WHERE id = :id;");
-		query.bindValue(":id", mId);
-		query.bindValue(":title", ui->leTitle->text());
-		query.bindValue(":performer", ui->lePerformer->text());
-		query.bindValue(":description", ui->teDescription->toPlainText());
-		query.bindValue(":date",
-						QDateTime(
-							QDate::fromString(ui->leDate->text(), "dd.MM.yyyy"),
-							QTime::fromString(tr("%1:%2").arg(ui->sbxHour->value()).arg(ui->sbxMinute->value()), "h:m")
-							)
-						);
-		query.bindValue(":state", Global::actionStateFromText(ui->cbxState->currentText()));
-		query.bindValue(":id_place", ui->cbxPlace->itemData(ui->cbxPlace->currentIndex()));
-		query.bindValue(":id_cat", ui->cbxCategory->itemData(ui->cbxCategory->currentIndex()));
+		Global::ActionState state = (Global::ActionState)Global::actionStateFromText(ui->cbxState->currentText());
+		if(state == Global::ActionComplited)
+		{
+			if(QMessageBox::Yes == QMessageBox::warning(this, tr("Внимание"), tr("При завершении мероприятия будет сформирован подробный отчет по продажам билетов, при этом само мероприятие и все его билеты будут удалены из базы данных т.е. будет невозможно экспортировать список билетов для контроля.\nВы действительно хотите продолжить?"), QMessageBox::Yes, QMessageBox::No))
+			{
+				//TODO: сформировать отчет, записать его в статистику, удалить все.
+			}
+			else
+				return;
+		}
+		else
+		{
+			query.prepare("UPDATE Actions SET title = :title, performer = :performer, description = :description, dateTime = :date, state = :state, id_place = :id_place, id_category = :id_cat WHERE id = :id;");
+			query.bindValue(":id", mId);
+			query.bindValue(":title", ui->leTitle->text());
+			query.bindValue(":performer", ui->lePerformer->text());
+			query.bindValue(":description", ui->teDescription->toPlainText());
+			query.bindValue(":date",
+							QDateTime(
+								QDate::fromString(ui->leDate->text(), "dd.MM.yyyy"),
+								QTime::fromString(tr("%1:%2").arg(ui->sbxHour->value()).arg(ui->sbxMinute->value()), "h:m")
+								)
+							);
+			query.bindValue(":state", state);
+			query.bindValue(":id_place", ui->cbxPlace->itemData(ui->cbxPlace->currentIndex()));
+			query.bindValue(":id_cat", ui->cbxCategory->itemData(ui->cbxCategory->currentIndex()));
+			if(!query.exec())
+				qDebug(qPrintable(query.lastError().text()));
+		}
 	}
-
-	if(!query.exec())
-		qDebug(qPrintable(query.lastError().text()));
 
 	emit dataWasUpdated();
 	close();

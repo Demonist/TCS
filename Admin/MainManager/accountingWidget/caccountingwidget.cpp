@@ -1,21 +1,19 @@
 #include "caccountingwidget.h"
 #include "ui_caccountingwidget.h"
 
-#define RETURNED_MARKET 0
-#define RETURNED_SELLER 1
-#define RETURNED_ACTION 2
-
-#define SPT_ACTION_ID 0
-#define SPT_ACTION_NAME 1
+#define RETURNED_ID 0
+#define RETURNED_MARKET 1
+#define RETURNED_SELLER 2
+#define RETURNED_ACTION 3
+#define RETURNED_DATETIME 4
 
 CAccountingWidget::CAccountingWidget(QWidget *parent) :
     CAbstractCommonWidget(parent),
     ui(new Ui::CAccountingWidget)
 {
     ui->setupUi(this);
-
-    ui->twActions->setColumnWidth(SPT_ACTION_ID, 0);
-
+	ui->twReturnedTickets->hideColumn(0);
+	ui->twReturnedTickets->setColumnWidth(0, 0);
 }
 
 CAccountingWidget::~CAccountingWidget()
@@ -25,75 +23,51 @@ CAccountingWidget::~CAccountingWidget()
 
 void CAccountingWidget::updateData()
 {
-    sumPriceTicketsForAction();
+	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+	if(query.exec("SELECT DISTINCT ReturnedTickets.id_action, Actions.title FROM ReturnedTickets, Actions WHERE ReturnedTickets.id_action = Actions.id;"))
+	{
+		ui->cbxActions->clear();
+		ui->cbxActions->addItem(tr("Все"), 0);
 
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    query.prepare("SELECT data FROM Statistics WHERE type = :type;");
-    query.bindValue(":type", CStatistics::TypeTicketReturned);
-    if(query.exec())
-    {
-        QTreeWidgetItem *item;
-        while(query.next())
-        {
-            CStatisticTicketReturnedType *type = (CStatisticTicketReturnedType*)CStatistics::fromByteArray(query.value(0).toByteArray());
-            if(type && type->isValid())
-            {
-                item = new QTreeWidgetItem();
-                if(item)
-                {
-                    QSqlQuery query2(QSqlDatabase::database(mConnectionName));
-                    query2.prepare("SELECT Markets.address, Users.name, Actions.title FROM Markets, Users, Actions WHERE Markets.id = :marketId AND Users.id = :userId AND Actions.id = :actId;");
-                    query2.bindValue(":marketId", type->marketId);
-                    query2.bindValue(":userId", type->sellerId);
-                    query2.bindValue(":actId", type->actionId);
-                    if(query2.exec() && query2.first())
-                    {
-                        item->setText(RETURNED_MARKET, query2.value(0).toString());
-                        item->setText(RETURNED_SELLER, query2.value(1).toString());
-                        item->setText(RETURNED_ACTION, query2.value(2).toString());
-                        ui->twReturnedTickets->addTopLevelItem(item);
-                    }
-                    else
-                        qDebug(qPrintable(query2.lastError().text()));
-                }
-            }
-        }
-    }
-    else
-        qDebug(qPrintable(query.lastError().text()));
+		while(query.next())
+			ui->cbxActions->addItem(query.value(1).toString(), query.value(0));
+	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
+
+	if(query.exec("SELECT ReturnedTickets.id, Markets.address, Users.name, Actions.title, ReturnedTickets.id_action, ReturnedTickets.dateTime FROM ReturnedTickets, Markets, Users, Actions WHERE Markets.id = ReturnedTickets.id_market AND Users.id = ReturnedTickets.id_user AND Actions.id = ReturnedTickets.id_action"))
+	{
+		ui->twReturnedTickets->clear();
+
+		QTreeWidgetItem *item;
+		while(query.next())
+		{
+			item = new QTreeWidgetItem();
+			if(item)
+			{
+				item->setText(RETURNED_ID, query.value(0).toString());
+				item->setText(RETURNED_MARKET, query.value(1).toString());
+				item->setText(RETURNED_SELLER, query.value(2).toString());
+				item->setText(RETURNED_ACTION, query.value(3).toString());
+				item->setData(RETURNED_ACTION, Qt::UserRole, query.value(4));
+				item->setText(RETURNED_DATETIME, query.value(5).toDateTime().toString("dd.MM.yyyy hh:mm"));
+
+				ui->twReturnedTickets->addTopLevelItem(item);
+			}
+		}
+	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
 }
 
-void CAccountingWidget::sumPriceTicketsForAction()
-{
-    ui->cbxCategoriesSelect->clear();
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    if(query.exec("SELECT id, name FROM Categories;"))
-    {
-        while(query.next())
-        {
-            ui->cbxCategoriesSelect->addItem(query.value(1).toString(), query.value(0).toString());
-        }
-    }
-}
 
-void CAccountingWidget::on_cbxCategoriesSelect_currentIndexChanged(int index)
+void CAccountingWidget::on_cbxActions_currentIndexChanged(int index)
 {
-    ui->twActions->clear();
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    query.prepare("SELECT id, title FROM Actions WHERE id_category = :id;");
-    query.bindValue(":id", ui->cbxCategoriesSelect->itemData(index));
-    if(query.exec())
-    {
-        QTreeWidgetItem *item;
-        while(query.next())
-        {
-            item = new QTreeWidgetItem();
-            if(item)
-            {
-                item->setText(SPT_ACTION_ID, query.value(0).toString());
-                item->setText(SPT_ACTION_NAME, query.value(1).toString());
-                ui->twActions->addTopLevelItem(item);
-            }
-        }
-    }
+	for(int i = 0; i < ui->twReturnedTickets->topLevelItemCount(); i++)
+	{
+		if(index == 0 || ui->cbxActions->itemData(index) == ui->twReturnedTickets->topLevelItem(i)->data(RETURNED_ACTION, Qt::UserRole))
+			ui->twReturnedTickets->topLevelItem(i)->setHidden(false);
+		else
+			ui->twReturnedTickets->topLevelItem(i)->setHidden(true);
+	}
 }

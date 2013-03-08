@@ -4,6 +4,7 @@
 #include <QtGui>
 #include "cabstractcommonwidget.h"
 #include "cclientdialog.h"
+#include "global.h"
 
 namespace Ui {
 class CClientsWidget;

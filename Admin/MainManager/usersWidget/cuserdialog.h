@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QtSql>
+#include "global.h"
 
 namespace Ui {
 class CUserDialog;

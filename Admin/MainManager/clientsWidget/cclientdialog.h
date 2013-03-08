@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QtSql>
+#include "global.h"
 
 namespace Ui {
 class CClientDialog;
@@ -18,11 +19,11 @@ private:
 	Type mType;
 	int mId;
 	QString mConnectionName;
-    bool validateLogin(QString login, Type actionType, int id = 0);
+	bool validateLogin(QString login, Type actionType);
 
 public:
 	explicit CClientDialog(const QString &connectionName, QWidget *parent = 0);   //Конструктор добавления.
-	explicit CClientDialog(const QString &connectionName, const int id, QWidget *parent = 0);
+	explicit CClientDialog(const QString &connectionName, const int id, QWidget *parent = 0);	//Конструктор редактирования.
 	~CClientDialog();
 
 

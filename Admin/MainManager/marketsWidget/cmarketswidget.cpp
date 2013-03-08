@@ -66,13 +66,25 @@ void CMarketsWidget::on_tbnMarketDelete_clicked()
     QTreeWidgetItem *selectedItem = ui->twMarkets->currentItem();
     if(selectedItem)
     {
-        if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите удалить выбранную торговую площадку?"), QMessageBox::Yes, QMessageBox::No))
-        {
-            QSqlQuery query(QSqlDatabase::database(mConnectionName));
-            query.prepare("DELETE FROM Markets WHERE id = :id");
-            query.bindValue(":id", selectedItem->text(ID));
-            query.exec();
-            updateData();
-        }
+		QSqlQuery query(QSqlDatabase::database(mConnectionName));
+
+		query.prepare("SELECT COUNT(id) FROM Users WHERE id_market = :marketId;");
+		query.bindValue(":marketId", selectedItem->text(ID));
+		if(query.exec() && query.first())
+		{
+			if(query.value(0).toInt() > 0)
+			{
+				QMessageBox::warning(this, tr("Внимание"), tr("Невозможно удалить данную тороговую точку так как к ней привязано %1 пользователей.\nПереместите пользователей на другую торговую площадку и только затем произведите удаление.").arg(query.value(0).toString()));
+				return;
+			}
+			else
+				if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите удалить выбранную торговую площадку?"), QMessageBox::Yes, QMessageBox::No))
+				{
+					query.prepare("DELETE FROM Markets WHERE id = :id");
+					query.bindValue(":id", selectedItem->text(ID));
+					query.exec();
+					updateData();
+				}
+		}
     }
 }

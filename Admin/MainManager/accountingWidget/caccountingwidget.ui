@@ -23,8 +23,33 @@
       <attribute name="title">
        <string>Возвращенные билеты</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
+      <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Мероприятие</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="cbxActions"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>529</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0" colspan="2">
         <widget class="QTreeWidget" name="twReturnedTickets">
          <property name="rootIsDecorated">
           <bool>false</bool>
@@ -35,6 +60,11 @@
          <attribute name="headerDefaultSectionSize">
           <number>150</number>
          </attribute>
+         <column>
+          <property name="text">
+           <string>id</string>
+          </property>
+         </column>
          <column>
           <property name="text">
            <string>Торовая точка</string>
@@ -48,6 +78,11 @@
          <column>
           <property name="text">
            <string>Мероприятие</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Дата и время</string>
           </property>
          </column>
         </widget>

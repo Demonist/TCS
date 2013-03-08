@@ -31,7 +31,7 @@ CClientDialog::CClientDialog(const QString &connectionName, const int id, QWidge
 		dt = QDate::fromString(query.value(1).toString(), "dd.MM.yyyy");
 		ui->cwClientBirthDate->setSelectedDate(dt);
         ui->leClientLogin->setText(query.value(2).toString());
-        ui->leClientPassword->setText(query.value(3).toString());
+		ui->leClientPassword->setText(Global::decrypt(query.value(3).toByteArray()));
         ui->leClientPhone->setText(query.value(4).toString());
 	}
 }
@@ -52,27 +52,24 @@ void CClientDialog::on_buttonBox_accepted()
             query.bindValue(":name", ui->leClientFIO->text());
             query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate().toString("dd.MM.yyyy"));
             query.bindValue(":login", ui->leClientLogin->text());
-            query.bindValue(":passwordHash", ui->leClientPassword->text());
+			query.bindValue(":passwordHash", Global::crypt(ui->leClientPassword->text()));
 			query.bindValue(":phone", ui->leClientPhone->text());
             query.exec();
             emit dataWasUpdated();
             close();
         }
         else
-        {
-            QMessageBox::Yes == QMessageBox::question(this, tr("Предупреждение"), tr("Пользователь с таким логином уже существует!"), QMessageBox::Yes);
-        }
-
+			QMessageBox::question(this, tr("Внимание"), tr("Пользователь с таким логином уже существует!"));
 	}
 	else if(mType == Edit)
 	{
-        if(validateLogin(ui->leClientLogin->text(), Edit, mId))
+		if(validateLogin(ui->leClientLogin->text(), Edit))
         {
 			query.prepare("UPDATE Clients SET name = :name, birthDate = :birthDate, login = :login, passwordHash = :passwordHash, phone = :phone WHERE id = :id;");
             query.bindValue(":name", ui->leClientFIO->text());
             query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate().toString("dd.MM.yyyy"));
             query.bindValue(":login", ui->leClientLogin->text());
-            query.bindValue(":passwordHash", ui->leClientPassword->text());
+			query.bindValue(":passwordHash", Global::crypt(ui->leClientPassword->text()));
 			query.bindValue(":phone", ui->leClientPhone->text());
             query.bindValue(":id", mId);
             query.exec();
@@ -80,9 +77,7 @@ void CClientDialog::on_buttonBox_accepted()
             close();
         }
         else
-        {
-            QMessageBox::Yes == QMessageBox::question(this, tr("Предупреждение"), tr("Пользователь с таким логином уже существует!"), QMessageBox::Yes);
-        }
+			QMessageBox::question(this, tr("Внимание"), tr("Пользователь с таким логином уже существует!"));
 	}
 }
 
@@ -91,31 +86,19 @@ void CClientDialog::on_buttonBox_rejected()
 	close();
 }
 
-bool CClientDialog::validateLogin(QString login, Type actionType, int id)
+bool CClientDialog::validateLogin(QString login, Type actionType)
 {
     QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    if(actionType == Edit)
-    {
-        if(query.exec("SELECT COUNT(id) AS id FROM Clients WHERE login = '" + login + "' AND id <> '"+ QString::number(id) +"';"))
-        {
-            while(query.next())
-            {
-                if(query.value(0).toInt() == 0)
-                    return true;
-                return false;
-            }
-        }
-    }
-    else
-    {
-        if(query.exec("SELECT COUNT(id) AS id FROM Clients WHERE login = '" + login + "';"))
-        {
-            while(query.next())
-            {
-                if(query.value(0).toInt() == 0)
-                    return true;
-                return false;
-            }
-        }
-    }
+	if(actionType == Edit)
+	{
+		query.prepare("SELECT COUNT(id) FROM Clients WHERE login = :login AND id <> :id;");
+		query.bindValue(":id", mId);
+	}
+	else
+		query.prepare("SELECT COUNT(id) FROM Clients WHERE login = :login;");
+	query.bindValue(":login", login);
+	if(query.exec() && query.first())
+		return query.value(0).toInt() == 0;
+
+	return false;
 }

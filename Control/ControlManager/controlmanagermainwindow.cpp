@@ -96,6 +96,7 @@ void ControlManagerMainWindow::connected(QString connectionName)
 {
     mConnectionName = connectionName;
     QSqlDatabase db = QSqlDatabase::database(mConnectionName);
+
     if(!db.open())
     {
         QMessageBox::critical(this, tr("Ошибка в открытии базы данных!"), tr("База данных не открыта!\nОшибка в открытии базы данных!"));

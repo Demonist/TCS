@@ -35,6 +35,7 @@ private slots:
 private:
 	Ui::CReturnTicketWidget *ui;
 	int mTicketId;
+	int mPenalty;
 	int mClientId;
 	int mActionId;
 };
