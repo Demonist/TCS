@@ -33,9 +33,6 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 	ui->stackedWidget->setCurrentIndex(0);
-	ui->splitter->setCollapsible(0, true);
-	ui->splitter->setStretchFactor(0, 1);
-	ui->splitter->setStretchFactor(1, 100);
 
 	connect(ui->wActions, SIGNAL(hideLeftPanel()), this, SLOT(hideLeftPanel()));
 	connect(ui->wActions, SIGNAL(showLeftPanel()), this, SLOT(showLeftPanel()));
@@ -81,8 +78,8 @@ CClientMainWindow::~CClientMainWindow()
 
 void CClientMainWindow::hideLeftPanel()
 {
-	ui->listWidget->hide();
 	ui->gbxUser->hide();
+	ui->listWidget->hide();
 }
 
 void CClientMainWindow::showLeftPanel()

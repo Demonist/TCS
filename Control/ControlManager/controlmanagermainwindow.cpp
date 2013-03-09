@@ -10,6 +10,7 @@ ControlManagerMainWindow::ControlManagerMainWindow(QWidget *parent) :
     ui->wConnection->setConnectionChoiceEnable(false);
     connect(ui->aExit, SIGNAL(activated()), this, SLOT(close()));
     connect(ui->wConnection, SIGNAL(connectedToDatabase(QString)), this, SLOT(connected(QString)));
+	connect(ui->wConnection, SIGNAL(closed()), this, SLOT(close()));
     ui->stackedWidget->setCurrentIndex(0);
 }
 
@@ -24,10 +25,10 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
     if(db.isOpen() && db.isValid())
     {
         CTicketIdentifier *ticketIdentifier = new CTicketIdentifier(ui->leGetBarcode->text());
-        QString barcode = ticketIdentifier->data();
+		QString identifier = ticketIdentifier->identifier();
         QSqlQuery query(db);
         query.prepare("SELECT COUNT(identifier), passedFlag, id FROM Tickets WHERE identifier = :identifier;");
-        query.bindValue(":identifier", barcode);
+		query.bindValue(":identifier", identifier);
         if(query.exec() && query.first())
         {
             if((query.value(0).toInt() == 1) && (query.value(1).toBool() == false))

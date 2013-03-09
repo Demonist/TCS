@@ -23,36 +23,36 @@ CTicketIdentifier::CTicketIdentifier()
 {
 }
 
-CTicketIdentifier::CTicketIdentifier(const QString &identifier)
+CTicketIdentifier::CTicketIdentifier(const QString &barCode)
 {
-	mIdentifier = identifier;
+	mBarCode = barCode;
 }
 
 void CTicketIdentifier::render(const int w, const int h, QPainter *painter) const
 {
-	EAN13 ean13(mIdentifier);
+	EAN13 ean13(mBarCode);
 	ean13.draw(QRectF(0.0f, 0.0f, w, h), painter);
 }
 
 /**
-Функция возвращает данные для заданного идентификатора.
+Функция возвращает идентификатор для заданного штрихкода.
 Возвращает \b не пустую строку в случае успеха.
 */
-QString CTicketIdentifier::data() const
+QString CTicketIdentifier::identifier() const
 {
 	QString data;
 
 	if(isValid())
 	{
-		switch(mIdentifier.size())
+		switch(mBarCode.size())
 		{
 			case 12:
 			case 13:
 			{
-				const char master = mIdentifier.mid(2, 1).toInt();
+				const char master = mBarCode.mid(2, 1).toInt();
 				const char slavePos = slavePosition(master);
 
-				data = mIdentifier;
+				data = mBarCode;
 				if(data.size() == 13)
 					data.chop(1);
 				data.remove(2, 1);
@@ -68,13 +68,13 @@ QString CTicketIdentifier::data() const
 //static:
 
 /**
-Функция генерирует идентификатор исходя из данных.
-Успешность проверяется методом \a isValid у полученного идентификатора.
+Функция генерирует штрихкод исходя из данных.
+Успешность проверяется методом \a isValid у полученного объекта.
 \param data содержит данные. Поддерживаются следующие форматы: размер 10 символов, только цифры.
 */
 CTicketIdentifier CTicketIdentifier::generate(const QString &data)
 {
-	QString identifier;
+	QString barCode;
 
 	switch(data.size())
 	{
@@ -87,20 +87,20 @@ CTicketIdentifier CTicketIdentifier::generate(const QString &data)
 				const char master = 1 + qrand() % 9;
 				const char slave = 10 - master;
 
-				identifier = data;
+				barCode = data;
 
-				identifier.insert(2, QString::number(master));
-				identifier.insert(slavePosition(master), QString::number(slave));
+				barCode.insert(2, QString::number(master));
+				barCode.insert(slavePosition(master), QString::number(slave));
 			}
 		}
 			break;
 	}
 
-	return CTicketIdentifier(identifier);
+	return CTicketIdentifier(barCode);
 }
 
 /**
-Функция генерирует идентификатор размером 12 символов.
+Функция генерирует штрихкод размером 12 символов.
 */
 CTicketIdentifier CTicketIdentifier::generate()
 {
@@ -115,19 +115,19 @@ CTicketIdentifier CTicketIdentifier::generate()
 	return CTicketIdentifier(identifier);
 }
 
-bool CTicketIdentifier::isValidIdentifier(const QString &identifier)
+bool CTicketIdentifier::isValidBarCode(const QString &barCode)
 {
-	switch(identifier.size())
+	switch(barCode.size())
 	{
 		case 12:
 		case 13:
 		{
 			bool conversion = false;
-			identifier.toULongLong(&conversion);
+			barCode.toULongLong(&conversion);
 			if(conversion == true)
 			{
-				const char master = identifier.mid(2, 1).toInt();
-				return 10 - master == identifier.mid(slavePosition(master), 1).toInt();
+				const char master = barCode.mid(2, 1).toInt();
+				return 10 - master == barCode.mid(slavePosition(master), 1).toInt();
 			}
 		}
 			break;

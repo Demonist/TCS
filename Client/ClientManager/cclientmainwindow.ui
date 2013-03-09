@@ -16,172 +16,170 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QSplitter" name="splitter">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="childrenCollapsible">
-       <bool>false</bool>
-      </property>
-      <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QListWidget" name="listWidget">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
         <item>
-         <widget class="QListWidget" name="listWidget">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>150</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>22</width>
-            <height>22</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>Мероприятия</string>
-           </property>
-           <property name="icon">
-            <iconset resource="clinet_res.qrc">
-             <normaloff>:/clientImages/categoriesImages/imActions.png</normaloff>:/clientImages/categoriesImages/imActions.png</iconset>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Бронь</string>
-           </property>
-           <property name="icon">
-            <iconset resource="clinet_res.qrc">
-             <normaloff>:/clientImages/categoriesImages/imReserved.png</normaloff>:/clientImages/categoriesImages/imReserved.png</iconset>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Возврат билета</string>
-           </property>
-           <property name="icon">
-            <iconset resource="clinet_res.qrc">
-             <normaloff>:/clientImages/categoriesImages/imReturn.png</normaloff>:/clientImages/categoriesImages/imReturn.png</iconset>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Регистрация</string>
-           </property>
-           <property name="icon">
-            <iconset resource="clinet_res.qrc">
-             <normaloff>:/clientImages/categoriesImages/imClients.png</normaloff>:/clientImages/categoriesImages/imClients.png</iconset>
-           </property>
-          </item>
-         </widget>
+         <property name="text">
+          <string>Мероприятия</string>
+         </property>
+         <property name="icon">
+          <iconset resource="clinet_res.qrc">
+           <normaloff>:/clientImages/categoriesImages/imActions.png</normaloff>:/clientImages/categoriesImages/imActions.png</iconset>
+         </property>
         </item>
         <item>
-         <widget class="QGroupBox" name="gbxUser">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title">
-           <string>Пользователь</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_6">
-           <property name="topMargin">
-            <number>0</number>
+         <property name="text">
+          <string>Бронь</string>
+         </property>
+         <property name="icon">
+          <iconset resource="clinet_res.qrc">
+           <normaloff>:/clientImages/categoriesImages/imReserved.png</normaloff>:/clientImages/categoriesImages/imReserved.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Возврат билета</string>
+         </property>
+         <property name="icon">
+          <iconset resource="clinet_res.qrc">
+           <normaloff>:/clientImages/categoriesImages/imReturn.png</normaloff>:/clientImages/categoriesImages/imReturn.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Регистрация</string>
+         </property>
+         <property name="icon">
+          <iconset resource="clinet_res.qrc">
+           <normaloff>:/clientImages/categoriesImages/imClients.png</normaloff>:/clientImages/categoriesImages/imClients.png</iconset>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="gbxUser">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Пользователь</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLineEdit" name="leUser">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-           <property name="bottomMargin">
-            <number>0</number>
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
-           <item row="0" column="0">
-            <widget class="QLineEdit" name="leUser">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QPushButton" name="pbnChangeUser">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Сменить</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="pbnChangeUser">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Сменить</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="1">
+     <widget class="CAnimatedStackedWidget" name="stackedWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="page_actions">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="CClientActionsWidget" name="wActions" native="true"/>
         </item>
        </layout>
       </widget>
-      <widget class="CAnimatedStackedWidget" name="stackedWidget">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="currentIndex">
-        <number>1</number>
-       </property>
-       <widget class="QWidget" name="page_actions">
-        <layout class="QGridLayout" name="gridLayout_2">
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="CClientActionsWidget" name="wActions" native="true"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="page_2">
-        <layout class="QGridLayout" name="gridLayout_3">
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="CClientReservationWidget" name="wReservation" native="true"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="page_3">
-        <layout class="QGridLayout" name="gridLayout_5">
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="CReturnTicketWidget" name="wReturnTicket" native="true"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="page_registration">
-        <layout class="QGridLayout" name="gridLayout_4">
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="CClientRegistrationWidget" name="wRegistration" native="true"/>
-         </item>
-        </layout>
-       </widget>
+      <widget class="QWidget" name="page_2">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="CClientReservationWidget" name="wReservation" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_3">
+       <layout class="QGridLayout" name="gridLayout_5">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="CReturnTicketWidget" name="wReturnTicket" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_registration">
+       <layout class="QGridLayout" name="gridLayout_4">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="CClientRegistrationWidget" name="wRegistration" native="true"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>

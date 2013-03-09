@@ -8,42 +8,42 @@
 class CTicketIdentifier
 {
 private:
-	QString mIdentifier;
+	QString mBarCode;
 
 public:
 	 explicit CTicketIdentifier();
-	 explicit CTicketIdentifier(const QString &identifier);
+	 explicit CTicketIdentifier(const QString &barCode);
 
 	void render(const int w, const int h, QPainter *painter) const;
 	inline void render(const QSize &imageSize, QPainter *painter) const;
 
-	QString data() const;
+	QString identifier() const;
 
-	static CTicketIdentifier generate(const QString &data);
+	static CTicketIdentifier generate(const QString &identifier);
 	static CTicketIdentifier generate();
 
-	static bool isValidIdentifier(const QString &identifier);
+	static bool isValidBarCode(const QString &barCode);
 
-	inline QString identifier() const;
-	inline void setIdentifier(const QString &identifier);
+	inline QString barCode() const;
+	inline void setBarCode(const QString &barCode);
 
 	inline bool isValid() const;
 };
 
 //inline implementation:
 
-inline QString CTicketIdentifier::identifier() const
+inline QString CTicketIdentifier::barCode() const
 {
-	return mIdentifier;
+	return mBarCode;
 }
-inline void CTicketIdentifier::setIdentifier(const QString &identifier)
+inline void CTicketIdentifier::setBarCode(const QString &barCode)
 {
-	mIdentifier = identifier;
+	mBarCode = barCode;
 }
 
 inline bool CTicketIdentifier::isValid() const
 {
-	return isValidIdentifier(mIdentifier);
+	return isValidBarCode(mBarCode);
 }
 
 inline void CTicketIdentifier::render(const QSize &imageSize, QPainter *painter) const

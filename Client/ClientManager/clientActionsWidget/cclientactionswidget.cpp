@@ -585,13 +585,13 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 				for(int i = 0; i < ui->sbxFanSellCount->value(); i++)
 				{
 					CTicketIdentifier ticketIdetifier = CTicketIdentifier::generate();
-					fanTickets.append(ticketIdetifier.data());
+					fanTickets.append(ticketIdetifier.identifier());
 				}
 
 				for(int i = 0; i < mSelectedSeats.count(); i++)
 				{
 					CTicketIdentifier ticketIdetifier = CTicketIdentifier::generate();
-					seatTickets.append(ticketIdetifier.data());
+					seatTickets.append(ticketIdetifier.identifier());
 				}
 
 				//printing:

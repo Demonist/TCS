@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -91,91 +91,134 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Сумма проданных по завершению мероприятия</string>
+       <string>Продажи мероприятий</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
+      <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_1">
-         <property name="title">
-          <string>Выбор мероприятия</string>
+        <widget class="QTreeWidget" name="twActions">
+         <property name="rootIsDecorated">
+          <bool>false</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout_6">
+         <property name="itemsExpandable">
+          <bool>false</bool>
+         </property>
+         <column>
+          <property name="text">
+           <string>id</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Мероприятие</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Статус</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Испольнитель</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Площадка</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Категория</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Продано билетов</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Возвращено билетов</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Продано на сумму</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Прибыль с неустоек</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Продажи торговых точек</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox_3">
-            <property name="title">
-             <string>Выбор категории</string>
+           <widget class="QTreeWidget" name="twMarkets">
+            <property name="rootIsDecorated">
+             <bool>false</bool>
             </property>
-            <layout class="QGridLayout" name="gridLayout_4">
-             <item row="0" column="0">
-              <widget class="QComboBox" name="cbxCategoriesSelect"/>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="groupBox_4">
-            <property name="title">
-             <string>Выбор мероприятия</string>
+            <property name="itemsExpandable">
+             <bool>false</bool>
             </property>
-            <layout class="QGridLayout" name="gridLayout_5">
-             <item row="0" column="0">
-              <widget class="QTreeWidget" name="twActions">
-               <column>
-                <property name="text">
-                 <string>ID</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Мероприятие</string>
-                </property>
-               </column>
-              </widget>
-             </item>
-            </layout>
+            <column>
+             <property name="text">
+              <string>Площадка</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Продано</string>
+             </property>
+            </column>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="title">
-          <string>Проданные билеты</string>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <layout class="QGridLayout" name="gridLayout_9">
+         <property name="title">
+          <string>Продажи кассиров</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox_5">
-            <property name="title">
-             <string>Сумма всего</string>
+           <widget class="QTreeWidget" name="twSellers">
+            <property name="rootIsDecorated">
+             <bool>false</bool>
             </property>
-            <layout class="QGridLayout" name="gridLayout_7">
-             <item row="0" column="0">
-              <widget class="QLineEdit" name="lePriseSumTickets">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="groupBox_6">
-            <property name="title">
-             <string>Проданные билеты</string>
+            <property name="itemsExpandable">
+             <bool>false</bool>
             </property>
-            <layout class="QGridLayout" name="gridLayout_8">
-             <item row="0" column="0">
-              <widget class="QTreeWidget" name="twSellsTickets">
-               <column>
-                <property name="text">
-                 <string>Стоимость билета</string>
-                </property>
-               </column>
-              </widget>
-             </item>
-            </layout>
+            <column>
+             <property name="text">
+              <string>Кассир</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Продано</string>
+             </property>
+            </column>
            </widget>
           </item>
          </layout>

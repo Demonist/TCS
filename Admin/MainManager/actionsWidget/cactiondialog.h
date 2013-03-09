@@ -7,6 +7,7 @@
 #include "cdatedialog.h"
 #include "cactionticketsmanagement.h"
 #include "cimagedialog.h"
+#include "ccomplitedaction.h"
 
 namespace Ui {
     class CActionDialog;

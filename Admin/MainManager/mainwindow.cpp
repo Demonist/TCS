@@ -81,7 +81,7 @@ void MainWindow::createTables()
 				   "fanPrice             INTEGER DEFAULT 0, "
 				   "fanPenalty           INTEGER DEFAULT 0, "
 				   "fanCount             INTEGER DEFAULT 0, "
-				   "id_place             INTEGER NULL, "
+				   "id_place             INTEGER NOT NULL, "
 				   "id_category          INTEGER NULL, "
 				   "id_ticketSubstrate   INTEGER NULL"
 				   ");"))
@@ -162,6 +162,21 @@ void MainWindow::createTables()
 				   ");"))
 		qDebug(qPrintable(query.lastError().text()));
 
+	if(!query.exec("CREATE TABLE IF NOT EXISTS ComplitedActions( "
+				   "id                   INTEGER " + autoincExpr +
+				   "title                TEXT NULL, "
+				   "performer            TEXT NULL, "
+				   "place                TEXT NULL, "
+				   "category             TEXT NULL, "
+				   "ticketsSolded        INTEGER DEFAULT 0, "
+				   "ticketsReturned      INTEGER DEFAULT 0, "
+				   "soldedBySite         INTEGER DEFAULT 0, "
+				   "income               INTEGER DEFAULT 0, "
+				   "penalties            INTEGER DEFAULT 0, "
+				   "data                 BLOB NULL"
+				   ");"))
+		qDebug(qPrintable(query.lastError().text()));
+
 	//triggers:
 
 	const QString nowExpr = isServer ? "NOW()" : "datetime('now')";
@@ -176,6 +191,7 @@ void MainWindow::createTables()
 	if(!query.exec("CREATE TRIGGER IF NOT EXISTS on_deleteActions BEFORE DELETE ON Actions"
 				   " FOR EACH ROW BEGIN"
 				   "	DELETE FROM Tickets WHERE id_action = OLD.id;"
+				   "	DELETE FROM ReturnedTickets WHERE id_action = OLD.id;"
 				   "	DELETE FROM Reservations WHERE id_action = OLD.id;"
 				   "	DELETE FROM ActionScheme WHERE id_action = OLD.id;"
 				   "	DELETE FROM ActionPriceGroups WHERE id_action = OLD.id;"

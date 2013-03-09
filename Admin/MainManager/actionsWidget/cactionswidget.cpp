@@ -104,24 +104,28 @@ void CActionsWidget::on_tbnDel_clicked()
 	if(selectedItem)
 	{
 		QSqlQuery query(QSqlDatabase::database(mConnectionName));
-		query.prepare("SELECT COUNT(Tickets.id), COUNT(Reservations.id) FROM Tickets, Reservations WHERE Tickets.id_action = :id AND Reservations.id_action = :id2;");
-		query.bindValue(":id", selectedItem->text(ID));
-		query.bindValue(":id2", selectedItem->text(ID));
+		int solded = 0;
+		query.prepare("SELECT COUNT(id) FROM Tickets WHERE id_action = :id;");
+		query.bindValue(":id", selectedItem->text(ID).toInt());
 		if(query.exec() && query.first())
+			solded = query.value(0).toInt();
+		int reserved = 0;
+		query.prepare("SELECT COUNT(id) FROM Reservations WHERE id_action = :id;");
+		query.bindValue(":id", selectedItem->text(ID));
+		if(query.exec() && query.first())
+			reserved = query.value(0).toInt();
+		if(solded + reserved > 0)
 		{
-			if(query.value(0).toInt() + query.value(1).toInt() > 0)
-			{
-				QMessageBox::warning(this, tr("Внимание"), tr("Невозможно удалить данное мероприятие так как уже продано %1 и забронировано %2 билетов.\nУдаление мероприятия невозможно. Но Вы можете изменить его состояние на '%3' - это равносильно удалению.").arg(query.value(0).toString()).arg(query.value(1).toString()).arg(Global::actionStateToText(Global::ActionComplited)));
-				return;
-			}
-			else
-				if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите удалить выбранное мероприятие?"), QMessageBox::Yes, QMessageBox::No))
-				{
-					query.prepare("DELETE FROM Actions WHERE id = :id");
-					query.bindValue(":id", selectedItem->text(ID));
-					query.exec();
-					updateData();
-				}
+			QMessageBox::warning(this, tr("Внимание"), tr("Невозможно удалить данное мероприятие так как уже продано %1 и забронировано %2 билетов.\nУдаление мероприятия невозможно. Но Вы можете изменить его состояние на '%3' - это равносильно удалению.").arg(solded).arg(reserved).arg(Global::actionStateToText(Global::ActionComplited)));
+			return;
 		}
+		else
+			if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите удалить выбранное мероприятие?"), QMessageBox::Yes, QMessageBox::No))
+			{
+				query.prepare("DELETE FROM Actions WHERE id = :id");
+				query.bindValue(":id", selectedItem->text(ID));
+				query.exec();
+				updateData();
+			}
 	}
 }

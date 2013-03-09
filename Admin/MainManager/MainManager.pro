@@ -47,7 +47,6 @@ SOURCES += main.cpp\
     placesWidget/cdistanceitem.cpp \
     ../../common/cimages.cpp \
     accountingWidget/caccountingwidget.cpp \
-    accountingWidget/caccountingactionsdialog.cpp \
     uploadingWidget/cuploadingwidget.cpp \
     ../../common/commonWidget/cabstractcommonwidget.cpp \
     ../../common/graphics/cseatitem.cpp \
@@ -63,7 +62,8 @@ SOURCES += main.cpp\
     ../../common/cstatistics.cpp \
     startingDialog/cadminstartingdialog.cpp \
     admin.cpp \
-    usersWidget/cuseradmindialog.cpp
+    usersWidget/cuseradmindialog.cpp \
+    ccomplitedaction.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -88,7 +88,6 @@ HEADERS  += mainwindow.h \
     placesWidget/cdistanceitem.h \
     ../../common/cimages.h \
     accountingWidget/caccountingwidget.h \
-    accountingWidget/caccountingactionsdialog.h \
     uploadingWidget/cuploadingwidget.h \
     ../../common/commonWidget/cabstractcommonwidget.h \
     ../../common/graphics/cseatitem.h \
@@ -104,7 +103,8 @@ HEADERS  += mainwindow.h \
     ../../common/cstatistics.h \
     startingDialog/cadminstartingdialog.h \
     admin.h \
-    usersWidget/cuseradmindialog.h
+    usersWidget/cuseradmindialog.h \
+    ccomplitedaction.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -124,7 +124,6 @@ FORMS    += mainwindow.ui \
 	marketsWidget/cmarketswidget.ui \
 	marketsWidget/cmarketdialog.ui \
     accountingWidget/caccountingwidget.ui \
-    accountingWidget/caccountingactionsdialog.ui \
     uploadingWidget/cuploadingwidget.ui \
     actionsWidget/cpricedialog.ui \
     imageDialog/cimagedialog.ui \

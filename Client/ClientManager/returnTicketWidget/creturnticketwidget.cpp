@@ -44,7 +44,7 @@ void CReturnTicketWidget::on_leIdentifier_textChanged(const QString &arg1)
 		ui->lIdentifierState->clear();
 		clear();
 	}
-	else if(CTicketIdentifier::isValidIdentifier(arg1))
+	else if(CTicketIdentifier::isValidBarCode(arg1))
 	{
 		ui->lIdentifierState->setStyleSheet("QLabel{color:green;};");
 		ui->lIdentifierState->setText(tr("Нажмите 'ВВОД'"));
@@ -65,7 +65,7 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 	CTicketIdentifier identifier(ui->leIdentifier->text());
 	if(identifier.isValid())
 	{
-		QString data = identifier.data();
+		QString data = identifier.identifier();
 		QSqlQuery query(QSqlDatabase::database(mConnectionName));
 		query.prepare("SELECT"
 					  " Tickets.id,"
@@ -181,6 +181,8 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 						ui->lePayment->setText(tr("%1 руб.").arg(payment));
 						ui->pbnReturnTicket->setEnabled(true);
 				}
+
+				ui->lIdentifierState->clear();
 			}
 			else
 			{
@@ -216,7 +218,7 @@ void CReturnTicketWidget::on_pbnReturnTicket_clicked()
 			query.prepare("INSERT INTO ReturnedTickets VALUES(NULL, :actId, :clientId, :identifier, :marketId, :sellerId, :penalty, NULL);");
 			query.bindValue(":actId", mActionId);
 			query.bindValue(":clientId", mClientId);
-			query.bindValue(":identifier", identifier.data());
+			query.bindValue(":identifier", identifier.identifier());
 			query.bindValue(":marketId", CMarket::instance()->marketId());
 			query.bindValue(":sellerId", CMarket::instance()->sellerId());
 			query.bindValue(":penalty", mPenalty);

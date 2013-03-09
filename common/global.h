@@ -35,6 +35,7 @@ QByteArray crypt(const QString &data);
 QString decrypt(const QByteArray &cryptedData);
 
 //inline implementation:
+
 inline QString actionStateToText(const ActionState actionState)
 {
 	return actionStateToText((const int)actionState);
@@ -44,6 +45,7 @@ inline QString seatStateToText(const SeatState seatState)
 {
 	return seatStateToText((const int)seatState);
 }
+
 } //namespace Global
 
 #endif // GLOBAL_H

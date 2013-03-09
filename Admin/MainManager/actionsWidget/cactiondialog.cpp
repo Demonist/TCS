@@ -61,11 +61,12 @@ CActionDialog::CActionDialog(const QString &connectionName, const int id, QWidge
 		ui->lePerformer->setCompleter(&mCompleter);
 	}
 
-	query.prepare("SELECT title, id_place, dateTime, state, id_category, description, performer FROM Actions WHERE id = :id;");
+	query.prepare("SELECT Actions.title, Places.title, Actions.dateTime, Actions.state, Actions.id_category, Actions.description, Actions.performer FROM Actions, Places WHERE Actions.id = :id AND Places.id = Actions.id_place;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
 	{
 		ui->leTitle->setText(query.value(0).toString());
+		ui->cbxPlace->addItem(query.value(1).toString());
 		QDateTime dateTime = query.value(2).toDateTime();
 		ui->leDate->setText(dateTime.toString("dd.MM.yyyy"));
 		ui->sbxHour->setValue(dateTime.time().hour());
@@ -83,7 +84,6 @@ CActionDialog::CActionDialog(const QString &connectionName, const int id, QWidge
 		}
 
 		int catId = query.value(4).toInt();
-		int placeId = query.value(1).toInt();
 		int index = 0;
 
 		if(query.exec("SELECT id, name FROM Categories;"))
@@ -94,16 +94,10 @@ CActionDialog::CActionDialog(const QString &connectionName, const int id, QWidge
 					index = ui->cbxCategory->count() - 1;
 			}
 		ui->cbxCategory->setCurrentIndex(index);
-
-		if(query.exec("SELECT id, title, address FROM Places;"))
-			while(query.next())
-			{
-				ui->cbxPlace->addItem(query.value(1).toString() + " (" + query.value(2).toString() + ')', query.value(0));
-				if(placeId == query.value(0).toInt())
-					index = ui->cbxPlace->count() - 1;
-			}
-		ui->cbxPlace->setCurrentIndex(index);
 	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
+
 }
 
 CActionDialog::~CActionDialog()
@@ -156,14 +150,28 @@ void CActionDialog::on_pbnApply_clicked()
 		{
 			if(QMessageBox::Yes == QMessageBox::warning(this, tr("Внимание"), tr("При завершении мероприятия будет сформирован подробный отчет по продажам билетов, при этом само мероприятие и все его билеты будут удалены из базы данных т.е. будет невозможно экспортировать список билетов для контроля.\nВы действительно хотите продолжить?"), QMessageBox::Yes, QMessageBox::No))
 			{
-				//TODO: сформировать отчет, записать его в статистику, удалить все.
+				CComplitedAction action;
+				if(action.makeFromAction(mId, mConnectionName) && action.toQuery(&query))
+				{
+					if(query.exec())
+					{
+						query.prepare("DELETE FROM Actions WHERE id = :id");
+						query.bindValue(":id", mId);
+						if(!query.exec())
+							qDebug(qPrintable(query.lastError().text()));
+					}
+					else
+						qDebug(qPrintable(query.lastError().text()));
+				}
+				else
+					qDebug("CComplitedAction error.");
 			}
 			else
 				return;
 		}
 		else
 		{
-			query.prepare("UPDATE Actions SET title = :title, performer = :performer, description = :description, dateTime = :date, state = :state, id_place = :id_place, id_category = :id_cat WHERE id = :id;");
+			query.prepare("UPDATE Actions SET title = :title, performer = :performer, description = :description, dateTime = :date, state = :state, id_category = :id_cat WHERE id = :id;");
 			query.bindValue(":id", mId);
 			query.bindValue(":title", ui->leTitle->text());
 			query.bindValue(":performer", ui->lePerformer->text());
@@ -175,7 +183,6 @@ void CActionDialog::on_pbnApply_clicked()
 								)
 							);
 			query.bindValue(":state", state);
-			query.bindValue(":id_place", ui->cbxPlace->itemData(ui->cbxPlace->currentIndex()));
 			query.bindValue(":id_cat", ui->cbxCategory->itemData(ui->cbxCategory->currentIndex()));
 			if(!query.exec())
 				qDebug(qPrintable(query.lastError().text()));
