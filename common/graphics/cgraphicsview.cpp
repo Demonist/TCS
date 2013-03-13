@@ -154,13 +154,13 @@ CGraphicsView::~CGraphicsView()
 
 void CGraphicsView::scaleUp()
 {
-	if(mScale < gScallingTable[SCALLING_TABLE_SIZE - 1])
+	if(mScale > gScallingTable[0])
 	{
 		qreal newScale = mScale;
 		if(mScaleAnimation.state() == QPropertyAnimation::Running
-		   && mScaleAnimation.startValue().toReal() < mScaleAnimation.endValue().toReal())
+		   && mScaleAnimation.startValue().toReal() > mScaleAnimation.endValue().toReal())
 			newScale = mScaleAnimation.endValue().toReal();
-		newScale *= 1.2f;
+		newScale *= 0.8f;
 		newScale = roundScale(newScale);
 		if(mWheelScallingAnimated)
 			setScaleAnimated(newScale);
@@ -172,13 +172,13 @@ void CGraphicsView::scaleUp()
 
 void CGraphicsView::scaleDown()
 {
-	if(mScale > gScallingTable[0])
+	if(mScale < gScallingTable[SCALLING_TABLE_SIZE - 1])
 	{
 		qreal newScale = mScale;
 		if(mScaleAnimation.state() == QPropertyAnimation::Running
-		   && mScaleAnimation.startValue().toReal() > mScaleAnimation.endValue().toReal())
+		   && mScaleAnimation.startValue().toReal() < mScaleAnimation.endValue().toReal())
 			newScale = mScaleAnimation.endValue().toReal();
-		newScale *= 0.8f;
+		newScale *= 1.2f;
 		newScale = roundScale(newScale);
 		if(mWheelScallingAnimated)
 			setScaleAnimated(newScale);

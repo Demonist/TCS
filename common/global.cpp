@@ -97,12 +97,12 @@ QByteArray crypt(const QString &data)
 	QByteArray crypted;
 	for(int i = 0;  i < _data.size(); i++)
 		crypted.append(((unsigned char)_data[i]) ^ CRYPTED_KEY);
-	return qCompress(crypted);
+	return crypted.toHex();
 }
 
 QString decrypt(const QByteArray &cryptedData)
 {
-	QByteArray crypted = qUncompress(cryptedData);
+	QByteArray crypted = QByteArray::fromHex(cryptedData);
 	QByteArray decrypted;
 	for(int i = 0; i < crypted.size(); i++)
 		decrypted.append(((unsigned char)crypted[i]) ^ CRYPTED_KEY);

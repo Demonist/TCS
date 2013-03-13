@@ -23,7 +23,7 @@ CUserAdminDialog::CUserAdminDialog(const QString &connectionName, const int id, 
 	mId = id;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	query.prepare("SELECT login, passwordCrypt, name, FROM Admins WHERE id = :id;");
+	query.prepare("SELECT login, passwordCrypt, name FROM Admins WHERE id = :id;");
 	query.bindValue(":id", mId);
 	if(query.exec() && query.first())
 	{
@@ -31,6 +31,8 @@ CUserAdminDialog::CUserAdminDialog(const QString &connectionName, const int id, 
 		ui->lePassword->setText(Global::decrypt(query.value(1).toByteArray()));
 		ui->leName->setText(query.value(2).toString());
 	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
 }
 
 CUserAdminDialog::~CUserAdminDialog()

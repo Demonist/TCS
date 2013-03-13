@@ -10,6 +10,149 @@
 #define INI_LOGIN "dataBaseLogin"
 #define INI_PASSWORD "dataBasePassword"
 
+//protected:
+
+void CDataBaseConnectionWidget::processConnecting()
+{
+	ui->lDbConnectionStatus->setText(tr("Подключение..."));
+	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+	bool connectingToServer = ui->rbnDbServer->isChecked(); //Флаг, показывающий подключаемся ли мы к серверу или к файлу.
+
+	QSqlDatabase db = QSqlDatabase::addDatabase(connectingToServer ? "QMYSQL" : "QSQLITE", mConnectionName);
+
+	if(connectingToServer)
+	{
+		db.setHostName(ui->cbxDbHost->currentText());
+		db.setDatabaseName(ui->leDbName->text());
+		db.setUserName(ui->leDbLogin->text());
+		db.setPassword(ui->leDbPassword->text());
+
+		if(db.hostName().isEmpty() || db.databaseName().isEmpty())
+		{
+			ui->lDbConnectionStatus->setText(tr("Указаны не все данные"));
+			return;
+		}
+	}
+	else    //connecting to file
+	{
+		db.setDatabaseName(ui->cbxDbFileName->currentText());
+		QString error;
+		if(db.databaseName().isEmpty())
+			error = tr("Файл не выбран");
+		else if(QFile::exists(db.databaseName()) == false)
+			error = tr("Файл не найден");
+		if(error.isEmpty() == false)
+		{
+			ui->lDbConnectionStatus->setText(error);
+			return;
+		}
+	}
+
+	enum Error{
+		ErrorNo,
+		ErrorDataBaseNotOpen,
+		ErrorNoTables,
+		ErrorNoCheckTables
+	} error = ErrorNo;
+	QString checkTablesErrorText;	//Содержит в себе перечень отсутсвующих таблиц.
+
+	if(!db.open())
+		error = ErrorDataBaseNotOpen;
+	else if(mCheckTables.isEmpty())
+	{
+		if(db.tables().count() == 0)
+			error = ErrorNoTables;
+	}
+	else
+	{
+		QStringList tables = db.tables();
+		for(int i = 0; i < mCheckTables.count(); i++)
+			if(tables.contains(mCheckTables[i]) == false)
+				checkTablesErrorText += mCheckTables[i] + '\n';
+		if(checkTablesErrorText.isEmpty() == false)
+			error = ErrorNoCheckTables;
+	}
+
+	if(error == ErrorNo)   //connection is successfully
+	{
+		mConnected = true;
+
+		ui->lDbConnectionStatus->setText(tr("Подключение произведено"));
+		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+		//кеширование:
+		if(mCache)
+		{
+			if(connectingToServer)
+			{
+				mCache->setValue(INI_CONNECTION_TYPE, "server");
+				mCache->setValue(INI_LASTSERVER, db.hostName());
+
+				if(ui->chbxDbRemember->isChecked()) //Галочка 'Запомнить'
+				{
+					mCache->beginGroup(db.hostName());
+					mCache->setValue(INI_DBNAME, db.databaseName());
+					mCache->setValue(INI_LOGIN, db.userName());
+					mCache->setValue(INI_PASSWORD, Global::crypt(db.password()));
+					mCache->endGroup();
+				}
+			}
+			else    //connecting to file
+			{
+				mCache->setValue(INI_CONNECTION_TYPE, "file");
+				mCache->setValue(INI_LASTFILE, ui->cbxDbFileName->currentText());
+
+				QStringList files = mCache->value(INI_FILES).toStringList();
+				if(files.contains(ui->cbxDbFileName->currentText()) == false)
+				{
+					files.append(ui->cbxDbFileName->currentText());
+					mCache->setValue(INI_FILES, files);
+				}
+			}
+
+			mCache->sync();
+		}
+
+		emit connectedToDatabase(mConnectionName);
+	}
+	else
+	{
+		ui->lDbConnectionStatus->setText(tr("Ошибка подключения"));
+		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+		qDebug("CDataBaseConnectionWidget::on_pbnDbConnect_clicked: error: %d", db.lastError().number());
+		QString errorText;
+
+		if(error == ErrorDataBaseNotOpen)
+		{
+			errorText = tr("Не удалось подключиться к базе данных.\n");
+			switch(db.lastError().number())
+			{
+				case 1045:
+					errorText += tr("Ошибка аутентификации. Проверьте правильность логина и пароля.\n");
+					break;
+				case 1044:
+					errorText += tr("Неверно указано имя базы данных.\n");
+					break;
+				case 2005:
+					errorText += tr("Не удалось найти указанный хост.\n");
+					break;
+				case -1:
+					errorText += tr("Указанный файл не является базой данных.");
+					break;
+			}
+			if(db.lastError().number() >= 0)
+				errorText += '\n' + db.lastError().text();
+		}else if(error == ErrorNoTables)
+			errorText = tr("Работа с базой данных не возможна.\nВ базе данных нет ни одной таблицы.");
+		else if(error == ErrorNoCheckTables)
+			errorText = tr("Работа с базой данных не возможна.\nВ базе данных отсутсвуют следующие таблицы:\n%1").arg(checkTablesErrorText);
+
+		QMessageBox::warning(this, tr("Ошибка подключения"), errorText);
+		ui->lDbConnectionStatus->clear();
+	}
+}
+
 //public:
 
 CDataBaseConnectionWidget::CDataBaseConnectionWidget(QWidget *parent) :
@@ -30,7 +173,24 @@ CDataBaseConnectionWidget::CDataBaseConnectionWidget(QWidget *parent) :
 			ui->rbnDbFile->setChecked(true);
 		ui->chbxDbRemember->setChecked(mCache->value(INI_REMEMBER).toBool());
 
-		QList<QString> files = mCache->value(INI_FILES).toStringList();
+		QStringList files = mCache->value(INI_FILES).toStringList();
+
+		//Удаление несуществующих файлов:
+		bool needSync = false;
+		for(int i = 0; i < files.count(); i++)
+			if(QFile::exists(files[i]) == false)
+			{
+				files.removeAt(i--);
+				needSync = true;
+			}
+		if(needSync)
+		{
+			mCache->setValue(INI_FILES, files);
+			if(files.isEmpty())
+				mCache->setValue(INI_LASTFILE, "");
+
+			mCache->sync();
+		}
 		ui->cbxDbFileName->addItems(files);
 		ui->cbxDbFileName->setCurrentIndex(ui->cbxDbFileName->findText(mCache->value(INI_LASTFILE).toString()));
 
@@ -86,110 +246,7 @@ void CDataBaseConnectionWidget::on_pbnDbExit_clicked()
 
 void CDataBaseConnectionWidget::on_pbnDbConnect_clicked()
 {
-	ui->lDbConnectionStatus->setText(tr("Подключение..."));
-	QApplication::processEvents();
-
-	bool connectingToServer = ui->rbnDbServer->isChecked(); //Флаг, показывающий подключаемся ли мы к серверу или к файлу.
-
-	QSqlDatabase db = QSqlDatabase::addDatabase(connectingToServer ? "QMYSQL" : "QSQLITE", mConnectionName);
-
-	if(connectingToServer)
-	{
-		db.setHostName(ui->cbxDbHost->currentText());
-		db.setDatabaseName(ui->leDbName->text());
-		db.setUserName(ui->leDbLogin->text());
-		db.setPassword(ui->leDbPassword->text());
-
-		if(db.hostName().isEmpty() || db.databaseName().isEmpty())
-		{
-			ui->lDbConnectionStatus->setText(tr("Указаны не все данные"));
-			return;
-		}
-	}
-	else    //connecting to file
-	{
-		db.setDatabaseName(ui->cbxDbFileName->currentText());
-		QString error;
-		if(db.databaseName().isEmpty())
-			error = tr("Файл не выбран");
-		else if(QFile::exists(db.databaseName()) == false)
-			error = tr("Файл не найден");
-		if(error.isEmpty() == false)
-		{
-			ui->lDbConnectionStatus->setText(error);
-			return;
-		}
-	}
-
-	if(db.open() && db.tables().count())   //connection is successfully
-	{
-		mConnected = true;
-
-		ui->lDbConnectionStatus->setText(tr("Подключение произведено"));
-		QApplication::processEvents();
-
-		//кеширование:
-		if(mCache)
-		{
-			if(connectingToServer)
-			{
-				mCache->setValue(INI_CONNECTION_TYPE, "server");
-				mCache->setValue(INI_LASTSERVER, db.hostName());
-
-				if(ui->chbxDbRemember->isChecked()) //Галочка 'Запомнить'
-				{
-					mCache->beginGroup(db.hostName());
-					mCache->setValue(INI_DBNAME, db.databaseName());
-					mCache->setValue(INI_LOGIN, db.userName());
-					mCache->setValue(INI_PASSWORD, Global::crypt(db.password()));
-					mCache->endGroup();
-				}
-			}
-			else    //connecting to file
-			{
-				mCache->setValue(INI_CONNECTION_TYPE, "file");
-				mCache->setValue(INI_LASTFILE, ui->cbxDbFileName->currentText());
-
-				QStringList files = mCache->value(INI_FILES).toStringList();
-				if(files.contains(ui->cbxDbFileName->currentText()) == false)
-				{
-					files.append(ui->cbxDbFileName->currentText());
-					mCache->setValue(INI_FILES, files);
-				}
-			}
-
-			mCache->sync();
-		}
-
-		emit connectedToDatabase(mConnectionName);
-	}
-	else
-	{
-		ui->lDbConnectionStatus->setText(tr("Ошибка подключения"));
-		QApplication::processEvents();
-		qDebug("CDataBaseConnectionWidget::on_pbnDbConnect_clicked: error: %d", db.lastError().number());
-		QString errorText = tr("Не удалось подключиться к базе данных.\n");
-		switch(db.lastError().number())
-		{
-			case 1045:
-				errorText += tr("Ошибка аутентификации. Проверьте правильность логина и пароля.\n");
-				break;
-			case 1044:
-				errorText += tr("Неверно указано имя базы данных.\n");
-				break;
-			case 2005:
-				errorText += tr("Не удалось найти указанный хост.\n");
-				break;
-			case -1:
-				errorText += tr("Указанный файл не является базой данных.");
-				break;
-		}
-		if(db.lastError().number() >= 0)
-			errorText += '\n' + db.lastError().text();
-
-		QMessageBox::warning(this, tr("Ошибка подключения"), errorText);
-		ui->lDbConnectionStatus->clear();
-	}
+	processConnecting();
 }
 
 void CDataBaseConnectionWidget::on_rbnDbServer_toggled(bool checked)

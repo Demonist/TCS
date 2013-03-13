@@ -138,7 +138,7 @@ void CUsersWidget::on_tbnAdminAdd_clicked()
 
 void CUsersWidget::on_tbnAdminEdit_clicked()
 {
-	QTreeWidgetItem *selectedItem = ui->twUsers->currentItem();
+	QTreeWidgetItem *selectedItem = ui->twAdmins->currentItem();
 	if(selectedItem)
 	{
 		CUserAdminDialog userDialog(mConnectionName, selectedItem->text(ID).toInt(), this);

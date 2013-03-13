@@ -169,7 +169,7 @@ int CImages::insert(const QPixmap &image)
 			else
 				curDate = "NOW()";
 
-			query.exec("BEGIN TRANSACTION;");
+			db.transaction();
 
 			query.prepare("INSERT INTO Images VALUES(NULL, :image, " + curDate + ");");
 			query.bindValue(":image", byteArray);
@@ -194,7 +194,7 @@ int CImages::insert(const QPixmap &image)
 					}
 				}
 			}
-			query.exec("COMMIT TRANSACTION;");
+			db.commit();
 		}
 	}
 	return ret;

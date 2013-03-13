@@ -598,7 +598,7 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 
 				bool queryError = false;
 
-				if(query.exec("BEGIN TRANSACTION;"))
+				if(QSqlDatabase::database(mConnectionName).transaction())
 				{
 					query.prepare("INSERT INTO Tickets VALUES(NULL, :actId, NULL, NULL, :identifier, :marketId, :sellerId, :price, NULL);");
 					query.bindValue(":actId", mCurrentActionId);
@@ -652,12 +652,13 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 
 					if(queryError)
 					{
-						query.exec("ROLLBACK TRANSACTION;");
+						qDebug(qPrintable(query.lastError().text()));
+						QSqlDatabase::database(mConnectionName).rollback();
 						QMessageBox::critical(this, tr("Ошибка"), tr("Произошла ошибка при работе с сервером базы данных. Печать отменена.\nПроверьте подключение к интернету."));
 					}
 					else
 					{
-						query.exec("COMMIT TRANSACTION;");
+						QSqlDatabase::database(mConnectionName).commit();
 
 						const static QPixmap printerBackground(":/clientImages/background.png");
 						const static QPoint substratePoint(48, 378);
@@ -758,6 +759,8 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 						ui->stackedWidget->setCurrentIndexAnimatedHorizontal(0);
 					}
 				}
+				else
+					qDebug(qPrintable(query.lastError().text()));
 			}
 		}
 	}

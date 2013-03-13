@@ -18,9 +18,6 @@ private:
 	Ui::MainWindow *ui;
 	QString mConnectionName;
 
-private:
-	void createTables();
-
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();

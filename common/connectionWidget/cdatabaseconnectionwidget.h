@@ -24,15 +24,19 @@ public:
 	enum ConnectionType{ConnectionServer, ConnectionFile};
 
 	//members:
-private:
+protected:
 	Ui::CDataBaseConnectionWidget *ui;
 	QSettings *mCache;
 
 	mutable bool mConnected;
 	ConnectionType mConnectionType;
 	QString mConnectionName;    //! Имя соединения с базой данных.
+	QStringList mCheckTables;	//! Имена таблиц, которые должны присутствовать в базе данных.
 
 	//methods:
+protected:
+	virtual void processConnecting();
+
 public:
 	explicit CDataBaseConnectionWidget(QWidget *parent = 0);
 	~CDataBaseConnectionWidget();
@@ -42,6 +46,7 @@ public:
 	bool isCloseButtonVisible() const;
 	bool isConnectionChoiceEnable() const;
 	inline ConnectionType connectionType() const;
+	inline QStringList checkTables() const;
 
 private slots:
 	void on_pbnDbExit_clicked();
@@ -56,6 +61,7 @@ public slots:
 	void setCloseButtonVisible(bool show);
 	void setConnectionChoiceEnable(bool enable);
 	void setConnectionType(const ConnectionType &connectionType);
+	inline void setCheckTables(const QStringList &checkTablesList);
 
 signals:
 	void closed();
@@ -72,6 +78,19 @@ inline QString CDataBaseConnectionWidget::connectionName() const
 inline CDataBaseConnectionWidget::ConnectionType CDataBaseConnectionWidget::connectionType() const
 {
 	return mConnectionType;
+}
+
+/**
+  Задает список таблиц, которые обязательно должны присутсвовать в базе данных.
+Если \a checkTablesList пустой список, то проверка не производится.
+*/
+inline void CDataBaseConnectionWidget::setCheckTables(const QStringList &checkTablesList)
+{
+	mCheckTables = checkTablesList;
+}
+inline QStringList CDataBaseConnectionWidget::checkTables() const
+{
+	return mCheckTables;
 }
 
 #endif // CDATABASECONNECTIONWIDGET_H

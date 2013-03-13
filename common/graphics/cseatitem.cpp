@@ -202,7 +202,7 @@ void CSeatItem::hideAnimated(const int durationMs)
 	while(anim.state() == QAbstractAnimation::Running)
 	{
 		CWaitThread::msleep(10);
-		QApplication::processEvents();
+		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 	hide();
 
