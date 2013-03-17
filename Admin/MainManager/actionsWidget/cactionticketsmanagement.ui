@@ -43,13 +43,16 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QGroupBox" name="groupBox_4">
+        <widget class="QGroupBox" name="gbxSeats">
          <property name="title">
           <string>Места</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
            <widget class="QToolButton" name="tbnAvaible">
+            <property name="toolTip">
+             <string>Отметить место как продаваемое</string>
+            </property>
             <property name="icon">
              <iconset resource="actionWidget_res.qrc">
               <normaloff>:/images/avaible.png</normaloff>:/images/avaible.png</iconset>
@@ -61,6 +64,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QToolButton" name="tbnNotAvaible">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Отметить место как НЕ продаваемое&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="icon">
              <iconset resource="actionWidget_res.qrc">
               <normaloff>:/images/unavaible.png</normaloff>:/images/unavaible.png</iconset>
@@ -70,19 +76,11 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QToolButton" name="tbnShow">
-            <property name="icon">
-             <iconset resource="actionWidget_res.qrc">
-              <normaloff>:/images/show.png</normaloff>:/images/show.png</iconset>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
+          <item row="0" column="2">
            <widget class="QToolButton" name="tbnHide">
+            <property name="toolTip">
+             <string>Скрыть место</string>
+            </property>
             <property name="icon">
              <iconset resource="actionWidget_res.qrc">
               <normaloff>:/images/hide.png</normaloff>:/images/hide.png</iconset>

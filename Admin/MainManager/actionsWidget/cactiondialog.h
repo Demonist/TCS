@@ -22,6 +22,7 @@ private:
 private:
 	Ui::CActionDialog *ui;
 	Type mType;
+	CActionTicketsManagement::Type mActionType;
 	int mId;	//! Идентификатор мероприятия.
 	QString mConnectionName;
 

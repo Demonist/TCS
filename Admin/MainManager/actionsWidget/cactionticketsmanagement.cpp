@@ -35,8 +35,6 @@ bool CActionTicketsManagement::eventFilter(QObject *obj, QEvent *event)
 					{
 						if(mEditType == Hide)
 							seatItem->setSeatStateAnimated(Global::SeatHided, 1000);
-						else if(mEditType == Show)
-							seatItem->setSeatStateAnimated(Global::SeatNotAvaible, 1000);
 						else if(mEditType == Avaible)
 							seatItem->setSeatStateAnimated(Global::SeatFree, 1000);
 						else if(mEditType == NotAvaible)
@@ -78,8 +76,6 @@ void CActionTicketsManagement::mouseSceneEvent(QMouseEvent *event)
 		{
 			if(mEditType == Hide)
 				seatItem->setSeatStateAnimated(Global::SeatHided, 1000);
-			else if(mEditType == Show)
-				seatItem->setSeatStateAnimated(Global::SeatNotAvaible, 1000);
 			else if(mEditType == Avaible)
 				seatItem->setSeatStateAnimated(Global::SeatFree, 1000);
 			else if(mEditType == NotAvaible)
@@ -153,7 +149,7 @@ void CActionTicketsManagement::paintLenend(QPainter *painter, const QSize &viewS
 
 //public:
 
-CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName, const int id, QWidget *parent) :
+CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName, const int id, Type type, QWidget *parent) :
     QDialog(parent),
 	CAbstractLegend(),
     ui(new Ui::CActionTicketsManagement)
@@ -183,6 +179,17 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 
 	ui->cbxShowBackground->setChecked(mScene.isDrawBackground());
 	ui->cbxShowLegend->setChecked(ui->gvScene->isLegend());
+
+	if(type == Show)
+	{
+		ui->gbxSeats->setEnabled(false);
+		ui->pbnApply->setEnabled(false);
+		ui->pbnFan->setEnabled(false);
+		ui->tbnPriceAdd->setEnabled(false);
+		ui->tbnPriceDel->setEnabled(false);
+		ui->tbnPriceEdit->setEnabled(false);
+		ui->tbnPricePaint->setEnabled(false);
+	}
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
@@ -363,7 +370,6 @@ void CActionTicketsManagement::on_tbnAvaible_clicked(bool checked)
 	if(checked)
 	{
 		ui->tbnNotAvaible->setChecked(false);
-		ui->tbnShow->setChecked(false);
 		ui->tbnHide->setChecked(false);
 		ui->tbnDrag->setChecked(false);
 		ui->tbnPricePaint->setChecked(false);
@@ -378,7 +384,6 @@ void CActionTicketsManagement::on_tbnNotAvaible_clicked(bool checked)
 	if(checked)
 	{
 		ui->tbnAvaible->setChecked(false);
-		ui->tbnShow->setChecked(false);
 		ui->tbnHide->setChecked(false);
 		ui->tbnDrag->setChecked(false);
 		ui->tbnPricePaint->setChecked(false);
@@ -394,25 +399,9 @@ void CActionTicketsManagement::on_tbnHide_clicked(bool checked)
 	{
 		ui->tbnAvaible->setChecked(false);
 		ui->tbnNotAvaible->setChecked(false);
-		ui->tbnShow->setChecked(false);
 		ui->tbnDrag->setChecked(false);
 		ui->tbnPricePaint->setChecked(false);
 		mEditType = Hide;
-	}
-	else
-		mEditType = None;
-}
-
-void CActionTicketsManagement::on_tbnShow_clicked(bool checked)
-{
-	if(checked)
-	{
-		ui->tbnAvaible->setChecked(false);
-		ui->tbnNotAvaible->setChecked(false);
-		ui->tbnHide->setChecked(false);
-		ui->tbnDrag->setChecked(false);
-		ui->tbnPricePaint->setChecked(false);
-		mEditType = Show;
 	}
 	else
 		mEditType = None;
@@ -424,7 +413,6 @@ void CActionTicketsManagement::on_tbnDrag_clicked(bool checked)
 	{
 		ui->tbnAvaible->setChecked(false);
 		ui->tbnNotAvaible->setChecked(false);
-		ui->tbnShow->setChecked(false);
 		ui->tbnHide->setChecked(false);
 		ui->tbnPricePaint->setChecked(false);
 		mEditType = Drag;
@@ -439,7 +427,6 @@ void CActionTicketsManagement::on_tbnPricePaint_clicked(bool checked)
 	{
 		ui->tbnAvaible->setChecked(false);
 		ui->tbnNotAvaible->setChecked(false);
-		ui->tbnShow->setChecked(false);
 		ui->tbnHide->setChecked(false);
 		ui->tbnDrag->setChecked(false);
 		mEditType = Paint;

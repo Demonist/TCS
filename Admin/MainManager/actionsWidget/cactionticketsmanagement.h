@@ -18,8 +18,13 @@ namespace Ui {
 class CActionTicketsManagement : public QDialog, public CAbstractLegend
 {
     Q_OBJECT
+
 	//types:
-	enum EditType{None, Avaible, NotAvaible, Hide, Show, Price, Drag, Paint};
+private:
+	enum EditType{None, Avaible, NotAvaible, Hide, Price, Drag, Paint};
+
+public:
+	enum Type{Edit, Show};
 
 	//members:
 protected:
@@ -41,7 +46,7 @@ protected:
 	void paintLenend(QPainter *painter, const QSize &viewSize);
 
 public:
-	explicit CActionTicketsManagement(const QString &connectionName, const int id, QWidget *parent = 0);
+	explicit CActionTicketsManagement(const QString &connectionName, const int id, Type type, QWidget *parent = 0);
     ~CActionTicketsManagement();
 
 private slots:
@@ -50,7 +55,6 @@ private slots:
 	void on_tbnAvaible_clicked(bool checked);
 	void on_tbnNotAvaible_clicked(bool checked);
 	void on_tbnHide_clicked(bool checked);
-	void on_tbnShow_clicked(bool checked);
 	void on_tbnDrag_clicked(bool checked);
 	void on_tbnPricePaint_clicked(bool checked);
 	void on_tbnDrag_toggled(bool checked);

@@ -48,6 +48,7 @@ CActionDialog::CActionDialog(const QString &connectionName, const int id, QWidge
 	ui->gbxPlace->setToolTip(tr("Данный функционал доступен только при добавлении"));
 	mType = Edit;
 	mId = id;
+	mActionType = CActionTicketsManagement::Edit;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
@@ -79,8 +80,8 @@ CActionDialog::CActionDialog(const QString &connectionName, const int id, QWidge
 
 		if(Global::ActionInactive != query.value(3).toInt())
 		{
-			ui->pbnTicketsManagement->setEnabled(false);
-			ui->pbnTicketsManagement->setToolTip(tr("Данный функционал доступен только для неактивных мероприятий"));
+			ui->pbnTicketsManagement->setText(tr("Просмотр билетов"));
+			mActionType = CActionTicketsManagement::Show;
 		}
 
 		int catId = query.value(4).toInt();
@@ -207,7 +208,7 @@ void CActionDialog::on_pbnTicketsManagement_clicked()
 {
 	if(mType == Edit)
 	{
-		CActionTicketsManagement ticketsManagement(mConnectionName, mId, this);
+		CActionTicketsManagement ticketsManagement(mConnectionName, mId, mActionType, this);
 		ticketsManagement.exec();
 	}
 }
