@@ -203,6 +203,16 @@
             </column>
             <column>
              <property name="text">
+              <string>Свободно мест</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Свободно в фан-зоне</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
               <string>Площадка</string>
              </property>
             </column>

@@ -18,6 +18,16 @@
 #define ACTIONS_INCOME 8
 #define ACTIONS_PENALTY 9
 
+#define COMPLITED_ID 0
+#define COMPLITED_TITLE 1
+#define COMPLITED_PERFORMER 2
+#define COMPLITED_PLACE 3
+#define COMPLITED_CATEGORY 4
+#define COMPLITED_SOLDED 5
+#define COMPLITED_RETURNED 6
+#define COMPLITED_INCOME 7
+#define COMPLITED_PENALTY 8
+
 CAccountingWidget::CAccountingWidget(QWidget *parent) :
     CAbstractCommonWidget(parent),
     ui(new Ui::CAccountingWidget)
@@ -30,6 +40,9 @@ CAccountingWidget::CAccountingWidget(QWidget *parent) :
 
 	ui->twActions->hideColumn(0);
 	ui->twActions->setColumnWidth(0, 0);
+
+	ui->twComplitedActions->hideColumn(0);
+	ui->twComplitedActions->setColumnWidth(0, 0);
 }
 
 CAccountingWidget::~CAccountingWidget()
@@ -111,6 +124,39 @@ void CAccountingWidget::updateData()
 	}
 	else
 		qDebug(qPrintable(query.lastError().text()));
+
+	//Завершенные мероприятия
+	if(query.exec("SELECT id, title, performer, place, category, ticketsSolded, ticketsReturned, soldedBySite, income, penalties, data FROM ComplitedActions ORDER BY id DESC;"))
+	{
+		ui->twComplitedActions->clear();
+		mComplitedStatistics.clear();
+
+		QTreeWidgetItem *item;
+		CComplitedAction action;
+		while(query.next())
+		{
+			item = new QTreeWidgetItem();
+			if(item)
+			{
+				item->setText(COMPLITED_ID, query.value(0).toString());
+				item->setText(COMPLITED_TITLE, query.value(1).toString());
+				item->setText(COMPLITED_PERFORMER, query.value(2).toString());
+				item->setText(COMPLITED_PLACE, query.value(3).toString());
+				item->setText(COMPLITED_CATEGORY, query.value(4).toString());
+				item->setText(COMPLITED_SOLDED, query.value(5).toString());
+				item->setText(COMPLITED_RETURNED, query.value(6).toString());
+				item->setText(COMPLITED_INCOME, query.value(7).toString());
+				item->setText(COMPLITED_PENALTY, query.value(8).toString());
+
+				ui->twComplitedActions->addTopLevelItem(item);
+
+				action.soldedFromByteArray(query.value(9).toByteArray());
+				mComplitedStatistics.append(qMakePair(action.soldedByMarkets, action.soldedBySellers));
+			}
+		}
+	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
 }
 
 void CAccountingWidget::on_cbxActions_currentIndexChanged(int index)
@@ -160,4 +206,42 @@ void CAccountingWidget::on_twActions_currentItemChanged(QTreeWidgetItem *current
 	}
 	else
 		qDebug("Actions statistic alarme!");
+}
+
+void CAccountingWidget::on_twComplitedActions_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+	int index = ui->twComplitedActions->indexOfTopLevelItem(current);
+	if(index >= 0 && index < mComplitedStatistics.size())
+	{
+		ui->twComplitedMarkets->clear();
+		ui->twComplitedSellers->clear();
+
+		const QHash<QString, int> &markets = mComplitedStatistics[index].first;
+		const QHash<QString, int> &selers = mComplitedStatistics[index].second;
+		QTreeWidgetItem *item;
+		QList<QString> keys = markets.keys();
+		for(int i = 0; i < keys.count(); i++)
+		{
+			item = new QTreeWidgetItem();
+			if(item)
+			{
+				item->setText(0, keys[i]);
+				item->setText(1, QString::number(markets[keys[i]]));
+				ui->twComplitedMarkets->addTopLevelItem(item);
+			}
+		}
+		keys = selers.keys();
+		for(int i = 0; i < keys.count(); i++)
+		{
+			item = new QTreeWidgetItem();
+			if(item)
+			{
+				item->setText(0, keys[i]);
+				item->setText(1, QString::number(selers[keys[i]]));
+				ui->twComplitedSellers->addTopLevelItem(item);
+			}
+		}
+	}
+	else
+		qDebug("Complited statistic alarme!");
 }

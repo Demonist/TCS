@@ -49,9 +49,11 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 		CImages::instance(mConnectionName);
 		CStatistics::instance(mConnectionName);
 		ui->wActions->setConnectionName(mConnectionName);
+		ui->wReservation->setConnectionName(mConnectionName);
 		ui->wReturnTicket->setConnectionName(mConnectionName);
         ui->wRegistration->setConnectionName(mConnectionName);
 		ui->leUser->setText(CMarket::instance()->seller());
+		ui->leUser->setCursorPosition(0);
 
 		mActionDialog.setSourceView(ui->wActions->view());
 		mActionDialog.showMinimized();
@@ -107,5 +109,8 @@ void CClientMainWindow::on_pbnChangeUser_clicked()
 	startingDialog.setChangeUserOnly();
 	startingDialog.exec();
 	if(startingDialog.isLogined())
+	{
 		ui->leUser->setText(CMarket::instance()->seller());
+		ui->leUser->setCursorPosition(0);
+	}
 }

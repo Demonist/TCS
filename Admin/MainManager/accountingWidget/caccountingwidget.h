@@ -26,11 +26,13 @@ public slots:
 private slots:
 	void on_cbxActions_currentIndexChanged(int index);
 	void on_twActions_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+	void on_twComplitedActions_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
 private:
     Ui::CAccountingWidget *ui;
     void sumPriceTicketsForAction();
 	QList<QPair<QHash<QString, int>, QHash<QString, int> > > mActionStatistics;
+	QList<QPair<QHash<QString, int>, QHash<QString, int> > > mComplitedStatistics;
 };
 
 #endif // CACCOUNTINGWIDGET_H

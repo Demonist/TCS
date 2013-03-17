@@ -5,8 +5,10 @@
 #define TITLE 1
 #define PERFORMER 2
 #define DATETIME 3
-#define PLACE 4
-#define CATEGORY 5
+#define FREE_SEATS 4
+#define FREE_FAN 5
+#define PLACE 6
+#define CATEGORY 7
 
 CClientActionsWidget::CClientActionsWidget(QWidget *parent) :
 	CAbstractCommonWidget(parent),
@@ -371,7 +373,7 @@ void CClientActionsWidget::updateData()
 
 	ui->leDate->clear();
 
-	query.prepare("SELECT Actions.id, Actions.title, Actions.performer, Actions.dateTime, Places.title, Places.address, Places.id, Categories.name, Categories.id FROM Actions, Places, Categories WHERE Actions.id_place = Places.id AND Actions.id_category = Categories.id AND Actions.state = :state;");
+	query.prepare("SELECT Actions.id, Actions.title, Actions.performer, Actions.dateTime, Places.title, Places.address, Places.id, Categories.name, Categories.id, Actions.fanCount FROM Actions, Places, Categories WHERE Actions.id_place = Places.id AND Actions.id_category = Categories.id AND Actions.state = :state;");
 	query.bindValue(":state", Global::ActionActive);
 	if(query.exec())
 	{
@@ -396,10 +398,20 @@ void CClientActionsWidget::updateData()
 				item->setData(PLACE, Qt::UserRole, query.value(6));
 				item->setText(CATEGORY, query.value(7).toString());
 				item->setData(CATEGORY, Qt::UserRole, query.value(8));
+				item->setText(FREE_FAN, query.value(9).toString());
 
 				ui->twActions->addTopLevelItem(item);
 			}
 			////TODO: Добавить обработчик ошибок.
+		}
+
+		query.prepare("SELECT COUNT(id_placeScheme) FROM ActionScheme WHERE id_action = :id AND state = :state;");
+		query.bindValue(":state", Global::SeatFree);
+		for(int i = 0; i < ui->twActions->topLevelItemCount(); i++)
+		{
+			query.bindValue(":id", ui->twActions->topLevelItem(i)->text(ID).toInt());
+			if(query.exec() && query.first())
+				ui->twActions->topLevelItem(i)->setText(FREE_SEATS, query.value(0).toString());
 		}
 	}
 	else
