@@ -38,6 +38,7 @@ private slots:
 private:
 	Ui::CDatabaseManager *ui;
 	QString mConnectionName;
+	bool mServer;
 };
 
 #endif // CDATABASEMANAGER_H

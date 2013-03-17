@@ -153,6 +153,11 @@ void CDataBaseConnectionWidget::processConnecting()
 	}
 }
 
+QString CDataBaseConnectionWidget::selectDatabaseFile()
+{
+	return QFileDialog::getOpenFileName(this, tr("Выберите файл базы данных"), "", tr("Файл базы данных (*.db);;Все файлы (*.*)"));
+}
+
 //public:
 
 CDataBaseConnectionWidget::CDataBaseConnectionWidget(QWidget *parent) :
@@ -269,7 +274,7 @@ void CDataBaseConnectionWidget::on_rbnDbFile_toggled(bool checked)
 
 void CDataBaseConnectionWidget::on_tbnDbFile_clicked()
 {
-	const QString fileName = QFileDialog::getOpenFileName(this, tr("Выберите файл базы данных"), "", tr("Файл базы данных (*.db);;Все файлы (*.*)"));
+	const QString fileName = selectDatabaseFile();
 	if(fileName.isEmpty() == false)
 	{
 		int index = ui->cbxDbFileName->findText(fileName);

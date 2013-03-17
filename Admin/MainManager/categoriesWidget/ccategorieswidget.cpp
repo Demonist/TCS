@@ -44,7 +44,6 @@ void CCategoriesWidget::updateData()
 	}
 }
 
-
 void CCategoriesWidget::on_tbnCategoriesAdd_clicked()
 {
 	CCategoryDialog categoriesDialog(mConnectionName, this);

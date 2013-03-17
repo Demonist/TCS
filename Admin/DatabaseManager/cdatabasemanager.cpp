@@ -77,6 +77,8 @@ CDatabaseManager::~CDatabaseManager()
 
 void CDatabaseManager::connectingToFile(const QString &fileName)
 {
+	mServer = false;
+
 	QFileInfo fileInfo(fileName);
 	QString text;
 	if(fileInfo.size() > 0)
@@ -92,6 +94,8 @@ void CDatabaseManager::connectingToFile(const QString &fileName)
 
 void CDatabaseManager::connectingToHost()
 {
+	mServer = true;
+
 	ui->stackedWidget->setCurrentIndexAnimatedHorizontal(1);
 
 	showDatabases();
@@ -99,6 +103,8 @@ void CDatabaseManager::connectingToHost()
 
 void CDatabaseManager::connectingToDatabase(const QString &databaseName)
 {
+	mServer = true;
+
 	ui->lDatabase->setText(tr("База данных: %1").arg(databaseName));
 
 	ui->stackedWidget->setCurrentIndexAnimatedHorizontal(2);
@@ -158,8 +164,16 @@ void CDatabaseManager::on_pbnClear_clicked()
 		if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите очистить таблицу '%1'?").arg(selected->text()), QMessageBox::Yes, QMessageBox::No))
 		{
 			QSqlQuery query(QSqlDatabase::database(mConnectionName));
-			if(!query.exec("TRUNCATE TABLE `" + selected->text() + "`;"))
-				qDebug(qPrintable(query.lastError().text()));
+			if(mServer)
+			{
+				if(!query.exec("TRUNCATE TABLE `" + selected->text() + "`;"))
+					qDebug(qPrintable(query.lastError().text()));
+			}
+			else
+			{
+				if(!query.exec("DELETE FROM`" + selected->text() + "` WHERE 1;"))
+					qDebug(qPrintable(query.lastError().text()));
+			}
 		}
 	}
 }
@@ -189,8 +203,16 @@ void CDatabaseManager::on_pbnClearAll_clicked()
 	{
 		QSqlQuery query(QSqlDatabase::database(mConnectionName));
 		for(int i = 0; i < ui->lwTables->count(); i++)
-			if(!query.exec("TRUNCATE TABLE `" + ui->lwTables->item(i)->text() + "`;"))
-				qDebug(qPrintable(query.lastError().text()));
+			if(mServer)
+			{
+				if(!query.exec("TRUNCATE TABLE `" + ui->lwTables->item(i)->text() + "`;"))
+					qDebug(qPrintable(query.lastError().text()));
+			}
+			else
+			{
+				if(!query.exec("DELETE FROM `" + ui->lwTables->item(i)->text() + "` WHERE 1;"))
+					qDebug(qPrintable(query.lastError().text()));
+			}
 	}
 }
 
@@ -212,11 +234,9 @@ void CDatabaseManager::on_pbnDeleteAll_clicked()
 
 void CDatabaseManager::on_pbnCreateTables_clicked()
 {
-	QSqlDatabase db = QSqlDatabase::database(mConnectionName);
-	QSqlQuery query(db);
-	const bool isServer = db.driverName() == "QMYSQL";
-	const QString autoincExpr = isServer ? "AUTO_INCREMENT PRIMARY KEY, " : "PRIMARY KEY AUTOINCREMENT, ";   //Выражение автоинкремента меняется в зависимости от драйвера базы днных.
-	const QString tableTypeExpr = isServer ? ") ENGINE=InnoDB DEFAULT CHARSET=utf8;" : ");";
+	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+	const QString autoincExpr = mServer ? "AUTO_INCREMENT PRIMARY KEY, " : "PRIMARY KEY AUTOINCREMENT, ";   //Выражение автоинкремента меняется в зависимости от драйвера базы днных.
+	const QString tableTypeExpr = mServer ? ") ENGINE=InnoDB DEFAULT CHARSET=utf8;" : ");";
 
 	//tables:
 
@@ -432,8 +452,8 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 	//removing triggers:
 
 	QList<QString> triggers;
-	const QString isExistTriggerExpr = isServer ? "" : "IF EXISTS";
-	if(isServer)
+	const QString isExistTriggerExpr = mServer ? "" : "IF EXISTS";
+	if(mServer)
 	{
 		if(query.exec("SHOW TRIGGERS;"))
 		{
@@ -454,7 +474,7 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 	//triggers:
 
 	QString triggersError;
-	const QString nowExpr = isServer ? "NOW()" : "datetime('now')";
+	const QString nowExpr = mServer ? "NOW()" : "datetime('now')";
 
 	if(!query.exec("CREATE TRIGGER on_deleteUsers BEFORE DELETE ON Users"
 				   " FOR EACH ROW BEGIN"
@@ -493,7 +513,7 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 		triggersError.append("on_deletePlaces\n");
 	}
 
-	if(isServer)
+	if(mServer)
 	{
 		if(!query.exec("CREATE TRIGGER on_insertTickets BEFORE INSERT ON Tickets"
 					   " FOR EACH ROW BEGIN"

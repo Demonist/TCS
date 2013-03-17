@@ -10,6 +10,7 @@ class CDatabaseConnectionExtWidget : public CDataBaseConnectionWidget
 	Q_OBJECT
 protected:
 	void processConnecting();
+	QString selectDatabaseFile();
 
 public:
 	explicit CDatabaseConnectionExtWidget(QWidget *parent = 0);

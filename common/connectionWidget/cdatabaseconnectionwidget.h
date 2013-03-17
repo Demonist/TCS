@@ -11,9 +11,9 @@ class CDataBaseConnectionWidget;
 
 /**
 Виджет полдключения к базе данных.
-Данные класс @b НЕ является менеджером подключений. Т.е. он не отвечает за закрытие подключения.
+Данные класс \b НЕ является менеджером подключений. Т.е. он не отвечает за закрытие подключения.
 
-@author Demonist
+\author Demonist
 */
 class CDataBaseConnectionWidget : public QWidget
 {
@@ -36,6 +36,7 @@ protected:
 	//methods:
 protected:
 	virtual void processConnecting();
+	virtual QString selectDatabaseFile();
 
 public:
 	explicit CDataBaseConnectionWidget(QWidget *parent = 0);
