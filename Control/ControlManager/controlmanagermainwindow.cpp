@@ -118,7 +118,7 @@ void ControlManagerMainWindow::connected(QString connectionName)
                 query.prepare("SELECT title, performer, dateTime FROM Actions");
                 if(query.exec() && query.first())
                 {
-                   ui->stackedWidget->setCurrentIndex(1);
+				   ui->stackedWidget->slideHorizontalNext();
                    ui->groupBox->setTitle(tr("База данных концерта: ") + query.value(0).toString() + tr(", Исполнитель: ") + query.value(1).toString() + tr(", Дата проведения концерта: ") + query.value(2).toString());
                    ui->aAddThisDB->setEnabled(true);
                 }

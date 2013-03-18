@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CControlUpdateDBase</class>
+ <widget class="QDialog" name="CControlUpdateDBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>504</width>
+    <height>346</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QStackedWidget" name="stackedWidget">
+     <widget class="CDataBaseConnectionWidget" name="page"/>
+     <widget class="QWidget" name="page_2"/>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CDataBaseConnectionWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">cdatabaseconnectionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

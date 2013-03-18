@@ -20,15 +20,20 @@ SOURCES += main.cpp\
     ../../common/ticketIdentifier/ean13.cpp \
     ../../common/global.cpp \
     ../../common/connectionWidget/cdatabaseconnectionwidget.cpp \
+    ccontrolupdatedbase.cpp \
+    ../../common/canimatedstackedwidget.cpp
 
 HEADERS  += controlmanagermainwindow.h \
     ../../common/global.h \
     ../../common/ticketIdentifier/cticketidentifier.h \
     ../../common/ticketIdentifier/ean13.h \
     ../../common/connectionWidget/cdatabaseconnectionwidget.h \
+    ccontrolupdatedbase.h \
+    ../../common/canimatedstackedwidget.h
 
 FORMS    += controlmanagermainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
+    ccontrolupdatedbase.ui
 
 RESOURCES += \
     ../../common/connectionWidget/connectionwidget_res.qrc
