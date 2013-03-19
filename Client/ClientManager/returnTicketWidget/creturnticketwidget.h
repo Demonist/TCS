@@ -38,6 +38,7 @@ private:
 	int mPenalty;
 	int mClientId;
 	int mActionId;
+	int mPlaceSchemeId;
 };
 
 #endif // CRETURNTICKETWIDGET_H

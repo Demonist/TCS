@@ -98,7 +98,7 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 				uint payment = 0;
 				int price;
 				mTicketId = query.value(0).toInt();
-				int placeSchemeId = query.value(1).toInt();
+				mPlaceSchemeId = query.value(1).toInt();
 				mClientId = query.value(2).toInt();
 				mActionId = query.value(3).toInt();
 				ui->leAction->setText(query.value(4).toString());
@@ -107,7 +107,7 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 				ui->leDateTime->setText(query.value(6).toDateTime().toString("dd.MM.yyyy hh:mm"));
 				ui->lePlace->setText(query.value(9).toString() + " (" + query.value(10).toString() + ')');
 
-				if(placeSchemeId == 0)
+				if(mPlaceSchemeId == 0)
 				{
 					ui->lePriceGroup->setText(tr("Фан-зона"));
 					ui->lePrice->setText(tr("%1 руб.").arg(query.value(7).toString()));
@@ -135,9 +135,9 @@ void CReturnTicketWidget::on_leIdentifier_returnPressed()
 								  " ActionPriceGroups.id = ActionScheme.id_priceGroup AND"
 								  " PlaceSchemes.id = :placeId2"
 								  ";");
-					query.bindValue(":placeId", placeSchemeId);
+					query.bindValue(":placeId", mPlaceSchemeId);
 					query.bindValue(":actId", mActionId);
-					query.bindValue(":placeId2", placeSchemeId);
+					query.bindValue(":placeId2", mPlaceSchemeId);
 					if(query.exec() && query.first())
 					{
 						ui->lePriceGroup->setText(query.value(0).toString());
@@ -209,7 +209,11 @@ void CReturnTicketWidget::on_pbnReturnTicket_clicked()
 {
 	if(mTicketId && QMessageBox::Yes == QMessageBox::question(this, tr("Подтвердите возврат"), tr("Вы действительно хотите возвратить данный билет?"), QMessageBox::Yes, QMessageBox::No))
 	{
-		QSqlQuery query(QSqlDatabase::database(mConnectionName));
+		QSqlDatabase db = QSqlDatabase::database(mConnectionName);
+		db.transaction();
+		bool error = false;
+
+		QSqlQuery query(db);
 		query.prepare("DELETE FROM Tickets WHERE id = :id;");
 		query.bindValue(":id", mTicketId);
 		if(query.exec())
@@ -223,7 +227,40 @@ void CReturnTicketWidget::on_pbnReturnTicket_clicked()
 			query.bindValue(":sellerId", CMarket::instance()->sellerId());
 			query.bindValue(":penalty", mPenalty);
 			if(!query.exec())
+			{
+				error = true;
 				qDebug(qPrintable(query.lastError().text()));
+			}
+		}
+		else
+		{
+			error = true;
+			qDebug(qPrintable(query.lastError().text()));
+		}
+
+		if(!error)
+		{
+			if(mPlaceSchemeId == 0)
+			{
+				query.prepare("UPDATE Actions SET fanCount = fanCount + 1 WHERE id = :id;");
+				query.bindValue(":id", mActionId);
+			}
+			else
+			{
+				query.prepare("UPDATE ActionScheme SET state = :state WHERE id_action = :actId AND id_placeScheme = :placeShemeId;");
+				query.bindValue(":actId", mActionId);
+				query.bindValue(":placeShemeId", mPlaceSchemeId);
+				query.bindValue(":state", Global::SeatFree);
+			}
+			if(!query.exec())
+			{
+				error = true;
+				qDebug(qPrintable(query.lastError().text()));
+			}
+		}
+		if(!error)
+		{
+			db.commit();
 
 			clear();
 			ui->leIdentifier->clear();
@@ -231,6 +268,9 @@ void CReturnTicketWidget::on_pbnReturnTicket_clicked()
 			QMessageBox::information(this, tr("Успех"), tr("Билет успешно возвращен.\nТеперь уничтожте печатную версию билета - она бесполезна."));
 		}
 		else
-			qDebug(qPrintable(query.lastError().text()));
+		{
+			db.rollback();
+			QMessageBox::critical(this, tr("Ошибка"), tr("Произошла ошибка при работе с сервером базы данных. Возврат билета отменен.\nПроверьте подключение к интернету."));
+		}
 	}
 }

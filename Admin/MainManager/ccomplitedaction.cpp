@@ -107,6 +107,7 @@ bool CComplitedAction::toQuery(QSqlQuery *query)
 		QByteArray data;
 		QDataStream stream(&data, QIODevice::WriteOnly);
 		stream << soldedByMarkets << soldedBySellers;
+
 		query->prepare("INSERT INTO ComplitedActions VALUES(NULL, :title, :perforemer, :place, :category, :solded, :returned, :bySite, :sum, :penalty, :data);");
 		query->bindValue(":title", title);
 		query->bindValue(":perforemer", performer);

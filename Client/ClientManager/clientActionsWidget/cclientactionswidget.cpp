@@ -721,7 +721,7 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 							if(i < fanTickets.count() - 1)	//if not last page
 								printer.newPage();
 						}
-						if(seatTickets.count())
+						if(seatTickets.count() && fanTickets.count() > 0)
 							printer.newPage();
 						for(int i = 0; i < seatTickets.count(); i++)
 						{

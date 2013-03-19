@@ -126,7 +126,7 @@ void CAccountingWidget::updateData()
 		qDebug(qPrintable(query.lastError().text()));
 
 	//Завершенные мероприятия
-	if(query.exec("SELECT id, title, performer, place, category, ticketsSolded, ticketsReturned, soldedBySite, income, penalties, data FROM ComplitedActions ORDER BY id DESC;"))
+	if(query.exec("SELECT id, title, performer, place, category, ticketsSolded, ticketsReturned, income, penalties, data FROM ComplitedActions ORDER BY id DESC;"))
 	{
 		ui->twComplitedActions->clear();
 		mComplitedStatistics.clear();
@@ -218,6 +218,7 @@ void CAccountingWidget::on_twComplitedActions_currentItemChanged(QTreeWidgetItem
 
 		const QHash<QString, int> &markets = mComplitedStatistics[index].first;
 		const QHash<QString, int> &selers = mComplitedStatistics[index].second;
+
 		QTreeWidgetItem *item;
 		QList<QString> keys = markets.keys();
 		for(int i = 0; i < keys.count(); i++)

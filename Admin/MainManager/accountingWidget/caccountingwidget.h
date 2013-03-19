@@ -30,7 +30,6 @@ private slots:
 
 private:
     Ui::CAccountingWidget *ui;
-    void sumPriceTicketsForAction();
 	QList<QPair<QHash<QString, int>, QHash<QString, int> > > mActionStatistics;
 	QList<QPair<QHash<QString, int>, QHash<QString, int> > > mComplitedStatistics;
 };
