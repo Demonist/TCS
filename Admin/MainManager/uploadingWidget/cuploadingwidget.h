@@ -5,6 +5,7 @@
 #include <QtSql>
 #include "cdatedialog.h"
 #include "cabstractcommonwidget.h"
+#include "uploading.h"
 
 namespace Ui {
 class CUploadingWidget;

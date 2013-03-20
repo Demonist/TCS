@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtSql>
 #include "cticketidentifier.h"
+#include "ccontrolupdatedbase.h"
 
 namespace Ui {
 class ControlManagerMainWindow;
@@ -20,6 +21,7 @@ public:
 private slots:
     void on_leGetBarcode_returnPressed();
     void connected(QString connectionName);
+	void importDataBase();
 
 private:
     Ui::ControlManagerMainWindow *ui;

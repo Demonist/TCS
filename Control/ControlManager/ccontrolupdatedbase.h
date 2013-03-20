@@ -1,7 +1,8 @@
 #ifndef CCONTROLUPDATEDBASE_H
 #define CCONTROLUPDATEDBASE_H
 
-#include <QDialog>
+#include <QtGui>
+#include "uploading.h"
 
 namespace Ui {
 class CControlUpdateDBase;
@@ -17,6 +18,11 @@ public:
 	
 private:
 	Ui::CControlUpdateDBase *ui;
+	QString mConnectionName;
+
+private slots:
+	void connected(QString connectionName);
+	void on_pbnExport_clicked();
 };
 
 #endif // CCONTROLUPDATEDBASE_H

@@ -63,7 +63,8 @@ SOURCES += main.cpp\
     startingDialog/cadminstartingdialog.cpp \
     admin.cpp \
     usersWidget/cuseradmindialog.cpp \
-    ccomplitedaction.cpp
+    ccomplitedaction.cpp \
+    ../../common/uploading.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -104,7 +105,8 @@ HEADERS  += mainwindow.h \
     startingDialog/cadminstartingdialog.h \
     admin.h \
     usersWidget/cuseradmindialog.h \
-    ccomplitedaction.h
+    ccomplitedaction.h \
+    ../../common/uploading.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \

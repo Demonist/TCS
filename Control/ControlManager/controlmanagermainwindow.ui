@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="CAnimatedStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -98,7 +98,7 @@
     <property name="title">
      <string>Файл</string>
     </property>
-    <addaction name="aAddThisDB"/>
+    <addaction name="aImportDB"/>
     <addaction name="aExit"/>
    </widget>
    <addaction name="menu"/>
@@ -108,12 +108,12 @@
     <string>Открыть новый файл БД</string>
    </property>
   </action>
-  <action name="aAddThisDB">
+  <action name="aImportDB">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>Обновить текущий файл БД</string>
+    <string>Импорт базы данных</string>
    </property>
   </action>
   <action name="aExit">

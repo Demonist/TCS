@@ -11,6 +11,7 @@ ControlManagerMainWindow::ControlManagerMainWindow(QWidget *parent) :
     connect(ui->aExit, SIGNAL(activated()), this, SLOT(close()));
     connect(ui->wConnection, SIGNAL(connectedToDatabase(QString)), this, SLOT(connected(QString)));
 	connect(ui->wConnection, SIGNAL(closed()), this, SLOT(close()));
+	connect(ui->aImportDB, SIGNAL(activated()), this, SLOT(importDataBase()));
     ui->stackedWidget->setCurrentIndex(0);
 }
 
@@ -120,9 +121,14 @@ void ControlManagerMainWindow::connected(QString connectionName)
                 {
 				   ui->stackedWidget->slideHorizontalNext();
                    ui->groupBox->setTitle(tr("База данных концерта: ") + query.value(0).toString() + tr(", Исполнитель: ") + query.value(1).toString() + tr(", Дата проведения концерта: ") + query.value(2).toString());
-                   ui->aAddThisDB->setEnabled(true);
                 }
             }
         }
     }
+}
+
+void ControlManagerMainWindow::importDataBase()
+{
+	CControlUpdateDBase cudb;
+	cudb.exec();
 }

@@ -11,16 +11,63 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Импорт базы данных</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item row="0" column="0">
-    <widget class="QStackedWidget" name="stackedWidget">
-     <widget class="CDataBaseConnectionWidget" name="page"/>
-     <widget class="QWidget" name="page_2"/>
+    <widget class="CAnimatedStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="page">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="CDataBaseConnectionWidget" name="wConnection" native="true"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QTreeWidget" name="twSelectAction">
+         <column>
+          <property name="text">
+           <string>Категории</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>ID</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbnExport">
+           <property name="text">
+            <string>Экспорт базы</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -30,6 +77,12 @@
    <class>CDataBaseConnectionWidget</class>
    <extends>QWidget</extends>
    <header location="global">cdatabaseconnectionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CAnimatedStackedWidget</class>
+   <extends>QStackedWidget</extends>
+   <header location="global">canimatedstackedwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

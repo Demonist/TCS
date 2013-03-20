@@ -13,6 +13,7 @@ INCLUDEPATH += ../../common/ \
                 ../../common/ticketIdentifier/ \
                 ../../common/commonWidget/ \
                 ../../common/connectionWidget/ \
+				../../common/uploading/ \
 
 SOURCES += main.cpp\
         controlmanagermainwindow.cpp \
@@ -21,7 +22,8 @@ SOURCES += main.cpp\
     ../../common/global.cpp \
     ../../common/connectionWidget/cdatabaseconnectionwidget.cpp \
     ccontrolupdatedbase.cpp \
-    ../../common/canimatedstackedwidget.cpp
+    ../../common/canimatedstackedwidget.cpp \
+    ../../common/uploading.cpp
 
 HEADERS  += controlmanagermainwindow.h \
     ../../common/global.h \
@@ -29,7 +31,8 @@ HEADERS  += controlmanagermainwindow.h \
     ../../common/ticketIdentifier/ean13.h \
     ../../common/connectionWidget/cdatabaseconnectionwidget.h \
     ccontrolupdatedbase.h \
-    ../../common/canimatedstackedwidget.h
+    ../../common/canimatedstackedwidget.h \
+    ../../common/uploading.h
 
 FORMS    += controlmanagermainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
