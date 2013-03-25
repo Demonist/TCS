@@ -71,15 +71,18 @@ void CControlUpdateDBase::on_pbnExport_clicked()
 		if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите экспортировать базу?"), QMessageBox::Yes, QMessageBox::No))
 		{
 			QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия "), QDir::currentPath(), tr("Файл базы данных(.db)"));
-			Uploading *upl = new Uploading(mConnectionName, pth, ui->twSelectAction->currentItem()->text(ID));
-			if(upl->openConnection())
+			if(!pth.isEmpty())
 			{
-				upl->uploadingProcess();
-				QMessageBox::information(this, tr("Выгрузка успешно завершена"), tr("Выгрузка в файл ") + tr(" успешно завершена\nБаза валидна."));
-			}
-			else
-			{
-				QMessageBox::critical(this, tr("База не валидна!"), tr("Для данного мероприятия исходная база данных не валидна.\nНайдено совпадение штрихкодов.\nПроверьте базу данных на совпадение штрихкодов."));
+				Uploading *upl = new Uploading(mConnectionName, pth, ui->twSelectAction->currentItem()->text(ID));
+				if(upl->openConnection())
+				{
+					upl->uploadingProcess();
+					QMessageBox::information(this, tr("Выгрузка успешно завершена"), tr("Выгрузка в файл ") + tr(" успешно завершена\nБаза валидна."));
+				}
+				else
+				{
+					QMessageBox::critical(this, tr("Не удалось открыть базу данных!"), tr("Не удалось открть базу данных."));
+				}
 			}
 		}
 	}

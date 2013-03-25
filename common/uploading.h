@@ -21,7 +21,7 @@ private:
 	QString mConnection;
 	QString mPath;
 	QString mIDAction;
-	bool validateDataBase();
+	//bool validateDataBase();
 
 	
 };

@@ -93,22 +93,21 @@ void CUploadingWidget::on_pbnUploading_clicked()
 	{
 
 		QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия ") + tActionName, QDir::currentPath(), tr("Файл базы данных(.db)"));
-		Uploading *upl = new Uploading(mConnectionName, pth, ui->twActions->currentItem()->text(ID));
-		if(upl->openConnection())
+		Uploading upl(mConnectionName, pth, ui->twActions->currentItem()->text(ID));
+		if(upl.openConnection())
 		{
-			upl->uploadingProcess();
+			upl.uploadingProcess();
 			QMessageBox::information(this, tr("Выгрузка успешно завершена"), tr("Выгрузка в файл ") + tr(" успешно завершена\nБаза валидна."));
 		}
 		else
 		{
-			QMessageBox::critical(this, tr("База не валидна!"), tr("Для данного мероприятия исходная база данных не валидна.\nНайдено совпадение штрихкодов.\nПроверьте базу данных на совпадение штрихкодов."));
+			QMessageBox::critical(this, tr("Не удалось открыть базу данных!"), tr("Не удалось открыть базу данных."));
 		}
 	}
 	else
 	{
 		QMessageBox::critical(this, tr("Ошибка выгрузки"), tr("Не выбрано мероприятие."));
 	}
-	//QSqlDatabase::removeDatabase("uploadingConnection");
 }
 
 void CUploadingWidget::on_tbnSearchClear_clicked()

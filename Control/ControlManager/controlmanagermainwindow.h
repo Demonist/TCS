@@ -22,10 +22,12 @@ private slots:
     void on_leGetBarcode_returnPressed();
     void connected(QString connectionName);
 	void importDataBase();
+	void writeLogFile();
 
 private:
     Ui::ControlManagerMainWindow *ui;
     QString mConnectionName;
+	int itemsCount;
 };
 
 #endif // CONTROLMANAGERMAINWINDOW_H

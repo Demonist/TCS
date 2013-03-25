@@ -64,8 +64,9 @@ void Uploading::createDBScheme()
 
 bool Uploading::openConnection()
 {
-	if(validateDataBase())
-	{
+	//if(validateDataBase())
+	//{
+		//имя подключения в define
 		QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "uploadingConnection");
 		db.setDatabaseName(mPath);
 		if(db.open())
@@ -76,17 +77,17 @@ bool Uploading::openConnection()
 		{
 			return false;
 		}
-	}
+	/*}
 	else
 	{
 		return false;
-	}
+	}*/
 }
 
-bool Uploading::validateDataBase()
+/*bool Uploading::validateDataBase()
 {
 	QSqlQuery vQuery(QSqlDatabase::database(mConnection));
-	vQuery.exec("SELECT COUNT(*) AS mCount FROM Tickets WHERE id_action = " + mIDAction + " GROUP BY identifier ORDER BY mCount DESC");
+	vQuery.exec("SELECT COUNT(id) AS mCount FROM Tickets WHERE id_action = " + mIDAction + " GROUP BY identifier ORDER BY mCount DESC");
 	vQuery.first();
 	if(vQuery.value(0).toInt() > 1)
 	{
@@ -97,11 +98,18 @@ bool Uploading::validateDataBase()
 		return true;
 	}
 
-}
+}*/
 
 void Uploading::uploadingProcess()
 {
 	{
+		QProgressDialog dlg;
+		dlg.setWindowTitle(tr("Название"));
+		dlg.setLabelText(tr("Название"));
+		dlg.setCancelButton(0);
+		dlg.setMinimumDuration(0);
+		dlg.setMaximum(3);
+		dlg.show();
 		QSqlDatabase db = QSqlDatabase::database("uploadingConnection");
 		createDBScheme();
 		QSqlQuery selectDataQuery(QSqlDatabase::database(mConnection));
@@ -125,6 +133,7 @@ void Uploading::uploadingProcess()
 
 			}
 		}
+		dlg.setValue(1);
 		if(selectDataQuery.exec("SELECT * FROM Tickets WHERE id_action = " + mIDAction))
 		{
 			QSqlQuery insertDataQuery(db);
@@ -158,6 +167,7 @@ void Uploading::uploadingProcess()
 				}
 			}
 		}
+		dlg.setValue(2);
 		if(selectDataQuery.exec("SELECT * FROM ReturnedTickets WHERE id_action = " + mIDAction))
 		{
 			QSqlQuery insertDataQuery(db);
@@ -174,6 +184,8 @@ void Uploading::uploadingProcess()
 				insertDataQuery.exec();
 			}
 		}
+		dlg.setValue(3);
+		dlg.close();
 		db.close();
 	}
 	QSqlDatabase::removeDatabase("uploadingConnection");

@@ -99,6 +99,7 @@
      <string>Файл</string>
     </property>
     <addaction name="aImportDB"/>
+    <addaction name="aLogFileWrite"/>
     <addaction name="aExit"/>
    </widget>
    <addaction name="menu"/>
@@ -119,6 +120,11 @@
   <action name="aExit">
    <property name="text">
     <string>Выход</string>
+   </property>
+  </action>
+  <action name="aLogFileWrite">
+   <property name="text">
+    <string>Записать лог-файл</string>
    </property>
   </action>
  </widget>
