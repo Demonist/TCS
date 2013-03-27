@@ -123,6 +123,9 @@
    </property>
   </action>
   <action name="aLogFileWrite">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Записать лог-файл</string>
    </property>
