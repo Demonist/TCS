@@ -23,7 +23,8 @@ INCLUDEPATH += ../../common/ \
         accountingWidget/ \
 		uploadingWidget/ \
 		imageDialog/ \
-		startingDialog/
+		startingDialog/ \
+		advertisementsWidget/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -64,8 +65,8 @@ SOURCES += main.cpp\
     admin.cpp \
     usersWidget/cuseradmindialog.cpp \
     ccomplitedaction.cpp \
-    ../../common/uploading.cpp
-
+    ../../common/uploading.cpp \
+    advertisementsWidget/cadvertisementswidget.cpp
 
 HEADERS  += mainwindow.h \
 	../../common/global.h \
@@ -106,7 +107,8 @@ HEADERS  += mainwindow.h \
     admin.h \
     usersWidget/cuseradmindialog.h \
     ccomplitedaction.h \
-    ../../common/uploading.h
+    ../../common/uploading.h \
+    advertisementsWidget/cadvertisementswidget.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -131,7 +133,8 @@ FORMS    += mainwindow.ui \
     imageDialog/cimagedialog.ui \
     actionsWidget/cfandialog.ui \
     startingDialog/cadminstartingdialog.ui \
-    usersWidget/cuseradmindialog.ui
+    usersWidget/cuseradmindialog.ui \
+    advertisementsWidget/cadvertisementswidget.ui
 
 RESOURCES += \
 	../../common/connectionWidget/connectionwidget_res.qrc \

@@ -2,7 +2,10 @@
 #define CCLIENTACTIONDIALOG_H
 
 #include <QtGui>
+#include <QtSql>
 #include "csourcegraphicsview.h"
+#include "cimages.h"
+#include "cadvertisementitem.h"
 
 namespace Ui {
 	class CClientActionDialog;
@@ -21,14 +24,28 @@ public:
 
 	void setSourceView(CSourceGraphicsView *sourceView);
 
+private slots:
+	void changeItem();
+
 public slots:
 	void setScale(const qreal scale);
 	void drag(int x, int y);
+	void updateAdvertisements(const QString &connectionName);
 	inline void setCanClose(const bool canClose);
+	void show();
+	void showSeats();
+	void showAdvertisements();
 
 private:
 	Ui::CClientActionDialog *ui;
 	bool mCanClose;
+	bool mOnSecondScreen;
+
+	QTimer mAdvertisementTimer;
+	QGraphicsScene mAdvertisementScene;
+	QMutex mAdvertisementMutex;
+	QList<CAdvertisementItem*> mAdvertisementItems;
+	int mAdvertisementItemCurrentIndex;
 };
 
 //inline implementation:

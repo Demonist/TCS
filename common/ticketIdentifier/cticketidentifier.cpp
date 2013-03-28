@@ -106,7 +106,7 @@ CTicketIdentifier CTicketIdentifier::generate()
 {
 	QString identifier = QString::number(qrand()%10000000000);
 	while(identifier.size() < 10)
-		identifier.prepend('0');
+		identifier.prepend(QString::number( 1 + qrand() % 9 ));
 	const char master = 1 + qrand() % 9;
 	const char slave = 10 - master;
 	identifier.insert(2, QString::number(master));

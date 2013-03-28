@@ -32,7 +32,12 @@ CAbstractGraphicsItem::CAbstractGraphicsItem() :
 
 CAbstractGraphicsItem::~CAbstractGraphicsItem()
 {
-
+	mScaleAnimation.stop();
+	mOpacityAnimation.stop();
+	mBrushColorAnimation.stop();
+	mPenColorAnimation.stop();
+	mPenWidthAnimation.stop();
+	mBlurAnimation.stop();
 }
 
 void CAbstractGraphicsItem::setScaleAnimated(const qreal newScale, const int durationMs)

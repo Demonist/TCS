@@ -30,12 +30,14 @@ private slots:
 	void showLeftPanel();
 	void on_listWidget_currentRowChanged(int currentRow);
 	void on_pbnChangeUser_clicked();
+	void updateAdvertisement();
 
 private:
 	Ui::CClientMainWindow *ui;
 	QString mConnectionName;
 	CClientActionDialog mActionDialog;
 	bool mCanClose;
+	QTimer mAdvertisementUpdateTimer;
 };
 
 #endif // CCLIENTMAINWINDOW_H

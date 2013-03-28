@@ -13,6 +13,7 @@ void CClientMainWindow::closeEvent(QCloseEvent *event)
 
 	if(QMessageBox::Yes == QMessageBox::question(this, tr("Хотите выйти?"), tr("Вы действительно хотите завершить работу данной программы?"), QMessageBox::Yes, QMessageBox::No))
 	{
+		mAdvertisementUpdateTimer.stop();
 		mActionDialog.setCanClose(true);
 		mActionDialog.close();
 		delete CImages::instance();
@@ -56,7 +57,15 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 		ui->leUser->setCursorPosition(0);
 
 		mActionDialog.setSourceView(ui->wActions->view());
-		mActionDialog.showMinimized();
+		mActionDialog.show();
+		connect(ui->wActions, SIGNAL(hideLeftPanel()), &mActionDialog, SLOT(showSeats()));
+		connect(ui->wActions, SIGNAL(showLeftPanel()), &mActionDialog, SLOT(showAdvertisements()));
+
+		mAdvertisementUpdateTimer.setSingleShot(false);
+		mAdvertisementUpdateTimer.setInterval(600000);	// 10 min.
+		connect(&mAdvertisementUpdateTimer, SIGNAL(timeout()), this, SLOT(updateAdvertisement()));
+		mAdvertisementUpdateTimer.start();
+		updateAdvertisement();
 
 		showMaximized();
 		mCanClose = false;
@@ -113,4 +122,9 @@ void CClientMainWindow::on_pbnChangeUser_clicked()
 		ui->leUser->setText(CMarket::instance()->seller());
 		ui->leUser->setCursorPosition(0);
 	}
+}
+
+void CClientMainWindow::updateAdvertisement()
+{
+	mActionDialog.updateAdvertisements(mConnectionName);
 }

@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
 		ui->wMarkets->setConnectionName(mConnectionName);
 		ui->wAccounting->setConnectionName(mConnectionName);
 		ui->wUploading->setConnectionName(mConnectionName);
+		ui->wAdvertisements->setConnectionName(mConnectionName);
 
 		CImages::instance(mConnectionName);
 
@@ -57,6 +58,7 @@ void MainWindow::on_lwSettings_currentRowChanged(int currentRow)
 		case 5: ui->wMarkets->updateData(); break;
 		case 6: ui->wAccounting->updateData(); break;
 		case 7: ui->wUploading->updateData(); break;
+		case 8: ui->wAdvertisements->updateData(); break;
 	}
 
 	ui->swSettings->setCurrentIndexAnimatedVertical(currentRow);

@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtSql>
 #include "cabstractcommonwidget.h"
+#include "global.h"
 
 namespace Ui {
 	class CClientReservationWidget;
@@ -24,6 +25,10 @@ private slots:
 	void on_tbnClearClient_clicked();
 	void on_leClient_textChanged(const QString &arg1);
 	void on_pbnReservationManagement_clicked();
+	void on_pbnSelectAll_clicked();
+	void on_pbnUnreservate_clicked();
+	void on_pbnSoldReservated_clicked();
+	void on_pbnBackToClients_clicked();
 
 private:
 	Ui::CClientReservationWidget *ui;

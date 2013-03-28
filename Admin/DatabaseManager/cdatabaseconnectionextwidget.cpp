@@ -123,14 +123,17 @@ void CDatabaseConnectionExtWidget::processConnecting()
 QString CDatabaseConnectionExtWidget::selectDatabaseFile()
 {
 	QString ret = QFileDialog::getSaveFileName(this, tr("Укажите файл для создания базы данных"), "", tr("Файл базы данных (*.db);;Все файлы (*.*)"));
-	QString suffix = QFileInfo(ret).completeSuffix();
-	if(suffix != "db")
+	if(ret.isEmpty() == false)
 	{
-		ret.chop(suffix.size());
-		if(ret.endsWith('.') == false)
-			ret.append(".db");
-		else
-			ret.append("db");
+		QString suffix = QFileInfo(ret).completeSuffix();
+		if(suffix != "db")
+		{
+			ret.chop(suffix.size());
+			if(ret.endsWith('.') == false)
+				ret.append(".db");
+			else
+				ret.append("db");
+		}
 	}
 	return ret;
 }

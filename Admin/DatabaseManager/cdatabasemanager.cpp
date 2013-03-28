@@ -449,6 +449,14 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 		tablesError.append("ComplitedActions\n");
 	}
 
+	if(!query.exec("CREATE TABLE IF NOT EXISTS Advertisements( "
+				   "id                   INTEGER NOT NULL"
+				   + tableTypeExpr))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		tablesError.append("Advertisements\n");
+	}
+
 	//removing triggers:
 
 	QList<QString> triggers;
@@ -465,7 +473,7 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 	}
 	else
 	{
-		triggers << "on_deleteUsers" << "on_deleteActions" << "on_deletePlaces" << "on_insertTickets" << "on_insertReturnedTickets" << "on_insertStatistics";
+		triggers << "on_deleteUsers" << "on_deleteActions" << "on_deletePlaces" << "on_insertTickets" << "on_insertReturnedTickets" << "on_insertStatistics" << "on_deleteAdvertisements";
 	}
 	for(int i = 0 ; i < triggers.count(); i++)
 		if(!query.exec("DROP TRIGGER " + isExistTriggerExpr + " `" + triggers[i] + "`;"))
@@ -511,6 +519,16 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 	{
 		qDebug(qPrintable(query.lastError().text()));
 		triggersError.append("on_deletePlaces\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteAdvertisements BEFORE DELETE ON Advertisements"
+				   " FOR EACH ROW BEGIN"
+				   "	DELETE FROM Images WHERE id = OLD.id;"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteAdvertisements\n");
 	}
 
 	if(mServer)

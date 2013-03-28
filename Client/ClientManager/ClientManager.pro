@@ -45,7 +45,8 @@ SOURCES += main.cpp\
     ../../common/cstatistics.cpp \
     cmarket.cpp \
     clientReservationWidget/cclientreservationwidget.cpp \
-    startingDialog/cstartingdialog.cpp
+    startingDialog/cstartingdialog.cpp \
+    clientActionsWidget/cadvertisementitem.cpp
 
 
 HEADERS  += cclientmainwindow.h \
@@ -71,7 +72,8 @@ HEADERS  += cclientmainwindow.h \
     ../../common/cstatistics.h \
     cmarket.h \
     clientReservationWidget/cclientreservationwidget.h \
-    startingDialog/cstartingdialog.h
+    startingDialog/cstartingdialog.h \
+    clientActionsWidget/cadvertisementitem.h
 
 
 FORMS    += cclientmainwindow.ui \

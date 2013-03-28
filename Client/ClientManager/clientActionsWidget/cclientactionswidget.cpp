@@ -405,7 +405,7 @@ void CClientActionsWidget::updateData()
 			////TODO: Добавить обработчик ошибок.
 		}
 
-		query.prepare("SELECT COUNT(id_placeScheme) FROM ActionScheme WHERE id_action = :id AND state = :state;");
+		query.prepare("SELECT COUNT(id_placeScheme) FROM ActionScheme WHERE id_action = :id AND state = :state AND id_priceGroup > 0;");
 		query.bindValue(":state", Global::SeatFree);
 		for(int i = 0; i < ui->twActions->topLevelItemCount(); i++)
 		{
@@ -769,6 +769,7 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 
 						emit showLeftPanel();
 						ui->stackedWidget->setCurrentIndexAnimatedHorizontal(0);
+						updateData();
 					}
 				}
 				else
