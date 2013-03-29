@@ -27,6 +27,7 @@ private slots:
 	void on_cbxActions_currentIndexChanged(int index);
 	void on_twActions_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 	void on_twComplitedActions_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+	void on_pbnExport_clicked();
 
 private:
     Ui::CAccountingWidget *ui;

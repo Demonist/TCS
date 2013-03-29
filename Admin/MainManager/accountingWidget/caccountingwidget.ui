@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>658</width>
-    <height>591</height>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -144,7 +144,7 @@
          </column>
          <column>
           <property name="text">
-           <string>Продано на сумму</string>
+           <string>Общая прибыль</string>
           </property>
          </column>
          <column>
@@ -232,128 +232,168 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
        <item row="0" column="0">
-        <widget class="QTreeWidget" name="twComplitedActions">
-         <property name="rootIsDecorated">
-          <bool>false</bool>
+        <widget class="QSplitter" name="splitter_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <property name="itemsExpandable">
-          <bool>false</bool>
-         </property>
-         <column>
-          <property name="text">
-           <string>id</string>
+         <widget class="QTreeWidget" name="twComplitedActions">
+          <property name="rootIsDecorated">
+           <bool>false</bool>
           </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Мероприятие</string>
+          <property name="itemsExpandable">
+           <bool>false</bool>
           </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Испольнитель</string>
+          <column>
+           <property name="text">
+            <string>id</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Мероприятие</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Испольнитель</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Площадка</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Категория</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Продано билетов</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Возвращено билетов</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Оющая прибыль</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Прибыль с неустоек</string>
+           </property>
+          </column>
+         </widget>
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Площадка</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Категория</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Продано билетов</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Возвращено билетов</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Продано на сумму</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Прибыль с неустоек</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>Продажи торговых точек</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="0">
-           <widget class="QTreeWidget" name="twComplitedMarkets">
-            <property name="rootIsDecorated">
-             <bool>false</bool>
-            </property>
-            <property name="itemsExpandable">
-             <bool>false</bool>
-            </property>
-            <column>
-             <property name="text">
-              <string>Площадка</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Продано</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>Продажи кассиров</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
-           <widget class="QTreeWidget" name="twComplitedSellers">
-            <property name="rootIsDecorated">
-             <bool>false</bool>
-            </property>
-            <property name="itemsExpandable">
-             <bool>false</bool>
-            </property>
-            <column>
-             <property name="text">
-              <string>Кассир</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Продано</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
+          <widget class="QGroupBox" name="groupBox_4">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="title">
+            <string>Продажи торговых точек</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="QTreeWidget" name="twComplitedMarkets">
+              <property name="rootIsDecorated">
+               <bool>false</bool>
+              </property>
+              <property name="itemsExpandable">
+               <bool>false</bool>
+              </property>
+              <column>
+               <property name="text">
+                <string>Площадка</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Продано</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QGroupBox" name="groupBox_5">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="title">
+               <string>Продажи кассиров</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_7">
+               <item row="0" column="0">
+                <widget class="QTreeWidget" name="twComplitedSellers">
+                 <property name="rootIsDecorated">
+                  <bool>false</bool>
+                 </property>
+                 <property name="itemsExpandable">
+                  <bool>false</bool>
+                 </property>
+                 <column>
+                  <property name="text">
+                   <string>Кассир</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Продано</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pbnExport">
+                <property name="text">
+                 <string>Экспорт</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="../main_res.qrc">
+                  <normaloff>:/images/export.png</normaloff>:/images/export.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -362,6 +402,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../main_res.qrc"/>
+  <include location="../main_res.qrc"/>
+ </resources>
  <connections/>
 </ui>

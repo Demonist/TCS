@@ -246,3 +246,70 @@ void CAccountingWidget::on_twComplitedActions_currentItemChanged(QTreeWidgetItem
 	else
 		qDebug("Complited statistic alarme!");
 }
+
+void CAccountingWidget::on_pbnExport_clicked()
+{
+	if(ui->twComplitedActions->topLevelItemCount() == 0)
+	{
+		QMessageBox::warning(this, tr("Внимание"), tr("Нет данных для экспорта."));
+		return;
+	}
+
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Укажите имя файла для сохранения"), "", tr("Файлы CSV (*.csv)"));
+	if(fileName.isEmpty() == false)
+	{
+		QFileInfo fileInfo(fileName);
+		if(fileInfo.completeSuffix() != "csv")
+			fileName = fileInfo.absolutePath() + fileInfo.baseName() + ".csv";
+		QFile file(fileName);
+		if(file.open(QFile::WriteOnly))
+		{
+			file.write(tr("\"Мероприятие\",\"Исполнитель\",\"Площадка\",\"Категория\",\"Продано билетов\",\"Возвращено билетов\",\"Общая прибыль\",\"Прибыль с неустоек\"\n").toLocal8Bit());
+			for(int i = 0; i < ui->twComplitedActions->topLevelItemCount(); i++)
+			{
+				QTreeWidgetItem *item = ui->twComplitedActions->topLevelItem(i);
+				file.write(
+							tr("\"%1\",\"%2\",\"%3\",\"%4\",\"%5\",\"%6\",\"%7\",\"%8\"\n")
+							.arg(item->text(COMPLITED_TITLE))
+							.arg(item->text(COMPLITED_PERFORMER))
+							.arg(item->text(COMPLITED_PLACE))
+							.arg(item->text(COMPLITED_CATEGORY))
+							.arg(item->text(COMPLITED_SOLDED))
+							.arg(item->text(COMPLITED_RETURNED))
+							.arg(item->text(COMPLITED_INCOME))
+							.arg(item->text(COMPLITED_PENALTY))
+							.toLocal8Bit()
+							);
+			}
+			file.write("\n");
+
+			file.write(tr("\"Продажи торговых точек\"\n\"Торговая площадка\",\"Продано\"\n").toLocal8Bit());
+			for(int i = 0; i < ui->twComplitedMarkets->topLevelItemCount(); i++)
+			{
+				QTreeWidgetItem *item = ui->twComplitedMarkets->topLevelItem(i);
+				file.write(
+							tr("\"%1\",\"%2\"\n")
+							.arg(item->text(0))
+							.arg(item->text(1))
+							.toLocal8Bit()
+							);
+			}
+			file.write("\n");
+
+			file.write(tr("\"Продажи кассиров\"\n\"Кассир\",\"Продано\"\n").toLocal8Bit());
+			for(int i = 0; i < ui->twComplitedSellers->topLevelItemCount(); i++)
+			{
+				QTreeWidgetItem *item = ui->twComplitedSellers->topLevelItem(i);
+				file.write(
+							tr("\"%1\",\"%2\"\n")
+							.arg(item->text(0))
+							.arg(item->text(1))
+							.toLocal8Bit()
+							);
+			}
+			file.write("\n");
+
+			file.close();
+		}
+	}
+}

@@ -15,5 +15,6 @@
         <file>images/categoriesImages/imUploading.png</file>
         <file>images/search.png</file>
         <file>images/categoriesImages/imAdvertisements.png</file>
+        <file>images/export.png</file>
     </qresource>
 </RCC>
