@@ -1,6 +1,11 @@
 #include "controlmanagermainwindow.h"
 #include "ui_controlmanagermainwindow.h"
 
+#define SEAT	0
+#define ROW		1
+#define IDENT	2
+#define INFO	3
+
 ControlManagerMainWindow::ControlManagerMainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::ControlManagerMainWindow)
@@ -30,7 +35,7 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 		CTicketIdentifier *ticketIdentifier = new CTicketIdentifier(ui->leGetBarcode->text());
 		QString identifier = ticketIdentifier->identifier();
 		QSqlQuery query(db);
-		query.prepare("SELECT id FROM Tickets WHERE identifier = :identifier AND passedFlag = 'false'");
+		query.prepare("SELECT id, id_placeScheme FROM Tickets WHERE identifier = :identifier AND passedFlag = 'false'");
 		query.bindValue(":identifier", identifier);
 		if(query.exec())
 		{
@@ -40,47 +45,101 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 				QTreeWidgetItem *item = new QTreeWidgetItem;
 				if(item)
 				{
-					item->setText(0, ui->leGetBarcode->text() + tr(" - Билет валиден"));
-					item->setBackgroundColor(0, QColor(131, 255, 131));
-					ui->twBarcodeControl->addTopLevelItem(item);
-					ui->twBarcodeControl->scrollToBottom();
-					QSqlQuery setTrueFlag(db);
-					setTrueFlag.exec("UPDATE Tickets SET passedFlag = 'true' WHERE id = " + query.value(0).toString());
+					QSqlQuery selectScheme(db);
+					selectScheme.prepare("SELECT seatNumber, row FROM PlaceSchemes WHERE id = :id");
+					selectScheme.bindValue(":id", query.value(1).toString());
+					if(selectScheme.exec())
+					{
+						if(selectScheme.first())
+						{
+
+							item->setText(SEAT, selectScheme.value(0).toString());
+							item->setText(ROW, selectScheme.value(1).toString());
+						}
+						else
+						{
+							item->setText(SEAT, tr("Фанзона"));
+							item->setText(ROW, tr("Фанзона"));
+						}
+						item->setText(IDENT, ui->leGetBarcode->text());
+						item->setText(INFO, tr("Билет валиден"));
+						item->setBackgroundColor(SEAT, QColor(131, 255, 131));
+						item->setBackgroundColor(ROW, QColor(131, 255, 131));
+						item->setBackgroundColor(IDENT, QColor(131, 255, 131));
+						item->setBackgroundColor(INFO, QColor(131, 255, 131));
+						ui->twBarcodeControl->addTopLevelItem(item);
+						ui->twBarcodeControl->scrollToBottom();
+						QSqlQuery setTrueFlag(db);
+						setTrueFlag.exec("UPDATE Tickets SET passedFlag = 'true' WHERE id = " + query.value(0).toString());
+					}
 				}
 			}
 			else
 			{
-				query.prepare("SELECT id, id_client FROM Tickets WHERE identifier = :identifier AND passedFlag = 'true'");
+				query.prepare("SELECT id, id_placeScheme, id_client FROM Tickets WHERE identifier = :identifier AND passedFlag = 'true'");
 				query.bindValue(":identifier", identifier);
 				if(query.exec())
 				{
 					if(query.first())
 					{
-						ui->wOutResult->setStyleSheet("background: yellow");
+						ui->wOutResult->setStyleSheet("background: red");
 						QTreeWidgetItem *item = new QTreeWidgetItem;
 						if(item)
 						{
-							if(query.value(1).isNull())
+							QSqlQuery selectScheme(db);
+							selectScheme.prepare("SELECT seatNumber, row FROM PlaceSchemes WHERE id = :id");
+							selectScheme.bindValue(":id", query.value(1).toString());
+							if(selectScheme.exec())
 							{
-								item->setText(0, ui->leGetBarcode->text() + tr(" - Попытка повторного прохода"));
-								item->setBackgroundColor(0, QColor(255, 240, 40));
-								ui->twBarcodeControl->addTopLevelItem(item);
-								ui->twBarcodeControl->scrollToBottom();
-							}
-							else
-							{
-								QSqlQuery clientsquery(db);
-								clientsquery.prepare("SELECT login, name FROM Clients WHERE id = :id");
-								clientsquery.bindValue(":id", query.value(1).toString());
-								if(clientsquery.exec() && clientsquery.first())
+								if(query.isNull(2))
 								{
-									item->setText(0, ui->leGetBarcode->text() + tr(" - Попытка повторного прохода. Билет приобретен клиентом ") + clientsquery.value(1).toString() + tr(", его логин - ") + clientsquery.value(0).toString());
-									item->setBackgroundColor(0, QColor(255, 240, 40));
+									if(selectScheme.first())
+									{
+										item->setText(SEAT, selectScheme.value(1).toString());
+										item->setText(ROW, selectScheme.value(2).toString());
+									}
+									else
+									{
+										item->setText(SEAT, tr("Фанзона"));
+										item->setText(ROW, tr("Фанзона"));
+									}
+									item->setText(IDENT, ui->leGetBarcode->text());
+									item->setText(INFO, tr("Попытка повторного прохода"));
+									item->setBackgroundColor(SEAT, QColor(255, 131, 131));
+									item->setBackgroundColor(ROW, QColor(255, 131, 131));
+									item->setBackgroundColor(IDENT, QColor(255, 131, 131));
+									item->setBackgroundColor(INFO, QColor(255, 131, 131));
 									ui->twBarcodeControl->addTopLevelItem(item);
 									ui->twBarcodeControl->scrollToBottom();
 								}
+								else
+								{
+									QSqlQuery clientsquery(db);
+									clientsquery.prepare("SELECT login, name FROM Clients WHERE id = :id");
+									clientsquery.bindValue(":id", query.value(2).toString());
+									if(clientsquery.exec() && clientsquery.first())
+									{
+										if(selectScheme.first())
+										{
+											item->setText(SEAT, selectScheme.value(1).toString());
+											item->setText(ROW, selectScheme.value(2).toString());
+										}
+										else
+										{
+											item->setText(SEAT, tr("Фанзона"));
+											item->setText(ROW, tr("Фанзона"));
+										}
+										item->setText(IDENT, ui->leGetBarcode->text());
+										item->setText(INFO, tr("Попытка повторного прохода. Билет приобретен клиентом ") + clientsquery.value(1).toString() + tr(", его логин - ") + clientsquery.value(0).toString());
+										item->setBackgroundColor(SEAT, QColor(255, 131, 131));
+										item->setBackgroundColor(ROW, QColor(255, 131, 131));
+										item->setBackgroundColor(IDENT, QColor(255, 131, 131));
+										item->setBackgroundColor(INFO, QColor(255, 131, 131));
+										ui->twBarcodeControl->addTopLevelItem(item);
+										ui->twBarcodeControl->scrollToBottom();
+									}
+								}
 							}
-
 						}
 					}
 					else
@@ -97,27 +156,30 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 								QTreeWidgetItem *item = new QTreeWidgetItem;
 								if(item)
 								{
+									item->setText(SEAT, tr("Внимание"));
+									item->setText(ROW, tr("Внимание"));
 									if(query1.value(2).toString() == "0")
 									{
-										item->setText(0, ui->leGetBarcode->text() + tr(" - Попытка пройти по сданному билету"));
-										item->setBackgroundColor(0, QColor(255, 131, 131));
-										ui->twBarcodeControl->addTopLevelItem(item);
-										ui->twBarcodeControl->scrollToBottom();
+										item->setText(IDENT, ui->leGetBarcode->text());
+										item->setText(INFO, tr("Попытка пройти по сданному билету"));
 									}
 									else
 									{
-										qDebug("123");
 										QSqlQuery clientsquery(db);
 										clientsquery.prepare("SELECT login, name FROM Clients WHERE id = :id");
 										clientsquery.bindValue(":id", query1.value(2).toString());
 										if(clientsquery.exec() && clientsquery.first())
 										{
-											item->setText(0, ui->leGetBarcode->text() + tr(" - Попытка пройти по сданному билету. Билет приобретен клиентом ") + clientsquery.value(1).toString() + tr(", его логин - ") + clientsquery.value(0).toString());
-											item->setBackgroundColor(0, QColor(255, 131, 131));
-											ui->twBarcodeControl->addTopLevelItem(item);
-											ui->twBarcodeControl->scrollToBottom();
+											item->setText(IDENT, ui->leGetBarcode->text());
+											item->setText(INFO, tr("Попытка пройти по сданному билету. Билет приобретен клиентом ") + clientsquery.value(1).toString() + tr(", его логин - ") + clientsquery.value(0).toString());
 										}
 									}
+									item->setBackgroundColor(SEAT, QColor(255, 131, 131));
+									item->setBackgroundColor(ROW, QColor(255, 131, 131));
+									item->setBackgroundColor(IDENT, QColor(255, 131, 131));
+									item->setBackgroundColor(INFO, QColor(255, 131, 131));
+									ui->twBarcodeControl->addTopLevelItem(item);
+									ui->twBarcodeControl->scrollToBottom();
 								}
 							}
 							else
@@ -126,8 +188,14 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 								QTreeWidgetItem *item = new QTreeWidgetItem;
 								if(item)
 								{
-									item->setText(0, ui->leGetBarcode->text() + tr(" - Попытка пройти по несуществующему билету"));
-									item->setBackgroundColor(0, QColor(255, 131, 131));
+									item->setText(SEAT, tr("Внимание"));
+									item->setText(ROW, tr("Внимание"));
+									item->setText(IDENT, ui->leGetBarcode->text());
+									item->setText(INFO, tr("Попытка пройти по несуществующему билету"));
+									item->setBackgroundColor(SEAT, QColor(255, 131, 131));
+									item->setBackgroundColor(ROW, QColor(255, 131, 131));
+									item->setBackgroundColor(IDENT, QColor(255, 131, 131));
+									item->setBackgroundColor(INFO, QColor(255, 131, 131));
 									ui->twBarcodeControl->addTopLevelItem(item);
 									ui->twBarcodeControl->scrollToBottom();
 								}
@@ -162,13 +230,13 @@ void ControlManagerMainWindow::connected(QString connectionName)
 	else
 	{
 		QSqlQuery query(db);
-		query.prepare("SELECT title, performer, dateTime FROM Actions");
+		query.prepare("SELECT title, performer FROM Actions");
 		if(query.exec() && query.first())
 		{
 			ui->stackedWidget->slideHorizontalNext();
 			showMaximized();
 			ui->aLogFileWrite->setEnabled(true);
-			ui->groupBox->setTitle(tr("База данных концерта: ") + query.value(0).toString() + tr(", Исполнитель: ") + query.value(1).toString() + tr(", Дата проведения концерта: ") + query.value(2).toString());
+			ui->groupBox->setTitle(tr("База данных концерта: ") + query.value(0).toString() + tr(", Исполнитель: ") + query.value(1).toString());
 		}
 	}
 }
@@ -190,7 +258,7 @@ void ControlManagerMainWindow::writeLogFile()
 
 		for(int i = 0; i < ui->twBarcodeControl->topLevelItemCount(); i++)
 		{
-			out << ui->twBarcodeControl->topLevelItem(i)->text(0) << "\n";
+			out << ui->twBarcodeControl->topLevelItem(i)->text(SEAT) << ui->twBarcodeControl->topLevelItem(i)->text(ROW) <<  ui->twBarcodeControl->topLevelItem(i)->text(IDENT) <<  ui->twBarcodeControl->topLevelItem(i)->text(INFO) <<"\n";
 		}
 
 		file.close();

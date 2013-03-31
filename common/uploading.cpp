@@ -16,14 +16,7 @@ void Uploading::createDBScheme()
 				"CREATE TABLE IF NOT EXISTS Actions( "
 				"id                   INTEGER NOT NULL, "
 				"title                TEXT NULL, "
-				"performer            TEXT NULL, "
-				"description          TEXT NULL, "
-				"dateTime             DATETIME NULL, "
-				"state                INTEGER DEFAULT 0, "
-				"fanPrice             INTEGER DEFAULT 0, "
-				"fanCount             INTEGER DEFAULT 0, "
-				"id_place             INTEGER NULL, "
-				"id_category          INTEGER NULL"
+				"performer            TEXT NULL "
 				"); "
 				))
 		qDebug(qPrintable(createDBQuery.lastError().text()));
@@ -34,7 +27,7 @@ void Uploading::createDBScheme()
 				"id_placeScheme       INTEGER NULL, "
 				"id_client            INTEGER NULL, "
 				"identifier           TEXT NULL, "
-				"passedFlag           TEXT NOT NULL"
+				"passedFlag           TEXT NOT NULL "
 				");"
 				))
 		qDebug(qPrintable(createDBQuery.lastError().text()));
@@ -42,22 +35,20 @@ void Uploading::createDBScheme()
 				"CREATE TABLE IF NOT EXISTS Clients( "
 				"id                   INTEGER NOT NULL, "
 				"name                 TEXT NULL, "
-				"birthDate            DATE NULL,  "
-				"login                TEXT NULL,  "
-				"passwordHash         TEXT NULL,  "
-				"phone                TEXT NULL  "
+				"login                TEXT NULL "
 				");"
 				))
 		qDebug(qPrintable(createDBQuery.lastError().text()));
 	if(!createDBQuery.exec("CREATE TABLE IF NOT EXISTS ReturnedTickets( "
 						   "id                   INTEGER PRIMARY KEY AUTOINCREMENT, "
-						   "id_action            INTEGER NOT NULL, "
 						   "id_client            INTEGER NULL, "
-						   "identifier           TEXT NOT NULL, "
-						   "id_market            INTEGER NULL, "
-						   "id_user              INTEGER NULL, "
-						   "penalty              INTEGER DEFAULT 0, "
-						   "dateTime             DATETIME NULL "
+						   "identifier           TEXT NOT NULL "
+						   ");"))
+		qDebug(qPrintable(createDBQuery.lastError().text()));
+	if(!createDBQuery.exec("CREATE TABLE IF NOT EXISTS PlaceSchemes( "
+						   "id                   INTEGER NOT NULL, "
+						   "seatNumber           INTEGER NULL, "
+						   "row					 INTEGER NULL "
 						   ");"))
 		qDebug(qPrintable(createDBQuery.lastError().text()));
 }
@@ -104,8 +95,8 @@ void Uploading::uploadingProcess()
 {
 	{
 		QProgressDialog dlg;
-		dlg.setWindowTitle(tr("Название"));
-		dlg.setLabelText(tr("Название"));
+		dlg.setWindowTitle(tr("Выгрузка базы данных"));
+		dlg.setLabelText(tr("Процесс выгрузки базы данных"));
 		dlg.setCancelButton(0);
 		dlg.setMinimumDuration(0);
 		dlg.setMaximum(3);
@@ -113,28 +104,21 @@ void Uploading::uploadingProcess()
 		QSqlDatabase db = QSqlDatabase::database("uploadingConnection");
 		createDBScheme();
 		QSqlQuery selectDataQuery(QSqlDatabase::database(mConnection));
-		if(selectDataQuery.exec("SELECT * FROM Actions WHERE id = " + mIDAction))
+		if(selectDataQuery.exec("SELECT id, title, performer FROM Actions WHERE id = " + mIDAction))
 		{
 			QSqlQuery insertDataQuery(db);
-			insertDataQuery.exec("INSERT INTO Actions VALUES(:id, :title, :performer, :description, :date, :state, :fanPrice, :fanCount, :id_place, :id_cat);");
+			insertDataQuery.exec("INSERT INTO Actions VALUES(:id, :title, :performer);");
 			while(selectDataQuery.next())
 			{
 				insertDataQuery.bindValue(":id", selectDataQuery.value(0).toString());
 				insertDataQuery.bindValue(":title", selectDataQuery.value(1).toString());
 				insertDataQuery.bindValue(":performer", selectDataQuery.value(2).toString());
-				insertDataQuery.bindValue(":description", selectDataQuery.value(3).toString());
-				insertDataQuery.bindValue(":date", selectDataQuery.value(4).toString());
-				insertDataQuery.bindValue(":state", selectDataQuery.value(5).toString());
-				insertDataQuery.bindValue(":fanPrice", selectDataQuery.value(6).toString());
-				insertDataQuery.bindValue(":fanCount", selectDataQuery.value(7).toString());
-				insertDataQuery.bindValue(":id_place", selectDataQuery.value(8).toString());
-				insertDataQuery.bindValue(":id_cat", selectDataQuery.value(9).toString());
 				insertDataQuery.exec();
 
 			}
 		}
 		dlg.setValue(1);
-		if(selectDataQuery.exec("SELECT * FROM Tickets WHERE id_action = " + mIDAction))
+		if(selectDataQuery.exec("SELECT id, id_action, id_placeScheme, id_client, identifier FROM Tickets WHERE id_action = " + mIDAction))
 		{
 			QSqlQuery insertDataQuery(db);
 			insertDataQuery.exec("INSERT INTO Tickets VALUES(NULL, :id_action, :id_placeScheme, :id_client, :identifier, :passedFlag);");
@@ -146,21 +130,33 @@ void Uploading::uploadingProcess()
 				insertDataQuery.bindValue(":identifier", selectDataQuery.value(4).toString());
 				insertDataQuery.bindValue(":passedFlag", "false");
 				insertDataQuery.exec();
+
+				QSqlQuery placeScheme(QSqlDatabase::database(mConnection));
+				if(placeScheme.exec("SELECT id, seatNumber, row FROM PlaceSchemes WHERE id = " + selectDataQuery.value(2).toString()))
+				{
+					QSqlQuery insertScheme(db);
+					insertScheme.exec("INSERT INTO PlaceSchemes VALUES(:id, :seatNumber, :row)");
+					while(placeScheme.next())
+					{
+						insertScheme.bindValue(":id", placeScheme.value(0).toString());
+						insertScheme.bindValue(":seatNumber", placeScheme.value(1).toString());
+						insertScheme.bindValue(":row", placeScheme.value(2).toString());
+						insertScheme.exec();
+					}
+				}
+
 				if(!selectDataQuery.value(3).isNull())
 				{
 					QSqlQuery selectDataClients(QSqlDatabase::database(mConnection));
-					if(selectDataClients.exec("SELECT * FROM Clients WHERE id = " + selectDataQuery.value(3).toString()))
+					if(selectDataClients.exec("SELECT id, name, login FROM Clients WHERE id = " + selectDataQuery.value(3).toString()))
 					{
 						QSqlQuery insertDataClients(db);
-						insertDataClients.exec("INSERT INTO Clients VALUES(:id, :name, :birthDate, :login, :passwordHash, :phone)");
+						insertDataClients.exec("INSERT INTO Clients VALUES(:id, :name, :login)");
 						while(selectDataClients.next())
 						{
 							insertDataClients.bindValue(":id", selectDataClients.value(0).toString());
 							insertDataClients.bindValue(":name", selectDataClients.value(1).toString());
-							insertDataClients.bindValue(":birthDate", selectDataClients.value(2).toString());
-							insertDataClients.bindValue(":login", selectDataClients.value(3).toString());
-							insertDataClients.bindValue(":passwordHash", selectDataClients.value(4).toString());
-							insertDataClients.bindValue(":phone", selectDataClients.value(5).toString());
+							insertDataClients.bindValue(":login", selectDataClients.value(2).toString());
 							insertDataClients.exec();
 						}
 					}
@@ -168,19 +164,14 @@ void Uploading::uploadingProcess()
 			}
 		}
 		dlg.setValue(2);
-		if(selectDataQuery.exec("SELECT * FROM ReturnedTickets WHERE id_action = " + mIDAction))
+		if(selectDataQuery.exec("SELECT id, id_client, identifier FROM ReturnedTickets WHERE id_action = " + mIDAction))
 		{
 			QSqlQuery insertDataQuery(db);
-			insertDataQuery.exec("INSERT INTO ReturnedTickets VALUES(NULL, :id_action, :id_client, :identifier, :id_market, :id_user, :penalty, :dateTime);");
+			insertDataQuery.exec("INSERT INTO ReturnedTickets VALUES(NULL, :id_client, :identifier);");
 			while(selectDataQuery.next())
 			{
-				insertDataQuery.bindValue(":id_action", selectDataQuery.value(1).toString());
-				insertDataQuery.bindValue(":id_client", selectDataQuery.value(2).toString());
-				insertDataQuery.bindValue(":identifier", selectDataQuery.value(3).toString());
-				insertDataQuery.bindValue(":id_market", selectDataQuery.value(4).toString());
-				insertDataQuery.bindValue(":id_user", selectDataQuery.value(5).toString());
-				insertDataQuery.bindValue(":penalty", selectDataQuery.value(6).toString());
-				insertDataQuery.bindValue(":dateTime", selectDataQuery.value(7).toString());
+				insertDataQuery.bindValue(":id_client", selectDataQuery.value(1).toString());
+				insertDataQuery.bindValue(":identifier", selectDataQuery.value(2).toString());
 				insertDataQuery.exec();
 			}
 		}

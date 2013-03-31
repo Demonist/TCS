@@ -57,7 +57,22 @@
              </property>
              <column>
               <property name="text">
-               <string>Билеты</string>
+               <string>Место</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Ряд</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Идентификатор</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Статус</string>
               </property>
              </column>
             </widget>
