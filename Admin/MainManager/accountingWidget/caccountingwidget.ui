@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>658</width>
-    <height>621</height>
+    <height>622</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -380,6 +380,9 @@
               </item>
               <item>
                <widget class="QPushButton" name="pbnExport">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Экспорт данных по всем завершенным мероприятиям в Excel-подобный формат.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
                 <property name="text">
                  <string>Экспорт</string>
                 </property>

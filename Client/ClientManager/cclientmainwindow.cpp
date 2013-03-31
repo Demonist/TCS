@@ -127,4 +127,5 @@ void CClientMainWindow::on_pbnChangeUser_clicked()
 void CClientMainWindow::updateAdvertisement()
 {
 	mActionDialog.updateAdvertisements(mConnectionName);
+	ui->wActions->updateData();
 }

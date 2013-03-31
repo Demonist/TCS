@@ -6,6 +6,7 @@
 #include "csourcegraphicsview.h"
 #include "cimages.h"
 #include "cadvertisementitem.h"
+#include "ccachechecker.h"
 
 namespace Ui {
 	class CClientActionDialog;

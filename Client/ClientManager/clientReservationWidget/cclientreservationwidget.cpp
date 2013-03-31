@@ -37,32 +37,38 @@ void CClientReservationWidget::updateData()
 {
 	ui->stackedWidget->setCurrentIndexAnimatedHorizontal(0);
 
-	ui->twClients->clear();
-
-	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	if(query.exec("SELECT Clients.id, Clients.name, Clients.birthDate, Clients.login, COUNT(Reservations.id) FROM Clients, Reservations WHERE Reservations.id_client = Clients.id;"))
+	static CCacheChecker cacheChecker("Clients, Reservations", mConnectionName);
+	if(cacheChecker.isNeedUpdate())
 	{
-		QTreeWidgetItem *item;
-		while(query.next())
-		{
-			if(query.isNull(0) == false)
-			{
-				item = new QTreeWidgetItem();
-				if(item)
-				{
-					item->setText(CLIENTS_ID, query.value(0).toString());
-					item->setText(CLIENTS_FIO, query.value(1).toString());
-					item->setText(CLIENTS_BIRTHDATE, query.value(2).toString());
-					item->setText(CLIENTS_LOGIN, query.value(3).toString());
-					item->setText(CLIENTS_COUNT, query.value(4).toString());
+		cacheChecker.setUpdated();
 
-					ui->twClients->addTopLevelItem(item);
+		QSqlQuery query(QSqlDatabase::database(mConnectionName));
+		if(query.exec("SELECT Clients.id, Clients.name, Clients.birthDate, Clients.login, COUNT(Reservations.id) FROM Clients, Reservations WHERE Reservations.id_client = Clients.id;"))
+		{
+			ui->twClients->clear();
+
+			QTreeWidgetItem *item;
+			while(query.next())
+			{
+				if(query.isNull(0) == false)
+				{
+					item = new QTreeWidgetItem();
+					if(item)
+					{
+						item->setText(CLIENTS_ID, query.value(0).toString());
+						item->setText(CLIENTS_FIO, query.value(1).toString());
+						item->setText(CLIENTS_BIRTHDATE, query.value(2).toString());
+						item->setText(CLIENTS_LOGIN, query.value(3).toString());
+						item->setText(CLIENTS_COUNT, query.value(4).toString());
+
+						ui->twClients->addTopLevelItem(item);
+					}
 				}
 			}
 		}
+		else
+			qDebug(qPrintable(query.lastError().text()));
 	}
-	else
-		qDebug(qPrintable(query.lastError().text()));
 }
 
 void CClientReservationWidget::on_tbnClearClient_clicked()

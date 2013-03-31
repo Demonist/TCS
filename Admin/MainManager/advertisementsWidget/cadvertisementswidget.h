@@ -5,6 +5,7 @@
 #include "cabstractcommonwidget.h"
 #include "cimages.h"
 #include "cimagedialog.h"
+#include "ccachechecker.h"
 
 namespace Ui {
 	class CAdvertisementsWidget;

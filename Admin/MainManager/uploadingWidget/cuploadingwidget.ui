@@ -52,7 +52,7 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Выгрузка базы данных</string>
+      <string>Выгрузка базы данных для мероприятия</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
@@ -127,12 +127,17 @@
         </column>
         <column>
          <property name="text">
-          <string>Название мероприятия</string>
+          <string>Название</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>Категория мероприятия</string>
+          <string>Категория</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Статус</string>
          </property>
         </column>
        </widget>

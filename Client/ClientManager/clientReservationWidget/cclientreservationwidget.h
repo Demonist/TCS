@@ -5,6 +5,7 @@
 #include <QtSql>
 #include "cabstractcommonwidget.h"
 #include "global.h"
+#include "ccachechecker.h"
 
 namespace Ui {
 	class CClientReservationWidget;

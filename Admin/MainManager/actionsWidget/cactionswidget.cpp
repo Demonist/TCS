@@ -28,44 +28,51 @@ CActionsWidget::~CActionsWidget()
 
 void CActionsWidget::updateData()
 {
-	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-
-	if(query.exec("SELECT COUNT(id) FROM Categories;") && query.first())
-		mCategoriesCount = query.value(0).toInt();
-	if(query.exec("SELECT COUNT(id) FROM Places;") && query.first())
-		mPlacesCount = query.value(0).toInt();
-
-	if(query.exec("SELECT Actions.id, Actions.title, Places.title, Places.address, Actions.dateTime, Actions.state, Categories.name, Actions.performer FROM Actions, Places, Categories WHERE Actions.id_place = Places.id AND Actions.id_category = Categories.id;"))
+	static CCacheChecker cacheChecker("Actions, Places, Categories", mConnectionName);
+	if(cacheChecker.isNeedUpdate())
 	{
-		ui->twActions->clear();
+		cacheChecker.setUpdated();
 
-		uint count = 0;
-		QTreeWidgetItem *item;
-		while(query.next())
+		QSqlQuery query(QSqlDatabase::database(mConnectionName));
+
+		if(query.exec("SELECT COUNT(id) FROM Categories;") && query.first())
+			mCategoriesCount = query.value(0).toInt();
+		if(query.exec("SELECT COUNT(id) FROM Places;") && query.first())
+			mPlacesCount = query.value(0).toInt();
+
+		if(query.exec("SELECT Actions.id, Actions.title, Places.title, Places.address, Actions.dateTime, Actions.state, Categories.name, Actions.performer FROM Actions, Places, Categories WHERE Actions.id_place = Places.id AND Actions.id_category = Categories.id;"))
 		{
-			item = new QTreeWidgetItem();
-			if(item)
-			{
-				item->setText(ID, query.value(0).toString());
-				item->setText(TITLE, query.value(1).toString());
-				item->setText(PLACE, query.value(2).toString() + " (" + query.value(3).toString() + ')');
-				QDateTime dateTime = query.value(4).toDateTime();
-				item->setText(DATETIME, tr("%1 (%2)")
-							  .arg(dateTime.toString("dd.MM.yyyy hh:mm"))
-							  .arg(QDate::longDayName(dateTime.date().dayOfWeek()))
-							  );
-				item->setText(STATE, Global::actionStateToText(query.value(5).toInt()));
-				item->setText(CATEGORY, query.value(6).toString());
-				item->setText(PERFORMER, query.value(7).toString());
+			ui->twActions->clear();
 
-				ui->twActions->addTopLevelItem(item);
-				count++;
+			uint count = 0;
+			QTreeWidgetItem *item;
+			while(query.next())
+			{
+				item = new QTreeWidgetItem();
+				if(item)
+				{
+					item->setText(ID, query.value(0).toString());
+					item->setText(TITLE, query.value(1).toString());
+					item->setText(PLACE, query.value(2).toString() + " (" + query.value(3).toString() + ')');
+					QDateTime dateTime = query.value(4).toDateTime();
+					item->setText(DATETIME, tr("%1 (%2)")
+								  .arg(dateTime.toString("dd.MM.yyyy hh:mm"))
+								  .arg(QDate::longDayName(dateTime.date().dayOfWeek()))
+								  );
+					item->setText(STATE, Global::actionStateToText(query.value(5).toInt()));
+					item->setText(CATEGORY, query.value(6).toString());
+					item->setText(PERFORMER, query.value(7).toString());
+
+					ui->twActions->addTopLevelItem(item);
+					count++;
+				}
+				////TODO: Добавить обработчик ошибок.
 			}
-			////TODO: Добавить обработчик ошибок.
+			ui->gbxActions->setTitle(tr("Мероприятия: %1 шт").arg(count));
 		}
-		ui->gbxActions->setTitle(tr("Мероприятия: %1 шт").arg(count));
+		else
+			qDebug(qPrintable(query.lastError().text()));
 	}
-	else qDebug(qPrintable(query.lastError().text()));
 }
 
 void CActionsWidget::on_tbnAdd_clicked()

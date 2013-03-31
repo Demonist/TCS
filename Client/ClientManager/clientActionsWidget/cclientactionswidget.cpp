@@ -347,63 +347,72 @@ void CClientActionsWidget::on_pbnSoldTicket_clicked()
 
 void CClientActionsWidget::updateData()
 {
+	static CCacheChecker cacheChecker("Actions, Places, Categories ActionScheme", mConnectionName);
+
 	mCanUpdateFilter = false;
 
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-	ui->cbxCategory->clear();
-	ui->cbxCategory->addItem(tr("Все"), 0);
-	if(query.exec("SELECT name, id FROM Categories;"))
-		while(query.next())
-			ui->cbxCategory->addItem(query.value(0).toString(), query.value(1).toInt());
-
-	ui->cbxPerformer->clear();
-	ui->cbxPerformer->addItem(tr("Все"), 0);
-	query.prepare("SELECT DISTINCT performer FROM Actions WHERE state = :state;");
-	query.bindValue(":state", Global::ActionActive);
-	if(query.exec())
-		while(query.next())
-			ui->cbxPerformer->addItem(query.value(0).toString());
-
-	ui->cbxPlace->clear();
-	ui->cbxPlace->addItem(tr("Все"), 0);
-	if(query.exec("SELECT title, id FROM Places;"))
-		while(query.next())
-			ui->cbxPlace->addItem(query.value(0).toString(), query.value(1).toInt());
-
-	ui->leDate->clear();
-
-	query.prepare("SELECT Actions.id, Actions.title, Actions.performer, Actions.dateTime, Places.title, Places.address, Places.id, Categories.name, Categories.id, Actions.fanCount FROM Actions, Places, Categories WHERE Actions.id_place = Places.id AND Actions.id_category = Categories.id AND Actions.state = :state;");
-	query.bindValue(":state", Global::ActionActive);
-	if(query.exec())
+	if(cacheChecker.isNeedUpdate())
 	{
-		ui->twActions->clear();
+		cacheChecker.setUpdated();
 
-		QTreeWidgetItem *item;
-		while(query.next())
+		ui->cbxCategory->clear();
+		ui->cbxCategory->addItem(tr("Все"), 0);
+		if(query.exec("SELECT name, id FROM Categories;"))
+			while(query.next())
+				ui->cbxCategory->addItem(query.value(0).toString(), query.value(1).toInt());
+
+		ui->cbxPerformer->clear();
+		ui->cbxPerformer->addItem(tr("Все"), 0);
+		query.prepare("SELECT DISTINCT performer FROM Actions WHERE state = :state;");
+		query.bindValue(":state", Global::ActionActive);
+		if(query.exec())
+			while(query.next())
+				ui->cbxPerformer->addItem(query.value(0).toString());
+
+		ui->cbxPlace->clear();
+		ui->cbxPlace->addItem(tr("Все"), 0);
+		if(query.exec("SELECT title, id FROM Places;"))
+			while(query.next())
+				ui->cbxPlace->addItem(query.value(0).toString(), query.value(1).toInt());
+
+		ui->leDate->clear();
+
+		query.prepare("SELECT Actions.id, Actions.title, Actions.performer, Actions.dateTime, Places.title, Places.address, Places.id, Categories.name, Categories.id, Actions.fanCount FROM Actions, Places, Categories WHERE Actions.id_place = Places.id AND Actions.id_category = Categories.id AND Actions.state = :state;");
+		query.bindValue(":state", Global::ActionActive);
+		if(query.exec())
 		{
-			item = new QTreeWidgetItem();
-			if(item)
-			{
-				item->setText(ID, query.value(0).toString());
-				item->setText(TITLE, query.value(1).toString());
-				item->setText(PERFORMER, query.value(2).toString());
-				QDateTime dateTime = query.value(3).toDateTime();
-				item->setText(DATETIME, tr("%1 (%2)")
-							  .arg(dateTime.toString("dd.MM.yyyy hh:mm"))
-							  .arg(QDate::longDayName(dateTime.date().dayOfWeek()))
-							  );
-				item->setData(DATETIME, Qt::UserRole, dateTime.date().toString("dd.MM.yyyy"));
-				item->setText(PLACE, query.value(4).toString() + " (" + query.value(5).toString() + ')');
-				item->setData(PLACE, Qt::UserRole, query.value(6));
-				item->setText(CATEGORY, query.value(7).toString());
-				item->setData(CATEGORY, Qt::UserRole, query.value(8));
-				item->setText(FREE_FAN, query.value(9).toString());
+			ui->twActions->clear();
 
-				ui->twActions->addTopLevelItem(item);
+			QTreeWidgetItem *item;
+			while(query.next())
+			{
+				item = new QTreeWidgetItem();
+				if(item)
+				{
+					item->setText(ID, query.value(0).toString());
+					item->setText(TITLE, query.value(1).toString());
+					item->setText(PERFORMER, query.value(2).toString());
+					QDateTime dateTime = query.value(3).toDateTime();
+					item->setText(DATETIME, tr("%1 (%2)")
+								  .arg(dateTime.toString("dd.MM.yyyy hh:mm"))
+								  .arg(QDate::longDayName(dateTime.date().dayOfWeek()))
+								  );
+					item->setData(DATETIME, Qt::UserRole, dateTime.date().toString("dd.MM.yyyy"));
+					item->setText(PLACE, query.value(4).toString() + " (" + query.value(5).toString() + ')');
+					item->setData(PLACE, Qt::UserRole, query.value(6));
+					item->setText(CATEGORY, query.value(7).toString());
+					item->setData(CATEGORY, Qt::UserRole, query.value(8));
+					item->setText(FREE_FAN, query.value(9).toString());
+
+					ui->twActions->addTopLevelItem(item);
+				}
+				////TODO: Добавить обработчик ошибок.
 			}
-			////TODO: Добавить обработчик ошибок.
 		}
+		else
+			qDebug(qPrintable(query.lastError().text()));
 
 		query.prepare("SELECT COUNT(id_placeScheme) FROM ActionScheme WHERE id_action = :id AND state = :state AND id_priceGroup > 0;");
 		query.bindValue(":state", Global::SeatFree);
@@ -414,8 +423,6 @@ void CClientActionsWidget::updateData()
 				ui->twActions->topLevelItem(i)->setText(FREE_SEATS, query.value(0).toString());
 		}
 	}
-	else
-		qDebug(qPrintable(query.lastError().text()));
 
 	mCanUpdateFilter = true;
 }

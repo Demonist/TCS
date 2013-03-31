@@ -6,6 +6,7 @@
 #include "cabstractcommonwidget.h"
 #include "global.h"
 #include "cactiondialog.h"
+#include "ccachechecker.h"
 
 namespace Ui {
     class CActionsWidget;

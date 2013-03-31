@@ -12,6 +12,7 @@
 #include "csourcegraphicsview.h"
 #include "cticketidentifier.h"
 #include "cmarket.h"
+#include "ccachechecker.h"
 
 namespace Ui {
 	class CClientActionsWidget;

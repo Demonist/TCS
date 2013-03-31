@@ -7,6 +7,7 @@
 #include "cdatedialog.h"
 #include "ccomplitedaction.h"
 #include "global.h"
+#include "ccachechecker.h"
 
 namespace Ui {
 class CAccountingWidget;

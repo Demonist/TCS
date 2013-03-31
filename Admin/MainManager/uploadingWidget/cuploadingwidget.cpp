@@ -4,6 +4,7 @@
 #define ID 0
 #define NAME 1
 #define TYPE 2
+#define STATE 3
 
 CUploadingWidget::CUploadingWidget(QWidget *parent) :
 	CAbstractCommonWidget(parent),
@@ -12,8 +13,9 @@ CUploadingWidget::CUploadingWidget(QWidget *parent) :
 	ui->setupUi(this);
 	ui->twActions->hideColumn(ID);
 	ui->twActions->setColumnWidth(ID, 0);
-	ui->twActions->setColumnWidth(NAME, 200);
-	ui->twActions->setColumnWidth(TYPE, 200);
+	ui->twActions->setColumnWidth(NAME, 300);
+	ui->twActions->setColumnWidth(TYPE, 150);
+	ui->twActions->setColumnWidth(STATE, 150);
 }
 
 CUploadingWidget::~CUploadingWidget()
@@ -24,7 +26,7 @@ CUploadingWidget::~CUploadingWidget()
 void CUploadingWidget::updateData()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	if(query.exec("SELECT Actions.id, Actions.title, Categories.name FROM Categories, Actions WHERE Actions.id_category = Categories.id;"))
+	if(query.exec("SELECT Actions.id, Actions.title, Categories.name, Actions.state FROM Categories, Actions WHERE Actions.id_category = Categories.id;"))
 	{
 		ui->twActions->clear();
 		QTreeWidgetItem *item;
@@ -36,6 +38,8 @@ void CUploadingWidget::updateData()
 				item->setText(ID, query.value(0).toString());
 				item->setText(NAME, query.value(1).toString());
 				item->setText(TYPE, query.value(2).toString());
+				item->setText(STATE, Global::actionStateToText(query.value(3).toInt()));
+
 				ui->twActions->addTopLevelItem(item);
 			}
 		}

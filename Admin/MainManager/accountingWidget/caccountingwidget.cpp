@@ -55,108 +55,126 @@ void CAccountingWidget::updateData()
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
 	// Возвращенные билеты:
-	if(query.exec("SELECT DISTINCT ReturnedTickets.id_action, Actions.title FROM ReturnedTickets, Actions WHERE ReturnedTickets.id_action = Actions.id;"))
+	static CCacheChecker cacheCheckerReturnedTicket("ReturnedTickets, Markets, Users, Actions", mConnectionName);
+	if(cacheCheckerReturnedTicket.isNeedUpdate())
 	{
-		ui->cbxActions->clear();
-		ui->cbxActions->addItem(tr("Все"), 0);
+		cacheCheckerReturnedTicket.setUpdated();
 
-		while(query.next())
-			ui->cbxActions->addItem(query.value(1).toString(), query.value(0));
-	}
-	else
-		qDebug(qPrintable(query.lastError().text()));
-
-	if(query.exec("SELECT ReturnedTickets.id, Markets.address, Users.name, Actions.title, ReturnedTickets.id_action, ReturnedTickets.dateTime FROM ReturnedTickets, Markets, Users, Actions WHERE Markets.id = ReturnedTickets.id_market AND Users.id = ReturnedTickets.id_user AND Actions.id = ReturnedTickets.id_action"))
-	{
-		ui->twReturnedTickets->clear();
-
-		QTreeWidgetItem *item;
-		while(query.next())
+		if(query.exec("SELECT DISTINCT ReturnedTickets.id_action, Actions.title FROM ReturnedTickets, Actions WHERE ReturnedTickets.id_action = Actions.id;"))
 		{
-			item = new QTreeWidgetItem();
-			if(item)
-			{
-				item->setText(RETURNED_ID, query.value(0).toString());
-				item->setText(RETURNED_MARKET, query.value(1).toString());
-				item->setText(RETURNED_SELLER, query.value(2).toString());
-				item->setText(RETURNED_ACTION, query.value(3).toString());
-				item->setData(RETURNED_ACTION, Qt::UserRole, query.value(4));
-				item->setText(RETURNED_DATETIME, query.value(5).toDateTime().toString("dd.MM.yyyy hh:mm"));
+			ui->cbxActions->clear();
+			ui->cbxActions->addItem(tr("Все"), 0);
 
-				ui->twReturnedTickets->addTopLevelItem(item);
-			}
+			while(query.next())
+				ui->cbxActions->addItem(query.value(1).toString(), query.value(0));
 		}
-	}
-	else
-		qDebug(qPrintable(query.lastError().text()));
+		else
+			qDebug(qPrintable(query.lastError().text()));
 
-	//Продажи мероприятий:
-	if(query.exec("SELECT id, state FROM Actions"))
-	{
-		ui->twActions->clear();
-		mActionStatistics.clear();
-
-		QTreeWidgetItem *item;
-		CComplitedAction action;
-		while(query.next())
+		if(query.exec("SELECT ReturnedTickets.id, Markets.address, Users.name, Actions.title, ReturnedTickets.id_action, ReturnedTickets.dateTime FROM ReturnedTickets, Markets, Users, Actions WHERE Markets.id = ReturnedTickets.id_market AND Users.id = ReturnedTickets.id_user AND Actions.id = ReturnedTickets.id_action"))
 		{
-			if(action.makeFromAction(query.value(0).toInt(), mConnectionName))
+			ui->twReturnedTickets->clear();
+
+			QTreeWidgetItem *item;
+			while(query.next())
 			{
 				item = new QTreeWidgetItem();
 				if(item)
 				{
-					item->setText(ACTIONS_ID, query.value(0).toString());
-					item->setText(ACTIONS_TITLE, action.title);
-					item->setText(ACTIONS_STATE, Global::actionStateToText(query.value(1).toInt()));
-					item->setText(ACTIONS_PERFORMER, action.performer);
-					item->setText(ACTIONS_PLACE, action.place);
-					item->setText(ACTIONS_CATEGORY, action.category);
-					item->setText(ACTIONS_SOLDED, QString::number(action.totalTicketsSolded));
-					item->setText(ACTIONS_RETURNED, QString::number(action.ticketsReturned));
-					item->setText(ACTIONS_INCOME, QString::number(action.totalSumm));
-					item->setText(ACTIONS_PENALTY, QString::number(action.penaltySumm));
+					item->setText(RETURNED_ID, query.value(0).toString());
+					item->setText(RETURNED_MARKET, query.value(1).toString());
+					item->setText(RETURNED_SELLER, query.value(2).toString());
+					item->setText(RETURNED_ACTION, query.value(3).toString());
+					item->setData(RETURNED_ACTION, Qt::UserRole, query.value(4));
+					item->setText(RETURNED_DATETIME, query.value(5).toDateTime().toString("dd.MM.yyyy hh:mm"));
 
-					ui->twActions->addTopLevelItem(item);
-					mActionStatistics.append(qMakePair(action.soldedByMarkets, action.soldedBySellers));
+					ui->twReturnedTickets->addTopLevelItem(item);
 				}
 			}
 		}
+		else
+			qDebug(qPrintable(query.lastError().text()));
 	}
-	else
-		qDebug(qPrintable(query.lastError().text()));
 
-	//Завершенные мероприятия
-	if(query.exec("SELECT id, title, performer, place, category, ticketsSolded, ticketsReturned, income, penalties, data FROM ComplitedActions ORDER BY id DESC;"))
+	//Продажи мероприятий:
+	static CCacheChecker cacheCheckerActions("Actions, Places, Categories Tickets Markets Users ReturnedTickets", mConnectionName);
+	if(cacheCheckerActions.isNeedUpdate())
 	{
-		ui->twComplitedActions->clear();
-		mComplitedStatistics.clear();
+		cacheCheckerActions.setUpdated();
 
-		QTreeWidgetItem *item;
-		CComplitedAction action;
-		while(query.next())
+		if(query.exec("SELECT id, state FROM Actions"))
 		{
-			item = new QTreeWidgetItem();
-			if(item)
+			ui->twActions->clear();
+			mActionStatistics.clear();
+
+			QTreeWidgetItem *item;
+			CComplitedAction action;
+			while(query.next())
 			{
-				item->setText(COMPLITED_ID, query.value(0).toString());
-				item->setText(COMPLITED_TITLE, query.value(1).toString());
-				item->setText(COMPLITED_PERFORMER, query.value(2).toString());
-				item->setText(COMPLITED_PLACE, query.value(3).toString());
-				item->setText(COMPLITED_CATEGORY, query.value(4).toString());
-				item->setText(COMPLITED_SOLDED, query.value(5).toString());
-				item->setText(COMPLITED_RETURNED, query.value(6).toString());
-				item->setText(COMPLITED_INCOME, query.value(7).toString());
-				item->setText(COMPLITED_PENALTY, query.value(8).toString());
+				if(action.makeFromAction(query.value(0).toInt(), mConnectionName))
+				{
+					item = new QTreeWidgetItem();
+					if(item)
+					{
+						item->setText(ACTIONS_ID, query.value(0).toString());
+						item->setText(ACTIONS_TITLE, action.title);
+						item->setText(ACTIONS_STATE, Global::actionStateToText(query.value(1).toInt()));
+						item->setText(ACTIONS_PERFORMER, action.performer);
+						item->setText(ACTIONS_PLACE, action.place);
+						item->setText(ACTIONS_CATEGORY, action.category);
+						item->setText(ACTIONS_SOLDED, QString::number(action.totalTicketsSolded));
+						item->setText(ACTIONS_RETURNED, QString::number(action.ticketsReturned));
+						item->setText(ACTIONS_INCOME, QString::number(action.totalSumm));
+						item->setText(ACTIONS_PENALTY, QString::number(action.penaltySumm));
 
-				ui->twComplitedActions->addTopLevelItem(item);
-
-				action.soldedFromByteArray(query.value(9).toByteArray());
-				mComplitedStatistics.append(qMakePair(action.soldedByMarkets, action.soldedBySellers));
+						ui->twActions->addTopLevelItem(item);
+						mActionStatistics.append(qMakePair(action.soldedByMarkets, action.soldedBySellers));
+					}
+				}
 			}
 		}
+		else
+			qDebug(qPrintable(query.lastError().text()));
 	}
-	else
-		qDebug(qPrintable(query.lastError().text()));
+
+	//Завершенные мероприятия:
+	static CCacheChecker cacheCheckerComplitedActions("ComplitedActions", mConnectionName);
+	if(cacheCheckerComplitedActions.isNeedUpdate())
+	{
+		cacheCheckerComplitedActions.setUpdated();
+
+		if(query.exec("SELECT id, title, performer, place, category, ticketsSolded, ticketsReturned, income, penalties, data FROM ComplitedActions ORDER BY id DESC;"))
+		{
+			ui->twComplitedActions->clear();
+			mComplitedStatistics.clear();
+
+			QTreeWidgetItem *item;
+			CComplitedAction action;
+			while(query.next())
+			{
+				item = new QTreeWidgetItem();
+				if(item)
+				{
+					item->setText(COMPLITED_ID, query.value(0).toString());
+					item->setText(COMPLITED_TITLE, query.value(1).toString());
+					item->setText(COMPLITED_PERFORMER, query.value(2).toString());
+					item->setText(COMPLITED_PLACE, query.value(3).toString());
+					item->setText(COMPLITED_CATEGORY, query.value(4).toString());
+					item->setText(COMPLITED_SOLDED, query.value(5).toString());
+					item->setText(COMPLITED_RETURNED, query.value(6).toString());
+					item->setText(COMPLITED_INCOME, query.value(7).toString());
+					item->setText(COMPLITED_PENALTY, query.value(8).toString());
+
+					ui->twComplitedActions->addTopLevelItem(item);
+
+					action.soldedFromByteArray(query.value(9).toByteArray());
+					mComplitedStatistics.append(qMakePair(action.soldedByMarkets, action.soldedBySellers));
+				}
+			}
+		}
+		else
+			qDebug(qPrintable(query.lastError().text()));
+	}
 }
 
 void CAccountingWidget::on_cbxActions_currentIndexChanged(int index)

@@ -46,7 +46,8 @@ SOURCES += main.cpp\
     cmarket.cpp \
     clientReservationWidget/cclientreservationwidget.cpp \
     startingDialog/cstartingdialog.cpp \
-    clientActionsWidget/cadvertisementitem.cpp
+    clientActionsWidget/cadvertisementitem.cpp \
+    ../../common/ccachechecker.cpp
 
 
 HEADERS  += cclientmainwindow.h \
@@ -73,7 +74,8 @@ HEADERS  += cclientmainwindow.h \
     cmarket.h \
     clientReservationWidget/cclientreservationwidget.h \
     startingDialog/cstartingdialog.h \
-    clientActionsWidget/cadvertisementitem.h
+    clientActionsWidget/cadvertisementitem.h \
+    ../../common/ccachechecker.h
 
 
 FORMS    += cclientmainwindow.ui \

@@ -66,7 +66,8 @@ SOURCES += main.cpp\
     usersWidget/cuseradmindialog.cpp \
     ccomplitedaction.cpp \
     ../../common/uploading.cpp \
-    advertisementsWidget/cadvertisementswidget.cpp
+    advertisementsWidget/cadvertisementswidget.cpp \
+    ../../common/ccachechecker.cpp
 
 HEADERS  += mainwindow.h \
 	../../common/global.h \
@@ -108,7 +109,8 @@ HEADERS  += mainwindow.h \
     usersWidget/cuseradmindialog.h \
     ccomplitedaction.h \
     ../../common/uploading.h \
-    advertisementsWidget/cadvertisementswidget.h
+    advertisementsWidget/cadvertisementswidget.h \
+    ../../common/ccachechecker.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \

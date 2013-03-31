@@ -6,6 +6,7 @@
 #include "cdatedialog.h"
 #include "cabstractcommonwidget.h"
 #include "uploading.h"
+#include "global.h"
 
 namespace Ui {
 class CUploadingWidget;

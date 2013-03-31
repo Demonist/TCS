@@ -235,8 +235,9 @@ void CDatabaseManager::on_pbnDeleteAll_clicked()
 void CDatabaseManager::on_pbnCreateTables_clicked()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	const QString autoincExpr = mServer ? "AUTO_INCREMENT PRIMARY KEY, " : "PRIMARY KEY AUTOINCREMENT, ";   //Выражение автоинкремента меняется в зависимости от драйвера базы днных.
-	const QString tableTypeExpr = mServer ? ") ENGINE=InnoDB DEFAULT CHARSET=utf8;" : ");";
+	const static QString autoincExpr = mServer ? "AUTO_INCREMENT PRIMARY KEY, " : "PRIMARY KEY AUTOINCREMENT, ";   //Выражение автоинкремента меняется в зависимости от драйвера базы днных.
+	const static QString tableTypeExpr = mServer ? ") ENGINE=InnoDB DEFAULT CHARSET=utf8;" : ");";
+	const static QString nowExpr = mServer ? "NOW()" : "datetime('now')";
 
 	//tables:
 
@@ -457,6 +458,42 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 		tablesError.append("Advertisements\n");
 	}
 
+	if(query.exec("CREATE TABLE IF NOT EXISTS Cache( "
+				  "id                   INTEGER PRIMARY KEY, "
+				  "tableName            TEXT NOT NULL, "
+				  "dateTime             DATETIME NULL"
+				  + tableTypeExpr))
+	{
+		int res = 0;
+		res += query.exec("INSERT INTO Cache VALUES(1, 'Users', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(2, 'Admins', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(3, 'Categories', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(4, 'Places', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(5, 'PlaceSchemes', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(6, 'Clients', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(7, 'Actions', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(8, 'ActionScheme', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(9, 'ActionPriceGroups', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(10, 'Markets', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(11, 'Tickets', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(12, 'ReturnedTickets', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(13, 'Reservations', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(14, 'Statistics', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(15, 'ComplitedActions', " + nowExpr + ");");
+		res += query.exec("INSERT INTO Cache VALUES(16, 'Advertisements', " + nowExpr + ");");
+
+		if(res != 16 && res > 0)
+		{
+			qDebug("Cache insert failure %d !", res);
+			tablesError.append("inserting to Cache\n");
+		}
+	}
+	else
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		tablesError.append("Cache\n");
+	}
+
 	//removing triggers:
 
 	QList<QString> triggers;
@@ -473,7 +510,22 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 	}
 	else
 	{
-		triggers << "on_deleteUsers" << "on_deleteActions" << "on_deletePlaces" << "on_insertTickets" << "on_insertReturnedTickets" << "on_insertStatistics" << "on_deleteAdvertisements";
+		triggers << "on_insertUsers" << "on_updateUsers" << "on_deleteUsers";
+		triggers << "on_insertAdmins" << "on_updateAdmins" << "on_deleteAdmins";
+		triggers << "on_insertCategories" << "on_updateCategories" << "on_deleteCategories";
+		triggers << "on_insertPlaces" << "on_updatePlaces" << "on_deletePlaces";
+		triggers << "on_insertPlaceSchemes" << "on_updatePlaceSchemes" << "on_deletePlaceSchemes";
+		triggers << "on_insertClients" << "on_updateClients" << "on_deleteClients";
+		triggers << "on_insertActions" << "on_updateActions" << "on_deleteActions";
+		triggers << "on_insertActionScheme" << "on_updateActionScheme" << "on_deleteActionScheme";
+		triggers << "on_insertActionPriceGroups" << "on_updateActionPriceGroups" << "on_deleteActionPriceGroups";
+		triggers << "on_insertMarkets" << "on_updateMarkets" << "on_deleteMarkets";
+		triggers << "on_insertTickets" << "on_updateTickets" << "on_deleteTickets";
+		triggers << "on_insertReturnedTickets" << "on_updateReturnedTickets" << "on_deleteReturnedTickets";
+		triggers << "on_insertReservations" << "on_updateReservations" << "on_deleteReservations";
+		triggers << "on_insertStatistics" << "on_updateStatistics" << "on_deleteStatistics";
+		triggers << "on_insertComplitedActions" << "on_updateComplitedActions" << "on_deleteComplitedActions";
+		triggers << "on_insertAdvertisements" << "on_updateAdvertisements" << "on_deleteAdvertisements";
 	}
 	for(int i = 0 ; i < triggers.count(); i++)
 		if(!query.exec("DROP TRIGGER " + isExistTriggerExpr + " `" + triggers[i] + "`;"))
@@ -482,11 +534,32 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 	//triggers:
 
 	QString triggersError;
-	const QString nowExpr = mServer ? "NOW()" : "datetime('now')";
+
+	//Users:
+	if(!query.exec("CREATE TRIGGER on_insertUsers BEFORE INSERT ON Users"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Users';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertUsers\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateUsers BEFORE UPDATE ON Users"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Users';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateUsers\n");
+	}
 
 	if(!query.exec("CREATE TRIGGER on_deleteUsers BEFORE DELETE ON Users"
 				   " FOR EACH ROW BEGIN"
 				   "	UPDATE Tickets SET id_user = NULL WHERE id_user = OLD.id;"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Users';"
 				   " END"
 				   ";"))
 	{
@@ -494,6 +567,184 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 		triggersError.append("on_deleteUsers\n");
 	}
 
+	//Admins:
+	if(!query.exec("CREATE TRIGGER on_insertAdmins BEFORE INSERT ON Admins"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Admins';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertAdmins\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateAdmins BEFORE UPDATE ON Admins"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Admins';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateAdmins\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteAdmins BEFORE DELETE ON Admins"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Admins';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteAdmins\n");
+	}
+
+	//Categories:
+	if(!query.exec("CREATE TRIGGER on_insertCategories BEFORE INSERT ON Categories"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Categories';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertCategories\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateCategories BEFORE UPDATE ON Categories"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Categories';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateCategories\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteCategories BEFORE DELETE ON Categories"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Categories';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteCategories\n");
+	}
+
+	//Places:
+	if(!query.exec("CREATE TRIGGER on_insertPlaces BEFORE INSERT ON Places"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Places';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertPlaces\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updatePlaces BEFORE UPDATE ON Places"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Places';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updatePlaces\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deletePlaces BEFORE DELETE ON Places"
+				   " FOR EACH ROW BEGIN"
+				   "	DELETE FROM Actions WHERE id_place = OLD.id;"
+				   "	DELETE FROM PlaceSchemes WHERE id_place = OLD.id;"
+				   "	DELETE FROM Images WHERE id = OLD.id_background;"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Places';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deletePlaces\n");
+	}
+
+	//PlaceSchemes:
+	if(!query.exec("CREATE TRIGGER on_insertPlaceSchemes BEFORE INSERT ON PlaceSchemes"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'PlaceSchemes';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertPlaceSchemes\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updatePlaceSchemes BEFORE UPDATE ON PlaceSchemes"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'PlaceSchemes';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updatePlaceSchemes\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deletePlaceSchemes BEFORE DELETE ON PlaceSchemes"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'PlaceSchemes';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deletePlaceSchemes\n");
+	}
+
+	//Clients:
+	if(!query.exec("CREATE TRIGGER on_insertClients BEFORE INSERT ON Clients"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Clients';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertClients\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateClients BEFORE UPDATE ON Clients"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Clients';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateClients\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteClients BEFORE DELETE ON Clients"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Clients';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteClients\n");
+	}
+
+	//Actions:
+	if(!query.exec("CREATE TRIGGER on_insertActions BEFORE INSERT ON Actions"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Actions';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertActions\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateActions BEFORE UPDATE ON Actions"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Actions';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateActions\n");
+	}
 	if(!query.exec("CREATE TRIGGER on_deleteActions BEFORE DELETE ON Actions"
 				   " FOR EACH ROW BEGIN"
 				   "	DELETE FROM Tickets WHERE id_action = OLD.id;"
@@ -502,6 +753,7 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 				   "	DELETE FROM ActionScheme WHERE id_action = OLD.id;"
 				   "	DELETE FROM ActionPriceGroups WHERE id_action = OLD.id;"
 				   "	DELETE FROM Images WHERE id = OLD.id_ticketSubstrate;"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Actions';"
 				   " END"
 				   ";"))
 	{
@@ -509,91 +761,287 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 		triggersError.append("on_deleteActions\n");
 	}
 
-	if(!query.exec("CREATE TRIGGER on_deletePlaces BEFORE DELETE ON Places"
+	//ActionScheme:
+	if(!query.exec("CREATE TRIGGER on_insertActionScheme BEFORE INSERT ON ActionScheme"
 				   " FOR EACH ROW BEGIN"
-				   "	DELETE FROM Actions WHERE id_place = OLD.id;"
-				   "	DELETE FROM PlaceSchemes WHERE id_place = OLD.id;"
-				   "	DELETE FROM Images WHERE id = OLD.id_background;"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ActionScheme';"
 				   " END"
 				   ";"))
 	{
 		qDebug(qPrintable(query.lastError().text()));
-		triggersError.append("on_deletePlaces\n");
+		triggersError.append("on_insertActionScheme\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateActionScheme BEFORE UPDATE ON ActionScheme"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ActionScheme';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateCategories\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteActionScheme BEFORE DELETE ON ActionScheme"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ActionScheme';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteActionScheme\n");
+	}
+
+	//ActionPriceGroups:
+	if(!query.exec("CREATE TRIGGER on_insertActionPriceGroups BEFORE INSERT ON ActionPriceGroups"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ActionPriceGroups';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertActionPriceGroups\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateActionPriceGroups BEFORE UPDATE ON ActionPriceGroups"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ActionPriceGroups';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateActionPriceGroups\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteActionPriceGroups BEFORE DELETE ON ActionPriceGroups"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ActionPriceGroups';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteActionPriceGroups\n");
+	}
+
+	//Markets:
+	if(!query.exec("CREATE TRIGGER on_insertMarkets BEFORE INSERT ON Markets"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Markets';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertMarkets\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateMarkets BEFORE UPDATE ON Markets"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Markets';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateMarkets\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteMarkets BEFORE DELETE ON Markets"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Markets';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteMarkets\n");
+	}
+
+	//Tickets:
+	if(!query.exec("CREATE TRIGGER on_insertTickets BEFORE INSERT ON Tickets"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Tickets SET dateTime = " + nowExpr + " WHERE id = NEW.id;"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Tickets';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertTickets\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateTickets BEFORE UPDATE ON Tickets"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Tickets';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateTickets\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteTickets BEFORE DELETE ON Tickets"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Tickets';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteTickets\n");
+	}
+
+	//ReturnedTickets:
+	if(!query.exec("CREATE TRIGGER on_insertReturnedTickets BEFORE INSERT ON ReturnedTickets"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE ReturnedTickets SET dateTime = " + nowExpr + " WHERE id = NEW.id;"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ReturnedTickets';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertReturnedTickets\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateReturnedTickets BEFORE UPDATE ON ReturnedTickets"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ReturnedTickets';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateReturnedTickets\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteReturnedTickets BEFORE DELETE ON ReturnedTickets"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ReturnedTickets';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteReturnedTickets\n");
+	}
+
+	//Reservations:
+	if(!query.exec("CREATE TRIGGER on_insertReservations BEFORE INSERT ON Reservations"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Reservations';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertReservations\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateReservations BEFORE UPDATE ON Reservations"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Reservations';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateReservations\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteReservations BEFORE DELETE ON Reservations"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Reservations';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteReservations\n");
+	}
+
+	//Statistics:
+	if(!query.exec("CREATE TRIGGER on_insertStatistics BEFORE INSERT ON Statistics"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Statistics SET dateTime = " + nowExpr + " WHERE id = NEW.id;"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Statistics';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertStatistics\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateStatistics BEFORE UPDATE ON Statistics"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Statistics';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateStatistics\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteStatistics BEFORE DELETE ON Statistics"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Statistics';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteStatistics\n");
+	}
+
+	//ComplitedActions:
+	if(!query.exec("CREATE TRIGGER on_insertComplitedActions BEFORE INSERT ON ComplitedActions"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ComplitedActions';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertComplitedActions\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateComplitedActions BEFORE UPDATE ON ComplitedActions"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ComplitedActions';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateComplitedActions\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_deleteComplitedActions BEFORE DELETE ON ComplitedActions"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ComplitedActions';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_deleteComplitedActions\n");
+	}
+
+	//Advertisements:
+	if(!query.exec("CREATE TRIGGER on_insertAdvertisements BEFORE INSERT ON Advertisements"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Advertisements';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_insertAdvertisements\n");
+	}
+
+	if(!query.exec("CREATE TRIGGER on_updateAdvertisements BEFORE UPDATE ON Advertisements"
+				   " FOR EACH ROW BEGIN"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Advertisements';"
+				   " END"
+				   ";"))
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		triggersError.append("on_updateAdvertisements\n");
 	}
 
 	if(!query.exec("CREATE TRIGGER on_deleteAdvertisements BEFORE DELETE ON Advertisements"
 				   " FOR EACH ROW BEGIN"
 				   "	DELETE FROM Images WHERE id = OLD.id;"
+				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Advertisements';"
 				   " END"
 				   ";"))
 	{
 		qDebug(qPrintable(query.lastError().text()));
 		triggersError.append("on_deleteAdvertisements\n");
-	}
-
-	if(mServer)
-	{
-		if(!query.exec("CREATE TRIGGER on_insertTickets BEFORE INSERT ON Tickets"
-					   " FOR EACH ROW BEGIN"
-					   "	SET NEW.dateTime = " + nowExpr + ";"
-					   " END"
-					   ";"))
-		{
-			qDebug(qPrintable(query.lastError().text()));
-			triggersError.append("on_insertTickets\n");
-		}
-
-		if(!query.exec("CREATE TRIGGER on_insertReturnedTickets BEFORE INSERT ON ReturnedTickets"
-					   " FOR EACH ROW BEGIN"
-					   "	SET NEW.dateTime = " + nowExpr + ";"
-					   " END"
-					   ";"))
-		{
-			qDebug(qPrintable(query.lastError().text()));
-			triggersError.append("on_insertReturnedTickets\n");
-		}
-
-		if(!query.exec("CREATE TRIGGER on_insertStatistics BEFORE INSERT ON Statistics"
-					   " FOR EACH ROW BEGIN"
-					   "	SET NEW.dateTime = " + nowExpr + ";"
-					   " END"
-					   ";"))
-		{
-			qDebug(qPrintable(query.lastError().text()));
-			triggersError.append("on_insertStatistics\n");
-		}
-	}
-	else
-	{
-		if(!query.exec("CREATE TRIGGER on_insertTickets AFTER INSERT ON Tickets"
-					   " FOR EACH ROW BEGIN"
-					   "	UPDATE Tickets SET dateTime = " + nowExpr + " WHERE id = NEW.id;"
-					   " END"
-					   ";"))
-		{
-			qDebug(qPrintable(query.lastError().text()));
-			triggersError.append("on_insertTickets\n");
-		}
-
-		if(!query.exec("CREATE TRIGGER on_insertReturnedTickets AFTER INSERT ON ReturnedTickets"
-					   " FOR EACH ROW BEGIN"
-					   "	UPDATE ReturnedTickets SET dateTime = " + nowExpr + " WHERE id = NEW.id;"
-					   " END"
-					   ";"))
-		{
-			qDebug(qPrintable(query.lastError().text()));
-			triggersError.append("on_insertReturnedTickets\n");
-		}
-
-		if(!query.exec("CREATE TRIGGER on_insertStatistics AFTER INSERT ON Statistics"
-					   " FOR EACH ROW BEGIN"
-					   "	UPDATE Statistics SET dateTime = " + nowExpr + " WHERE id = NEW.id;"
-					   " END"
-					   ";"))
-		{
-			qDebug(qPrintable(query.lastError().text()));
-			triggersError.append("on_insertStatistics\n");
-		}
 	}
 
 	showTables();

@@ -112,32 +112,38 @@ void CClientActionDialog::drag(int x, int y)
 
 void CClientActionDialog::updateAdvertisements(const QString &connectionName)
 {
-	QSqlQuery query(QSqlDatabase::database(connectionName));
-	if(query.exec("SELECT id FROM Advertisements;"))
+	static CCacheChecker cacheChecker("Advertisements", connectionName);
+	if(cacheChecker.isNeedUpdate())
 	{
-		mAdvertisementMutex.lock();
+		cacheChecker.setUpdated();
 
-		mAdvertisementItems.clear();
-		mAdvertisementScene.clear();
-		mAdvertisementItemCurrentIndex = -1;
-
-		CAdvertisementItem *item;
-		while(query.next())
+		QSqlQuery query(QSqlDatabase::database(connectionName));
+		if(query.exec("SELECT id FROM Advertisements;"))
 		{
-			item = new CAdvertisementItem;
-			if(item)
+			mAdvertisementMutex.lock();
+
+			mAdvertisementItems.clear();
+			mAdvertisementScene.clear();
+			mAdvertisementItemCurrentIndex = -1;
+
+			CAdvertisementItem *item;
+			while(query.next())
 			{
-				item->setId(query.value(0).toInt());
-				item->setPixmap( CImages::instance()->image(item->id()) );
-				mAdvertisementItems.append(item);
-				item->setOpacity(0.0f);
-				mAdvertisementScene.addItem(item);
+				item = new CAdvertisementItem;
+				if(item)
+				{
+					item->setId(query.value(0).toInt());
+					item->setPixmap( CImages::instance()->image(item->id()) );
+					mAdvertisementItems.append(item);
+					item->setOpacity(0.0f);
+					mAdvertisementScene.addItem(item);
+				}
 			}
+
+			mAdvertisementMutex.unlock();
+
+			changeItem();
 		}
-
-		mAdvertisementMutex.unlock();
-
-		changeItem();
 	}
 }
 

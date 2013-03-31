@@ -15,33 +15,39 @@ CAdvertisementsWidget::~CAdvertisementsWidget()
 
 void CAdvertisementsWidget::updateData()
 {
-	QSqlQuery query(QSqlDatabase::database(mConnectionName));
-
-	if(query.exec("SELECT id FROM Advertisements;"))
+	static CCacheChecker cacheChecker("Advertisements", mConnectionName);
+	if(cacheChecker.isNeedUpdate())
 	{
-		int counter = 0;
-		QListWidgetItem *item;
-		CImages *images = CImages::instance();
-		if(!images)
-		{
-			qCritical("CAdvertisementsWidget::updateData: No images handle!");
-			return;
-		}
+		cacheChecker.setUpdated();
 
-		ui->lwImages->clear();
+		QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
-		while(query.next())
+		if(query.exec("SELECT id FROM Advertisements;"))
 		{
-			item = new QListWidgetItem;
-			if(item)
+			int counter = 0;
+			QListWidgetItem *item;
+			CImages *images = CImages::instance();
+			if(!images)
 			{
-				item->setData(Qt::UserRole, query.value(0));
-				item->setIcon(QIcon(images->image(query.value(0).toInt())));
-				ui->lwImages->addItem(item);
+				qCritical("CAdvertisementsWidget::updateData: No images handle!");
+				return;
 			}
-			counter++;
+
+			ui->lwImages->clear();
+
+			while(query.next())
+			{
+				item = new QListWidgetItem;
+				if(item)
+				{
+					item->setData(Qt::UserRole, query.value(0));
+					item->setIcon(QIcon(images->image(query.value(0).toInt())));
+					ui->lwImages->addItem(item);
+				}
+				counter++;
+			}
+			ui->gbxAdvertisement->setTitle(tr("Реклама: %1 шт.").arg(counter));
 		}
-		ui->gbxAdvertisement->setTitle(tr("Реклама: %1 шт.").arg(counter));
 	}
 }
 
