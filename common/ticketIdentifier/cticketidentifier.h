@@ -14,6 +14,8 @@ public:
 	 explicit CTicketIdentifier();
 	 explicit CTicketIdentifier(const QString &barCode);
 
+	void operator = (const CTicketIdentifier &object);
+
 	void render(const int w, const int h, QPainter *painter) const;
 	inline void render(const QSize &imageSize, QPainter *painter) const;
 

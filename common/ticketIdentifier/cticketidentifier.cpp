@@ -28,6 +28,11 @@ CTicketIdentifier::CTicketIdentifier(const QString &barCode)
 	mBarCode = barCode;
 }
 
+void CTicketIdentifier::operator =(const CTicketIdentifier &object)
+{
+	mBarCode = object.mBarCode;
+}
+
 void CTicketIdentifier::render(const int w, const int h, QPainter *painter) const
 {
 	EAN13 ean13(mBarCode);
@@ -81,7 +86,7 @@ CTicketIdentifier CTicketIdentifier::generate(const QString &data)
 		case 10:
 		{
 			bool conversion;
-			data.toInt(&conversion, 10);
+			data.toULongLong(&conversion, 10);
 			if(conversion == true)
 			{
 				const char master = 1 + qrand() % 9;
@@ -104,7 +109,8 @@ CTicketIdentifier CTicketIdentifier::generate(const QString &data)
 */
 CTicketIdentifier CTicketIdentifier::generate()
 {
-	QString identifier = QString::number(qrand()%10000000000);
+	quint64 num = (qrand() << 32) + qrand();
+	QString identifier = QString::number(num).right(10);
 	while(identifier.size() < 10)
 		identifier.prepend(QString::number( 1 + qrand() % 9 ));
 	const char master = 1 + qrand() % 9;

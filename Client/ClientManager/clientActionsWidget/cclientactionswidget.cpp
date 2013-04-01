@@ -673,7 +673,7 @@ void CClientActionsWidget::on_pbnPrintTickets_clicked()
 					{
 						qDebug(qPrintable(query.lastError().text()));
 						QSqlDatabase::database(mConnectionName).rollback();
-						QMessageBox::critical(this, tr("Ошибка"), tr("Произошла ошибка при работе с сервером базы данных. Печать отменена.\nПроверьте подключение к интернету."));
+						QMessageBox::critical(this, tr("Ошибка"), tr("Произошла ошибка при работе с сервером базы данных. Печать отменена."));
 					}
 					else
 					{

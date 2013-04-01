@@ -855,9 +855,10 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 	}
 
 	//Tickets:
+	const static QString ticketsExpr = mServer ? " SET NEW.dateTime = NOW();" : " UPDATE Tickets SET dateTime = datetime('now') WHERE id = NEW.id;";
 	if(!query.exec("CREATE TRIGGER on_insertTickets BEFORE INSERT ON Tickets"
 				   " FOR EACH ROW BEGIN"
-				   "	UPDATE Tickets SET dateTime = " + nowExpr + " WHERE id = NEW.id;"
+				   + ticketsExpr +
 				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Tickets';"
 				   " END"
 				   ";"))
@@ -887,9 +888,10 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 	}
 
 	//ReturnedTickets:
+	const static QString returnedTicketsExpr = mServer ? " SET NEW.dateTime = NOW();" : " UPDATE ReturnedTickets SET dateTime = datetime('now') WHERE id = NEW.id;";
 	if(!query.exec("CREATE TRIGGER on_insertReturnedTickets BEFORE INSERT ON ReturnedTickets"
 				   " FOR EACH ROW BEGIN"
-				   "	UPDATE ReturnedTickets SET dateTime = " + nowExpr + " WHERE id = NEW.id;"
+				   + returnedTicketsExpr +
 				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'ReturnedTickets';"
 				   " END"
 				   ";"))
@@ -950,9 +952,10 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 	}
 
 	//Statistics:
+	const static QString staticsExpr = mServer ? " SET NEW.dateTime = NOW();" : " UPDATE Statistics SET dateTime = datetime('now') WHERE id = NEW.id;";
 	if(!query.exec("CREATE TRIGGER on_insertStatistics BEFORE INSERT ON Statistics"
 				   " FOR EACH ROW BEGIN"
-				   "	UPDATE Statistics SET dateTime = " + nowExpr + " WHERE id = NEW.id;"
+				   + staticsExpr +
 				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'Statistics';"
 				   " END"
 				   ";"))
