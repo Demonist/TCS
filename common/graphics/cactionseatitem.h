@@ -22,8 +22,9 @@ protected:
 	QColor brushForSeat() const;
 
 public:
-	explicit CActionSeatItem(const QString &connectionName, const int seatId);
-	explicit CActionSeatItem(const QString &connectionName, const int seatId, const Global::SeatState seatState, const int priceGroupId);
+	explicit CActionSeatItem(const int seatId, const QString &seatText, const QString &row, const qreal &x, const qreal &y, const Global::SeatState seatState, const int priceGroupId, const QString &priceColor);
+	explicit CActionSeatItem(const int seatId, const QString &seatText, const QString &row, const qreal &x, const qreal &y, const Global::SeatState seatState);
+	explicit CActionSeatItem(const int seatId, const QString &seatText, const QString &row, const qreal &x, const qreal &y);
 	~CActionSeatItem();
 
 	void setSeatStateAnimated(const Global::SeatState seatState, const int durationMs = 300);

@@ -686,6 +686,7 @@ void CDatabaseManager::on_pbnCreateTables_clicked()
 
 	if(!query.exec("CREATE TRIGGER on_deletePlaceSchemes BEFORE DELETE ON PlaceSchemes"
 				   " FOR EACH ROW BEGIN"
+				   "	DELETE FROM ActionScheme WHERE id_placeScheme = OLD.id;"
 				   "	UPDATE Cache SET dateTime = " + nowExpr + " WHERE tableName = 'PlaceSchemes';"
 				   " END"
 				   ";"))

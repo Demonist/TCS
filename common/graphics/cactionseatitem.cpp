@@ -27,26 +27,29 @@ QColor CActionSeatItem::brushForSeat() const
 
 //public:
 
-CActionSeatItem::CActionSeatItem(const QString &connectionName, const int seatId) :
-	CSeatItem(connectionName, seatId)
+CActionSeatItem::CActionSeatItem(const int seatId, const QString &seatText, const QString &row, const qreal &x, const qreal &y, const Global::SeatState seatState, const int priceGroupId, const QString &priceColor) :
+	CSeatItem(seatId, seatText, row, x, y)
 {
-	mSeatState = Global::SeatHided;
+	mSeatState = seatState;
+	mPriceGroupId = priceGroupId;
+	setPenColor(priceColor);
+	init();
+}
+
+CActionSeatItem::CActionSeatItem(const int seatId, const QString &seatText, const QString &row, const qreal &x, const qreal &y, const Global::SeatState seatState) :
+	CSeatItem(seatId, seatText, row, x, y)
+{
+	mSeatState = seatState;
 	mPriceGroupId = 0;
 	init();
 }
 
-CActionSeatItem::CActionSeatItem(const QString &connectionName, const int seatId, const Global::SeatState seatState, const int priceGroupId) :
-	CSeatItem(connectionName, seatId)
+CActionSeatItem::CActionSeatItem(const int seatId, const QString &seatText, const QString &row, const qreal &x, const qreal &y) :
+	CSeatItem(seatId, seatText, row, x, y)
 {
-	mSeatState = seatState;
-	mPriceGroupId = priceGroupId;
+	mSeatState = Global::SeatHided;
+	mPriceGroupId = 0;
 	init();
-
-	QSqlQuery query(QSqlDatabase::database(connectionName));
-	query.prepare("SELECT color FROM ActionPriceGroups WHERE id = :id;");
-	query.bindValue(":id", mPriceGroupId);
-	if(query.exec() && query.first())
-		setPenColor(query.value(0).toString());
 }
 
 CActionSeatItem::~CActionSeatItem()

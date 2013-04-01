@@ -540,13 +540,13 @@ CPlaceSchemeDialog::CPlaceSchemeDialog(const QString &connectionName, const int 
 		mScene.setSceneRect(0.0f, 0.0f, query.value(2).toReal(), query.value(3).toReal());
 	}
 
-	query.prepare("SELECT id FROM PlaceSchemes WHERE id_place = :id;");
+	query.prepare("SELECT id, seatNumber, row, x, y FROM PlaceSchemes WHERE id_place = :id;");
 	query.bindValue(":id", mId);
 	mSeatsCount = 0;
 	if(query.exec())
 		while(query.next())
 		{
-			CSeatItem *item = new CSeatItem(mConnectionName, query.value(0).toInt());
+			CSeatItem *item = new CSeatItem(query.value(0).toInt(), query.value(1).toString(), query.value(2).toString(), query.value(3).toReal(), query.value(4).toReal());
 			mScene.addItem(item);
 			item->showAnimated(2000);
 			mSeatsCount++;
@@ -566,14 +566,22 @@ void CPlaceSchemeDialog::on_pbnCancel_clicked()
 
 void CPlaceSchemeDialog::on_pbnApply_clicked()
 {
-	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+	QSqlDatabase db = QSqlDatabase::database(mConnectionName);
+	QSqlQuery query(db);
+	bool queryError = false;
+
+	if(!db.transaction())
+		queryError = true;
 
 	query.prepare("UPDATE Places SET backgroundWidth = :width, backgroundHeight = :height WHERE id = :id;");
 	query.bindValue(":id", mId);
 	query.bindValue(":width", ui->sbxWidth->value());
 	query.bindValue(":height", ui->sbxHeight->value());
 	if(!query.exec())
+	{
+		queryError = true;
 		qDebug(qPrintable(query.lastError().text()));
+	}
 
 	QList<QGraphicsItem*> items = mScene.items();
 
@@ -583,7 +591,7 @@ void CPlaceSchemeDialog::on_pbnApply_clicked()
 	progressDialog.setMinimumDuration(500);
 	progressDialog.setMaximum(items.count());
 
-	for(int i = 0; i < items.count(); i++)
+	for(int i = 0; i < items.count() && !queryError; i++)
 	{
 		if(items[i]->data(0).toString() == CSeatItem::itemName())
 		{
@@ -598,7 +606,6 @@ void CPlaceSchemeDialog::on_pbnApply_clicked()
 					query.bindValue(":x", item->x());
 					query.bindValue(":y", item->y());
 					query.bindValue(":placeId", mId);
-					query.exec();
 				}
 				else
 				{
@@ -608,21 +615,32 @@ void CPlaceSchemeDialog::on_pbnApply_clicked()
 					query.bindValue(":x", item->x());
 					query.bindValue(":y", item->y());
 					query.bindValue(":id", item->id());
-					query.exec();
 				}
+				if(!query.exec())
+					queryError = true;
 			}
 		}
 		progressDialog.setValue(i);
 	}
 	progressDialog.close();
 
-	for(int i = 0; i < mDeletedIds.count(); i++)
+	for(int i = 0; i < mDeletedIds.count() && !queryError; i++)
 		if(mDeletedIds[i] > 0)
 		{
 			query.prepare("DELETE FROM PlaceSchemes WHERE id = :id;");
 			query.bindValue(":id", mDeletedIds[i]);
-			query.exec();
+			if(!query.exec())
+				queryError = true;
 		}
+
+	if(queryError)
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		db.rollback();
+		QMessageBox::critical(this, tr("Ошибка"), tr("Произошла ошибка при работе с сервером базы данных. Изменения не были сохранены."));
+	}
+	else
+		db.commit();
 
 	close();
 }

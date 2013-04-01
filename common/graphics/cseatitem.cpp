@@ -68,6 +68,20 @@ CSeatItem::CSeatItem(const QString &connectionName, const int seatId) :
 	}
 }
 
+CSeatItem::CSeatItem(const int seatId, const QString &seatText, const QString &row, const qreal &x, const qreal &y) :
+	CAbstractGraphicsItem()
+{
+	init();
+	mId = seatId;
+
+	mText = seatText;
+	mInitText = mText;
+	mRow = row;
+	mInitRow = mRow;
+	setPos(x, y);
+	mInitPoint = pos().toPoint();
+}
+
 CSeatItem::~CSeatItem()
 {
 

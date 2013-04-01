@@ -34,6 +34,7 @@ protected:
 public:
 	explicit CSeatItem();
 	explicit CSeatItem(const QString &connectionName, const int seatId);
+	explicit CSeatItem(const int seatId, const QString &seatText, const QString &row, const qreal &x, const qreal &y);
 	virtual ~CSeatItem();
 
 	virtual QRectF boundingRect() const;

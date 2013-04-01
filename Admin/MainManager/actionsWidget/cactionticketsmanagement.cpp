@@ -255,31 +255,132 @@ CActionTicketsManagement::CActionTicketsManagement(const QString &connectionName
 	else
 		qDebug(qPrintable(query.lastError().text()));
 
-	query.prepare("SELECT id FROM PlaceSchemes WHERE id_place = :id;");
+	CActionSeatItem *item;
+	QList<int> loadedPlaceSchemeIds;
+
+	query.prepare("SELECT"
+				  " PlaceSchemes.id,"
+				  " PlaceSchemes.seatNumber,"
+				  " PlaceSchemes.row,"
+				  " PlaceSchemes.x,"
+				  " PlaceSchemes.y,"
+				  " ActionScheme.state,"
+				  " ActionScheme.id_priceGroup,"
+				  " ActionPriceGroups.color "
+				  "FROM"
+				  " PlaceSchemes,"
+				  " ActionScheme,"
+				  " ActionPriceGroups "
+				  "WHERE"
+				  " id_place = :id AND"
+				  " ActionScheme.id_action = :actionId AND"
+				  " ActionScheme.id_placeScheme = PlaceSchemes.id AND"
+				  " ActionPriceGroups.id = ActionScheme.id_priceGroup"
+				  ";");
+	query.bindValue(":id", mPlaceId);
+	query.bindValue(":actionId", mId);
+	if(query.exec())
+	{
+		while(query.next())
+		{
+			loadedPlaceSchemeIds.append(query.value(0).toInt());
+
+			item = new CActionSeatItem(
+					   query.value(0).toInt(),
+					   query.value(1).toString(),
+					   query.value(2).toString(),
+					   query.value(3).toReal(),
+					   query.value(4).toReal(),
+					   static_cast<Global::SeatState>( query.value(5).toInt() ),
+					   query.value(6).toInt(),
+					   query.value(7).toString()
+					   );
+			if(item)
+			{
+				item->setData(1, true);
+				mScene.addItem(item);
+				item->showAnimated(2000);
+			}
+		}
+	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
+
+	query.prepare("SELECT"
+				  " PlaceSchemes.id,"
+				  " PlaceSchemes.seatNumber,"
+				  " PlaceSchemes.row,"
+				  " PlaceSchemes.x,"
+				  " PlaceSchemes.y,"
+				  " ActionScheme.state "
+				  "FROM"
+				  " PlaceSchemes,"
+				  " ActionScheme "
+				  "WHERE"
+				  " id_place = :id AND"
+				  " ActionScheme.id_action = :actionId AND"
+				  " ActionScheme.id_placeScheme = PlaceSchemes.id AND"
+				  " (ActionScheme.id_priceGroup = 0 OR ActionScheme.id_priceGroup = NULL)"
+				  ";");
+	query.bindValue(":id", mPlaceId);
+	query.bindValue(":actionId", mId);
+	if(query.exec())
+	{
+		while(query.next())
+		{
+			loadedPlaceSchemeIds.append(query.value(0).toInt());
+
+			item = new CActionSeatItem(
+					   query.value(0).toInt(),
+					   query.value(1).toString(),
+					   query.value(2).toString(),
+					   query.value(3).toReal(),
+					   query.value(4).toReal(),
+					   static_cast<Global::SeatState>( query.value(5).toInt() )
+					   );
+			if(item)
+			{
+				item->setData(1, true);
+				mScene.addItem(item);
+				item->showAnimated(2000);
+			}
+		}
+	}
+	else
+		qDebug(qPrintable(query.lastError().text()));
+
+	query.prepare("SELECT"
+				  " PlaceSchemes.id,"
+				  " PlaceSchemes.seatNumber,"
+				  " PlaceSchemes.row,"
+				  " PlaceSchemes.x,"
+				  " PlaceSchemes.y "
+				  "FROM"
+				  " PlaceSchemes "
+				  "WHERE"
+				  " id_place = :id"
+				  ";");
 	query.bindValue(":id", mPlaceId);
 	if(query.exec())
 	{
-		QSqlQuery query2(QSqlDatabase::database(mConnectionName));
-		query2.prepare("SELECT state, id_priceGroup FROM ActionScheme WHERE id_action = :actionId AND id_placeScheme = :idSeat");
 		while(query.next())
 		{
-			CActionSeatItem *item;
-
-			query2.bindValue(":actionId", mId);
-			query2.bindValue(":idSeat", query.value(0).toInt());
-			if(query2.exec() && query2.first())
+			if(loadedPlaceSchemeIds.contains(query.value(0).toInt()) == false)
 			{
-				item = new CActionSeatItem(mConnectionName, query.value(0).toInt(), (Global::SeatState)query2.value(0).toInt(), query2.value(1).toInt());
-				item->setData(1, true);
+				item = new CActionSeatItem(
+						   query.value(0).toInt(),
+						   query.value(1).toString(),
+						   query.value(2).toString(),
+						   query.value(3).toReal(),
+						   query.value(4).toReal()
+						   );
+				if(item)
+				{
+					item->setData(1, false);
+					mScene.addItem(item);
+					item->showAnimated(2000);
+				}
 			}
-			else
-			{
-				item = new CActionSeatItem(mConnectionName, query.value(0).toInt());
-				item->setData(1, false);
-			}
-
-			mScene.addItem(item);
-			item->showAnimated(2000);
 		}
 	}
 	else
@@ -298,7 +399,10 @@ void CActionTicketsManagement::on_pbnCancel_clicked()
 
 void CActionTicketsManagement::on_pbnApply_clicked()
 {
-	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+	QSqlDatabase db = QSqlDatabase::database(mConnectionName);
+	QSqlQuery query(db);
+	bool queryError = false;
+
 	QList<QGraphicsItem*> items = mScene.items();
 
 	QProgressDialog progressDialog(this);
@@ -319,7 +423,10 @@ void CActionTicketsManagement::on_pbnApply_clicked()
 					return;
 		}
 
-	for(int i = 0; i < items.size(); i++)
+	if(!db.transaction())
+		queryError = true;
+
+	for(int i = 0; i < items.size() && !queryError; i++)
 	{
 		if(items[i]->data(0) == CActionSeatItem::itemName())
 		{
@@ -337,7 +444,7 @@ void CActionTicketsManagement::on_pbnApply_clicked()
 					if(seatItem->data(1).toBool() == true)
 					{
 						query.prepare("UPDATE ActionScheme SET state = :state, id_priceGroup = :priceGroup WHERE id_action = :actId AND id_placeScheme = :seatId;");
-						query.bindValue(":state", (int)seatItem->seatState());
+						query.bindValue(":state", static_cast<int>( seatItem->seatState() ));
 						query.bindValue(":actId", mId);
 						query.bindValue(":seatId", seatItem->id());
 						query.bindValue(":priceGroup", seatItem->priceGroupId());
@@ -348,20 +455,30 @@ void CActionTicketsManagement::on_pbnApply_clicked()
 
 						query.bindValue(":actId", mId);
 						query.bindValue(":seatId", seatItem->id());
-						query.bindValue(":state", (int)seatItem->seatState());
+						query.bindValue(":state", static_cast<int>( seatItem->seatState() ));
 						query.bindValue(":priceGroup", seatItem->priceGroupId());
 					}
 				}
 				if(!query.exec())
 				{
+					queryError = true;
 					qDebug(qPrintable(query.lastError().text()));
-					break;
 				}
 			}
 		}
 		progressDialog.setValue(i);
 	}
 	progressDialog.close();
+
+	if(queryError)
+	{
+		qDebug(qPrintable(query.lastError().text()));
+		db.rollback();
+		QMessageBox::critical(this, tr("Ошибка"), tr("Произошла ошибка при работе с сервером базы данных. Изменения не были сохранены."));
+	}
+	else
+		db.commit();
+
 	close();
 }
 

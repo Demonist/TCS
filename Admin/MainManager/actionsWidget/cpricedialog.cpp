@@ -80,10 +80,12 @@ void CPriceDialog::on_pbnCancel_clicked()
 
 void CPriceDialog::on_pbnApply_clicked()
 {
-	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+	QSqlDatabase db = QSqlDatabase::database(mConnectionName);
+	QSqlQuery query(db);
 
 	if(mType == Add)
 	{
+		db.transaction();
 		query.prepare("INSERT INTO ActionPriceGroups VALUES(NULL, :actId, :name, :price, :penalty, :color);");
 		query.bindValue(":actId", mActionId);
 		query.bindValue(":name", ui->leName->text());
@@ -105,7 +107,10 @@ void CPriceDialog::on_pbnApply_clicked()
 	{
 		if(mType == Add
 		   && query.exec("SELECT MAX(id) FROM ActionPriceGroups;") && query.first())
+		{
 			mId = query.value(0).toInt();
+			db.commit();
+		}
 	}
 	else
 		qDebug(qPrintable("CPriceDialog::on_pbnApply_clicked: sql error - " + query.lastError().text()));
