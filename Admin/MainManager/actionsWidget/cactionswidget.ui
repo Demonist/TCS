@@ -63,6 +63,9 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QToolButton" name="tbnAdd">
+          <property name="toolTip">
+           <string>Добавить мероприятие</string>
+          </property>
           <property name="icon">
            <iconset resource="../main_res.qrc">
             <normaloff>:/images/add.png</normaloff>:/images/add.png</iconset>
@@ -71,6 +74,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="tbnEdit">
+          <property name="toolTip">
+           <string>Редактировать мероприятие</string>
+          </property>
           <property name="icon">
            <iconset resource="../main_res.qrc">
             <normaloff>:/images/edit.png</normaloff>:/images/edit.png</iconset>
@@ -79,6 +85,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="tbnDel">
+          <property name="toolTip">
+           <string>Удалить мероприятие</string>
+          </property>
           <property name="icon">
            <iconset resource="../main_res.qrc">
             <normaloff>:/images/delete.png</normaloff>:/images/delete.png</iconset>

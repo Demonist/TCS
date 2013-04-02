@@ -27,8 +27,8 @@ public:
 	~CUserDialog();
 
 private slots:
-	void on_buttonBox_accepted();
-	void on_buttonBox_rejected();
+	void on_pbnCancel_clicked();
+	void on_pbnApply_clicked();
 
 signals:
 	void dataWasUpdated();

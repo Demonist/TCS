@@ -43,6 +43,9 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QToolButton" name="tbnPlacesAdd">
+          <property name="toolTip">
+           <string>Добавить концертную площадку</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -54,6 +57,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="tbnPlacesEdit">
+          <property name="toolTip">
+           <string>Редактировать концертную площадку</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -65,6 +71,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="tbnPlacesDelete">
+          <property name="toolTip">
+           <string>Удалить концертню площадку</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -95,6 +104,7 @@
   </layout>
  </widget>
  <resources>
+  <include location="../main_res.qrc"/>
   <include location="../main_res.qrc"/>
  </resources>
  <connections/>

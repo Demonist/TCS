@@ -120,6 +120,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="toolTip">
+            <string>Сменить текущего пользователя (кассира)</string>
+           </property>
            <property name="text">
             <string>Сменить</string>
            </property>

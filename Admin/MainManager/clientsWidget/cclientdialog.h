@@ -19,6 +19,8 @@ private:
 	Type mType;
 	int mId;
 	QString mConnectionName;
+
+private:
 	bool validateLogin(QString login, Type actionType);
 
 public:
@@ -28,8 +30,8 @@ public:
 
 
 private slots:
-	void on_buttonBox_accepted();
-	void on_buttonBox_rejected();
+	void on_pbnCancel_clicked();
+	void on_pbnApply_clicked();
 
 signals:
 	void dataWasUpdated();

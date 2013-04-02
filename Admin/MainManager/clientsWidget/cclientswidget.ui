@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>632</width>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,6 +61,9 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QToolButton" name="tbnClientsAdd">
+          <property name="toolTip">
+           <string>Добавить клиента</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -72,6 +75,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="tbnClientsEdit">
+          <property name="toolTip">
+           <string>Редактировать данные клиента</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -83,6 +89,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="tbnClientsDelete">
+          <property name="toolTip">
+           <string>Удалить клиента</string>
+          </property>
           <property name="text">
            <string/>
           </property>

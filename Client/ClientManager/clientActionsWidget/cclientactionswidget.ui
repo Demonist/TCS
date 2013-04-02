@@ -53,6 +53,9 @@
                 </item>
                 <item row="0" column="1">
                  <widget class="QToolButton" name="tbnCategoryClear">
+                  <property name="toolTip">
+                   <string>Убрать фильтр по категории</string>
+                  </property>
                   <property name="icon">
                    <iconset resource="../clinet_res.qrc">
                     <normaloff>:/clientImages/clear.png</normaloff>:/clientImages/clear.png</iconset>
@@ -73,6 +76,9 @@
                 </item>
                 <item row="0" column="1">
                  <widget class="QToolButton" name="tbnPerformerCLear">
+                  <property name="toolTip">
+                   <string>Убрать фильтр по исполнителю</string>
+                  </property>
                   <property name="icon">
                    <iconset resource="../clinet_res.qrc">
                     <normaloff>:/clientImages/clear.png</normaloff>:/clientImages/clear.png</iconset>
@@ -93,6 +99,9 @@
                 </item>
                 <item row="0" column="1">
                  <widget class="QToolButton" name="tbnPlaceClear">
+                  <property name="toolTip">
+                   <string>Убрать фильтр по концертной площадке</string>
+                  </property>
                   <property name="icon">
                    <iconset resource="../clinet_res.qrc">
                     <normaloff>:/clientImages/clear.png</normaloff>:/clientImages/clear.png</iconset>
@@ -130,6 +139,9 @@
                 </item>
                 <item row="0" column="2">
                  <widget class="QToolButton" name="tbnDateClear">
+                  <property name="toolTip">
+                   <string>Убрать фильтр по дате проведения мероприятия</string>
+                  </property>
                   <property name="icon">
                    <iconset resource="../clinet_res.qrc">
                     <normaloff>:/clientImages/clear.png</normaloff>:/clientImages/clear.png</iconset>
@@ -143,6 +155,9 @@
               <layout class="QVBoxLayout" name="verticalLayout">
                <item>
                 <widget class="QToolButton" name="tbnFilterClear">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Убрать все фильтры&lt;br/&gt;(показать все мероприятия)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="icon">
                   <iconset resource="../clinet_res.qrc">
                    <normaloff>:/clientImages/clear.png</normaloff>:/clientImages/clear.png</iconset>
@@ -243,8 +258,11 @@
          </item>
          <item>
           <widget class="QPushButton" name="pbnSoldTicket">
+           <property name="toolTip">
+            <string>Перейти к показу сцены</string>
+           </property>
            <property name="text">
-            <string>Продать билет</string>
+            <string>Показать сцену</string>
            </property>
           </widget>
          </item>
@@ -288,6 +306,9 @@
           </property>
           <item row="0" column="0">
            <widget class="QGroupBox" name="groupBox_9">
+            <property name="toolTip">
+             <string>Стоимость одного билета в фан-зоне</string>
+            </property>
             <property name="title">
              <string>Цена</string>
             </property>
@@ -310,6 +331,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QGroupBox" name="groupBox_11">
+            <property name="toolTip">
+             <string>Доступное количество билетов в фан-зоне для продажи</string>
+            </property>
             <property name="title">
              <string>Доступно</string>
             </property>
@@ -332,6 +356,9 @@
           </item>
           <item row="0" column="2">
            <widget class="QGroupBox" name="groupBox_10">
+            <property name="toolTip">
+             <string>Количество билетов в фан-зоне, которое Вы хотите продать</string>
+            </property>
             <property name="title">
              <string>Продать</string>
             </property>
@@ -365,6 +392,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="toolTip">
+            <string>Вернуться назад к выбору мероприятий</string>
+           </property>
            <property name="text">
             <string>Назад</string>
            </property>
@@ -391,6 +421,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="toolTip">
+            <string>Начать процедуру продажи билетов для выбранных мест</string>
+           </property>
            <property name="text">
             <string>Начать продажу</string>
            </property>
@@ -411,6 +444,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string>Вернуться назад к схеме зала</string>
            </property>
            <property name="text">
             <string>Назад</string>
@@ -437,6 +473,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string>Распечатать билеты</string>
            </property>
            <property name="text">
             <string>Печать билетов</string>
@@ -567,6 +606,29 @@
    <header>csourcegraphicsview.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>twActions</tabstop>
+  <tabstop>pbnSoldTicket</tabstop>
+  <tabstop>sbxFanSellCount</tabstop>
+  <tabstop>pbnStartSelling</tabstop>
+  <tabstop>pbnPrintTickets</tabstop>
+  <tabstop>tbnFilterClear</tabstop>
+  <tabstop>cbxCategory</tabstop>
+  <tabstop>tbnCategoryClear</tabstop>
+  <tabstop>cbxPerformer</tabstop>
+  <tabstop>tbnPerformerCLear</tabstop>
+  <tabstop>cbxPlace</tabstop>
+  <tabstop>tbnPlaceClear</tabstop>
+  <tabstop>tbnDate</tabstop>
+  <tabstop>tbnDateClear</tabstop>
+  <tabstop>pbnBackToActions</tabstop>
+  <tabstop>pbnBackToSeats</tabstop>
+  <tabstop>leFanAvaible</tabstop>
+  <tabstop>gvScene</tabstop>
+  <tabstop>leFanPrice</tabstop>
+  <tabstop>leDate</tabstop>
+  <tabstop>twTickets</tabstop>
+ </tabstops>
  <resources>
   <include location="../clinet_res.qrc"/>
  </resources>

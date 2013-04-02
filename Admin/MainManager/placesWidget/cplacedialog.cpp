@@ -39,7 +39,21 @@ CPlaceDialog::~CPlaceDialog()
 	delete ui;
 }
 
-void CPlaceDialog::on_buttonBox_accepted()
+void CPlaceDialog::on_pbnEditPlaceScheme_clicked()
+{
+	if(mType == Edit)
+	{
+		CPlaceSchemeDialog schemeDialog(mConnectionName, mId, this);
+		schemeDialog.exec();
+	}
+}
+
+void CPlaceDialog::on_pbnCancel_clicked()
+{
+	close();
+}
+
+void CPlaceDialog::on_pbnApply_clicked()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 	if(mType == Add)
@@ -56,24 +70,9 @@ void CPlaceDialog::on_buttonBox_accepted()
 		query.bindValue(":id", mId);
 	}
 
-	////TODO: :
 	if(!query.exec())
 		qDebug(qPrintable(query.lastError().text()));
 
 	emit dataWasUpdated();
 	close();
-}
-
-void CPlaceDialog::on_buttonBox_rejected()
-{
-	close();
-}
-
-void CPlaceDialog::on_pbnEditPlaceScheme_clicked()
-{
-	if(mType == Edit)
-	{
-		CPlaceSchemeDialog schemeDialog(mConnectionName, mId, this);
-		schemeDialog.exec();
-	}
 }

@@ -38,6 +38,9 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QToolButton" name="tbnCategoriesAdd">
+          <property name="toolTip">
+           <string>Добавить категорию</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -49,6 +52,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="tbnCategoriesEdit">
+          <property name="toolTip">
+           <string>Редактировать название категории</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -60,6 +66,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="tbnCategoriesDelete">
+          <property name="toolTip">
+           <string>Удалить категорию</string>
+          </property>
           <property name="text">
            <string/>
           </property>

@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="CAnimatedStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_connection">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -180,15 +180,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CDataBaseConnectionWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">cdatabaseconnectionwidget.h</header>
+   <class>CAnimatedStackedWidget</class>
+   <extends>QStackedWidget</extends>
+   <header>canimatedstackedwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>CAnimatedStackedWidget</class>
-   <extends>QStackedWidget</extends>
-   <header location="global">canimatedstackedwidget.h</header>
+   <class>CDataBaseConnectionWidget</class>
+   <extends>QWidget</extends>
+   <header>cdatabaseconnectionwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -199,6 +199,8 @@
   <tabstop>pbnExit</tabstop>
  </tabstops>
  <resources>
+  <include location="../../../common/connectionWidget/connectionwidget_res.qrc"/>
+  <include location="../../../common/connectionWidget/connectionwidget_res.qrc"/>
   <include location="../../../common/connectionWidget/connectionwidget_res.qrc"/>
   <include location="../../../common/connectionWidget/connectionwidget_res.qrc"/>
  </resources>

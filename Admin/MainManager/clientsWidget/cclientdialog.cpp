@@ -1,6 +1,27 @@
 #include "cclientdialog.h"
 #include "ui_cclientdialog.h"
 
+//private:
+
+bool CClientDialog::validateLogin(QString login, Type actionType)
+{
+	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+	if(actionType == Edit)
+	{
+		query.prepare("SELECT COUNT(id) FROM Clients WHERE login = :login AND id <> :id;");
+		query.bindValue(":id", mId);
+	}
+	else
+		query.prepare("SELECT COUNT(id) FROM Clients WHERE login = :login;");
+	query.bindValue(":login", login);
+	if(query.exec() && query.first())
+		return query.value(0).toInt() == 0;
+
+	return false;
+}
+
+//public:
+
 CClientDialog::CClientDialog(const QString &connectionName, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::CClientDialog)
@@ -41,64 +62,47 @@ CClientDialog::~CClientDialog()
 	delete ui;
 }
 
-void CClientDialog::on_buttonBox_accepted()
+void CClientDialog::on_pbnCancel_clicked()
 {
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
+	close();
+}
+
+void CClientDialog::on_pbnApply_clicked()
+{
+	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 	if(mType == Add)
 	{
-        if(validateLogin(ui->leClientLogin->text(), Add))
-        {
+		if(validateLogin(ui->leClientLogin->text(), Add))
+		{
 			query.prepare("INSERT INTO Clients VALUES(NULL, :name, :birthDate, :login, :passwordHash, :phone);");
-            query.bindValue(":name", ui->leClientFIO->text());
-            query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate().toString("dd.MM.yyyy"));
-            query.bindValue(":login", ui->leClientLogin->text());
+			query.bindValue(":name", ui->leClientFIO->text());
+			query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate().toString("dd.MM.yyyy"));
+			query.bindValue(":login", ui->leClientLogin->text());
 			query.bindValue(":passwordHash", Global::crypt(ui->leClientPassword->text()));
 			query.bindValue(":phone", ui->leClientPhone->text());
-            query.exec();
-            emit dataWasUpdated();
-            close();
-        }
-        else
+			query.exec();
+			emit dataWasUpdated();
+			close();
+		}
+		else
 			QMessageBox::question(this, tr("Внимание"), tr("Пользователь с таким логином уже существует!"));
 	}
 	else if(mType == Edit)
 	{
 		if(validateLogin(ui->leClientLogin->text(), Edit))
-        {
+		{
 			query.prepare("UPDATE Clients SET name = :name, birthDate = :birthDate, login = :login, passwordHash = :passwordHash, phone = :phone WHERE id = :id;");
-            query.bindValue(":name", ui->leClientFIO->text());
-            query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate().toString("dd.MM.yyyy"));
-            query.bindValue(":login", ui->leClientLogin->text());
+			query.bindValue(":name", ui->leClientFIO->text());
+			query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate().toString("dd.MM.yyyy"));
+			query.bindValue(":login", ui->leClientLogin->text());
 			query.bindValue(":passwordHash", Global::crypt(ui->leClientPassword->text()));
 			query.bindValue(":phone", ui->leClientPhone->text());
-            query.bindValue(":id", mId);
-            query.exec();
-            emit dataWasUpdated();
-            close();
-        }
-        else
+			query.bindValue(":id", mId);
+			query.exec();
+			emit dataWasUpdated();
+			close();
+		}
+		else
 			QMessageBox::question(this, tr("Внимание"), tr("Пользователь с таким логином уже существует!"));
 	}
-}
-
-void CClientDialog::on_buttonBox_rejected()
-{
-	close();
-}
-
-bool CClientDialog::validateLogin(QString login, Type actionType)
-{
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
-	if(actionType == Edit)
-	{
-		query.prepare("SELECT COUNT(id) FROM Clients WHERE login = :login AND id <> :id;");
-		query.bindValue(":id", mId);
-	}
-	else
-		query.prepare("SELECT COUNT(id) FROM Clients WHERE login = :login;");
-	query.bindValue(":login", login);
-	if(query.exec() && query.first())
-		return query.value(0).toInt() == 0;
-
-	return false;
 }

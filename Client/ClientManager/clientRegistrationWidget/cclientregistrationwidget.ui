@@ -106,6 +106,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="pbnSave">
+          <property name="toolTip">
+           <string>Зарегистрировать клиента</string>
+          </property>
           <property name="text">
            <string>Зарегистрировать</string>
           </property>

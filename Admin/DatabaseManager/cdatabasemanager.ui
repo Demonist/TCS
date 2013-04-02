@@ -21,7 +21,7 @@
     <item row="0" column="0">
      <widget class="CAnimatedStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout">
@@ -73,6 +73,9 @@
               </item>
               <item row="0" column="1">
                <widget class="QPushButton" name="pbnCreateDB">
+                <property name="toolTip">
+                 <string>Создать базу данных</string>
+                </property>
                 <property name="text">
                  <string>Создать</string>
                 </property>
@@ -83,6 +86,9 @@
            </item>
            <item row="1" column="3">
             <widget class="QPushButton" name="pbnConnectToDB">
+             <property name="toolTip">
+              <string>ПОдключиться к выбранной базе данных</string>
+             </property>
              <property name="text">
               <string>Подключиться</string>
              </property>
@@ -90,6 +96,9 @@
            </item>
            <item row="1" column="1">
             <widget class="QPushButton" name="pbnDeleteDB">
+             <property name="toolTip">
+              <string>Удалить выбранную базу данных</string>
+             </property>
              <property name="text">
               <string>Удалить</string>
              </property>
@@ -138,6 +147,9 @@
              </item>
              <item>
               <widget class="QPushButton" name="pbnClear">
+               <property name="toolTip">
+                <string>Очистить выбранные таблицы</string>
+               </property>
                <property name="text">
                 <string>Очистить</string>
                </property>
@@ -145,6 +157,9 @@
              </item>
              <item>
               <widget class="QPushButton" name="pbnDelete">
+               <property name="toolTip">
+                <string>Удалить выбранные таблицы</string>
+               </property>
                <property name="text">
                 <string>Удалить</string>
                </property>
@@ -155,7 +170,7 @@
            <item row="4" column="0" colspan="2">
             <widget class="QPushButton" name="pbnCreateTables">
              <property name="toolTip">
-              <string>Создание недостающих таблиц и обновление всех триггеров</string>
+              <string>Создать недостающие таблицы и обновить все триггеы</string>
              </property>
              <property name="text">
               <string>Создать таблицы</string>
@@ -164,6 +179,9 @@
            </item>
            <item row="3" column="1">
             <widget class="QPushButton" name="pbnDeleteAll">
+             <property name="toolTip">
+              <string>Удалить все таблицы</string>
+             </property>
              <property name="text">
               <string>Удалить все</string>
              </property>
@@ -181,6 +199,9 @@
            </item>
            <item row="3" column="0">
             <widget class="QPushButton" name="pbnClearAll">
+             <property name="toolTip">
+              <string>Очистить все таблицы</string>
+             </property>
              <property name="text">
               <string>Очистить все</string>
              </property>
@@ -211,6 +232,19 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>lwDatabases</tabstop>
+  <tabstop>pbnConnectToDB</tabstop>
+  <tabstop>leNewDBName</tabstop>
+  <tabstop>pbnCreateDB</tabstop>
+  <tabstop>pbnCreateTables</tabstop>
+  <tabstop>lwTables</tabstop>
+  <tabstop>pbnClear</tabstop>
+  <tabstop>pbnDelete</tabstop>
+  <tabstop>pbnClearAll</tabstop>
+  <tabstop>pbnDeleteAll</tabstop>
+  <tabstop>pbnDeleteDB</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

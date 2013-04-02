@@ -52,7 +52,12 @@ CUserDialog::~CUserDialog()
 	delete ui;
 }
 
-void CUserDialog::on_buttonBox_accepted()
+void CUserDialog::on_pbnCancel_clicked()
+{
+	close();
+}
+
+void CUserDialog::on_pbnApply_clicked()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 
@@ -97,10 +102,5 @@ void CUserDialog::on_buttonBox_accepted()
 		qDebug(qPrintable(query.lastError().text()));
 
 	emit dataWasUpdated();
-	close();
-}
-
-void CUserDialog::on_buttonBox_rejected()
-{
 	close();
 }

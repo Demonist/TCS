@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>263</width>
+    <width>368</width>
     <height>191</height>
    </rect>
   </property>
@@ -42,7 +42,7 @@
      <item>
       <widget class="QPushButton" name="pbnOk">
        <property name="text">
-        <string>Ок</string>
+        <string>Применить</string>
        </property>
        <property name="icon">
         <iconset resource="../../Admin/MainManager/main_res.qrc">
@@ -66,6 +66,7 @@
   </layout>
  </widget>
  <resources>
+  <include location="../../Admin/MainManager/main_res.qrc"/>
   <include location="../../Admin/MainManager/main_res.qrc"/>
  </resources>
  <connections/>

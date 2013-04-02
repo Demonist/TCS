@@ -73,7 +73,7 @@
             <item>
              <widget class="QToolButton" name="tbnAdd">
               <property name="toolTip">
-               <string>Добавить пользователя</string>
+               <string>Добавить кассира</string>
               </property>
               <property name="icon">
                <iconset resource="../main_res.qrc">
@@ -84,7 +84,7 @@
             <item>
              <widget class="QToolButton" name="tbnEdit">
               <property name="toolTip">
-               <string>Редактировать данные пользователя</string>
+               <string>Редактировать данные кассира</string>
               </property>
               <property name="icon">
                <iconset resource="../main_res.qrc">
@@ -95,7 +95,7 @@
             <item>
              <widget class="QToolButton" name="tbnDel">
               <property name="toolTip">
-               <string>Удалить выбранного пользователя</string>
+               <string>Удалить выбранного кассира</string>
               </property>
               <property name="icon">
                <iconset resource="../main_res.qrc">
@@ -163,7 +163,7 @@
             <item>
              <widget class="QToolButton" name="tbnAdminAdd">
               <property name="toolTip">
-               <string>Добавить пользователя</string>
+               <string>Добавить администратора</string>
               </property>
               <property name="icon">
                <iconset resource="../main_res.qrc">
@@ -174,7 +174,7 @@
             <item>
              <widget class="QToolButton" name="tbnAdminEdit">
               <property name="toolTip">
-               <string>Редактировать данные пользователя</string>
+               <string>Редактировать данные администратора</string>
               </property>
               <property name="icon">
                <iconset resource="../main_res.qrc">
@@ -185,7 +185,7 @@
             <item>
              <widget class="QToolButton" name="tbnAdminDel">
               <property name="toolTip">
-               <string>Удалить выбранного пользователя</string>
+               <string>Удалить выбранного администратора</string>
               </property>
               <property name="icon">
                <iconset resource="../main_res.qrc">

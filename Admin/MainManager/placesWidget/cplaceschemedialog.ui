@@ -92,7 +92,7 @@
             <item row="0" column="0">
              <widget class="QToolButton" name="tbnSelect">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Выбор места&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Выбор места</string>
               </property>
               <property name="icon">
                <iconset resource="placeWidget_res.qrc">
@@ -106,7 +106,7 @@
             <item row="0" column="1">
              <widget class="QToolButton" name="tbnMove">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Перемещение места&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Перемещение места</string>
               </property>
               <property name="icon">
                <iconset resource="placeWidget_res.qrc">
@@ -120,7 +120,7 @@
             <item row="1" column="0">
              <widget class="QToolButton" name="tbnAdd">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Добавление места&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Добавление места</string>
               </property>
               <property name="icon">
                <iconset resource="../main_res.qrc">
@@ -134,7 +134,7 @@
             <item row="1" column="1">
              <widget class="QToolButton" name="tbnDel">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Удаление места&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Удаление места</string>
               </property>
               <property name="icon">
                <iconset resource="../main_res.qrc">
@@ -225,7 +225,7 @@
             <item row="0" column="0">
              <widget class="QToolButton" name="tbnZoomIn">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Увеличить&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Увеличить масштаб сцены</string>
               </property>
               <property name="icon">
                <iconset resource="placeWidget_res.qrc">
@@ -236,7 +236,7 @@
             <item row="0" column="1">
              <widget class="QToolButton" name="tbnDrag">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Перетаскивание.&lt;/p&gt;&lt;p&gt;Так же доступно правой кнопкой мыши.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Перемещение вида&lt;br/&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;(так же доступно правой кнопкой мыши)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="icon">
                <iconset resource="placeWidget_res.qrc">
@@ -250,7 +250,7 @@
             <item row="1" column="0">
              <widget class="QToolButton" name="tbnZoomOut">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Уменьшить&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Уменьшить масштаб сцены</string>
               </property>
               <property name="icon">
                <iconset resource="placeWidget_res.qrc">
@@ -261,7 +261,7 @@
             <item row="1" column="1">
              <widget class="QToolButton" name="tbnZoomDefault">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Вернуться к стандартному масштабу&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Вернуть сцене исходный масштаб</string>
               </property>
               <property name="icon">
                <iconset resource="placeWidget_res.qrc">
@@ -378,6 +378,9 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_5">
+         <property name="toolTip">
+          <string>Подложка схемы зала</string>
+         </property>
          <property name="title">
           <string>Подложка</string>
          </property>

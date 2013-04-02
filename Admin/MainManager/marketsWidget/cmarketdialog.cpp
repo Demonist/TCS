@@ -34,27 +34,27 @@ CMarketDialog::~CMarketDialog()
     delete ui;
 }
 
-void CMarketDialog::on_buttonBox_accepted()
+void CMarketDialog::on_pbnCancel_clicked()
 {
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    if(mType == Add)
-    {
-            query.prepare("INSERT INTO Markets VALUES(NULL, :address);");
-            query.bindValue(":address", ui->leAddress->text());
-    }
-    else if(mType == Edit)
-    {
-
-            query.prepare("UPDATE Markets SET address = :address WHERE id = :id;");
-            query.bindValue(":address", ui->leAddress->text());
-            query.bindValue(":id", mId);
-    }
-    query.exec();
-    emit dataWasUpdated();
-    close();
+	close();
 }
 
-void CMarketDialog::on_buttonBox_rejected()
+void CMarketDialog::on_pbnApply_clicked()
 {
-    close();
+	QSqlQuery query(QSqlDatabase::database(mConnectionName));
+	if(mType == Add)
+	{
+			query.prepare("INSERT INTO Markets VALUES(NULL, :address);");
+			query.bindValue(":address", ui->leAddress->text());
+	}
+	else if(mType == Edit)
+	{
+
+			query.prepare("UPDATE Markets SET address = :address WHERE id = :id;");
+			query.bindValue(":address", ui->leAddress->text());
+			query.bindValue(":id", mId);
+	}
+	query.exec();
+	emit dataWasUpdated();
+	close();
 }

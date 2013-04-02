@@ -279,6 +279,9 @@
          </item>
          <item row="0" column="1">
           <widget class="QToolButton" name="tbnClearIdentifier">
+           <property name="toolTip">
+            <string>Очистить поле идентификатора билета</string>
+           </property>
            <property name="icon">
             <iconset resource="../clinet_res.qrc">
              <normaloff>:/clientImages/clear.png</normaloff>:/clientImages/clear.png</iconset>

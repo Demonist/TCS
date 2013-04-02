@@ -36,8 +36,12 @@ CCategoryDialog::~CCategoryDialog()
 	delete ui;
 }
 
+void CCategoryDialog::on_pbnCancel_clicked()
+{
+	close();
+}
 
-void CCategoryDialog::on_buttonBox_accepted()
+void CCategoryDialog::on_pbnApply_clicked()
 {
 	QSqlQuery query(QSqlDatabase::database(mConnectionName));
 	if(mType == Add)
@@ -52,14 +56,8 @@ void CCategoryDialog::on_buttonBox_accepted()
 		query.bindValue(":id", mId);
 	}
 
-	////TODO: :
 	query.exec();
 
 	emit dataWasUpdated();
-	close();
-}
-
-void CCategoryDialog::on_buttonBox_rejected()
-{
 	close();
 }
