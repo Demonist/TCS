@@ -91,12 +91,12 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 							selectScheme.bindValue(":id", query.value(1).toString());
 							if(selectScheme.exec())
 							{
-								if(query.isNull(2))
+								if(query.value(2).toString() == "0")
 								{
 									if(selectScheme.first())
 									{
-										item->setText(SEAT, selectScheme.value(1).toString());
-										item->setText(ROW, selectScheme.value(2).toString());
+										item->setText(SEAT, selectScheme.value(0).toString());
+										item->setText(ROW, selectScheme.value(1).toString());
 									}
 									else
 									{
@@ -121,8 +121,8 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 									{
 										if(selectScheme.first())
 										{
-											item->setText(SEAT, selectScheme.value(1).toString());
-											item->setText(ROW, selectScheme.value(2).toString());
+											item->setText(SEAT, selectScheme.value(0).toString());
+											item->setText(ROW, selectScheme.value(1).toString());
 										}
 										else
 										{
