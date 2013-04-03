@@ -1,6 +1,7 @@
 #include <QtGui/QApplication>
 #include <QTextCodec>
 #include "cdatabasemanager.h"
+#include "global.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,6 +9,11 @@ int main(int argc, char *argv[])
 	QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
 
 	QApplication a(argc, argv);
+
+	QDir path(Global::currentPath());
+	path.cd("plugins");
+	QApplication::addLibraryPath(path.absolutePath());
+
 	CDatabaseManager w;
 	w.show();
 	

@@ -42,7 +42,7 @@ void CClientsWidget::updateData()
 			{
 				item->setText(ID, query.value(0).toString());
 				item->setText(NAME, query.value(1).toString());
-				item->setText(BIRTHDATE, query.value(2).toString());
+				item->setText(BIRTHDATE, query.value(2).toDate().toString("dd.MM.yyyy"));
 				item->setText(LOGIN, query.value(3).toString());
 				item->setText(PASSWORD, Global::decrypt(query.value(4).toByteArray()));
                 item->setText(PHONE, query.value(5).toString());

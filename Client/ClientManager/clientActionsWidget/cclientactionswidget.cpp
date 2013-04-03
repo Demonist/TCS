@@ -261,7 +261,7 @@ void CClientActionsWidget::on_pbnSoldTicket_clicked()
 		if(query.exec() && query.first())
 		{
 			mScene.setSceneRect(0.0f, 0.0f, query.value(0).toReal(), query.value(1).toReal());
-			if(query.value(2).isNull() == false)
+			if(query.value(2).isNull() == false && query.value(2).toInt() > 0)
 				mScene.setBackgroundImage(CImages::instance()->image(query.value(2).toInt()));
 			mFanPriceForCurrentAction = query.value(3).toInt();
 			mFanCountForCurrentAction = query.value(4).toInt();
@@ -337,6 +337,16 @@ void CClientActionsWidget::on_pbnSoldTicket_clicked()
 		}
 		else
 			qDebug(qPrintable(query.lastError().text()));
+
+		// -> Такие костыля нужны чтобы избежать неправильного расчета масштаба в fitScene. Который возникает из-за кривых geometry данных, потому что gvScene еще не отресайзен в layout'е.
+		static bool firstShow = true;
+		if(firstShow)
+			firstShow = false;
+		else
+		{
+			ui->gvScene->fitScene();
+			ui->gvScene->setScale(ui->gvScene->scale());	//Для обновления второго окна.
+		}
 
 		ui->stackedWidget->slideHorizontalNext();
 		emit hideLeftPanel();

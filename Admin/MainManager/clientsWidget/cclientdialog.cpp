@@ -48,9 +48,7 @@ CClientDialog::CClientDialog(const QString &connectionName, const int id, QWidge
 	if(query.exec() && query.first())
 	{
 		ui->leClientFIO->setText(query.value(0).toString());
-		QDate dt;
-		dt = QDate::fromString(query.value(1).toString(), "dd.MM.yyyy");
-		ui->cwClientBirthDate->setSelectedDate(dt);
+		ui->cwClientBirthDate->setSelectedDate(query.value(1).toDate());
         ui->leClientLogin->setText(query.value(2).toString());
 		ui->leClientPassword->setText(Global::decrypt(query.value(3).toByteArray()));
         ui->leClientPhone->setText(query.value(4).toString());
@@ -76,7 +74,7 @@ void CClientDialog::on_pbnApply_clicked()
 		{
 			query.prepare("INSERT INTO Clients VALUES(NULL, :name, :birthDate, :login, :passwordHash, :phone);");
 			query.bindValue(":name", ui->leClientFIO->text());
-			query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate().toString("dd.MM.yyyy"));
+			query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate());
 			query.bindValue(":login", ui->leClientLogin->text());
 			query.bindValue(":passwordHash", Global::crypt(ui->leClientPassword->text()));
 			query.bindValue(":phone", ui->leClientPhone->text());
@@ -93,7 +91,7 @@ void CClientDialog::on_pbnApply_clicked()
 		{
 			query.prepare("UPDATE Clients SET name = :name, birthDate = :birthDate, login = :login, passwordHash = :passwordHash, phone = :phone WHERE id = :id;");
 			query.bindValue(":name", ui->leClientFIO->text());
-			query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate().toString("dd.MM.yyyy"));
+			query.bindValue(":birthDate", ui->cwClientBirthDate->selectedDate());
 			query.bindValue(":login", ui->leClientLogin->text());
 			query.bindValue(":passwordHash", Global::crypt(ui->leClientPassword->text()));
 			query.bindValue(":phone", ui->leClientPhone->text());

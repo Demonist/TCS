@@ -59,7 +59,7 @@ public slots:
 	virtual void setScale(const qreal scale);
 	void setScaleAnimated(const qreal scale, const int durationMs = 750);
 	inline void setLegend(CAbstractLegend *legend);
-	inline void fitScene();
+	void fitScene();
 };
 
 //inline implementation:
@@ -115,9 +115,4 @@ inline void CGraphicsView::setWheelScallingAnimated(const bool animatedScalling)
 	mWheelScallingAnimated = animatedScalling;
 }
 
-inline void CGraphicsView::fitScene()
-{
-	if(scene())
-		fitInView(scene()->sceneRect(), Qt::KeepAspectRatioByExpanding);
-}
 #endif // CGRAPHICSVIEW_H

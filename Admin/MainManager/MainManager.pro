@@ -24,7 +24,8 @@ INCLUDEPATH += ../../common/ \
 		uploadingWidget/ \
 		imageDialog/ \
 		startingDialog/ \
-		advertisementsWidget/
+		advertisementsWidget/ \
+		../../common/aboutDialog/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -67,7 +68,8 @@ SOURCES += main.cpp\
     ccomplitedaction.cpp \
     ../../common/uploading.cpp \
     advertisementsWidget/cadvertisementswidget.cpp \
-    ../../common/ccachechecker.cpp
+    ../../common/ccachechecker.cpp \
+    ../../common/aboutDialog/caboutdialog.cpp
 
 HEADERS  += mainwindow.h \
 	../../common/global.h \
@@ -110,7 +112,8 @@ HEADERS  += mainwindow.h \
     ccomplitedaction.h \
     ../../common/uploading.h \
     advertisementsWidget/cadvertisementswidget.h \
-    ../../common/ccachechecker.h
+    ../../common/ccachechecker.h \
+    ../../common/aboutDialog/caboutdialog.h
 
 FORMS    += mainwindow.ui \
 	../../common/connectionWidget/cdatabaseconnectionwidget.ui \
@@ -136,10 +139,12 @@ FORMS    += mainwindow.ui \
     actionsWidget/cfandialog.ui \
     startingDialog/cadminstartingdialog.ui \
     usersWidget/cuseradmindialog.ui \
-    advertisementsWidget/cadvertisementswidget.ui
+    advertisementsWidget/cadvertisementswidget.ui \
+    ../../common/aboutDialog/caboutdialog.ui
 
 RESOURCES += \
 	../../common/connectionWidget/connectionwidget_res.qrc \
     main_res.qrc \
     placesWidget/placeWidget_res.qrc \
-    actionsWidget/actionWidget_res.qrc
+    actionsWidget/actionWidget_res.qrc \
+    ../../common/aboutDialog/aboutDialog_res.qrc
