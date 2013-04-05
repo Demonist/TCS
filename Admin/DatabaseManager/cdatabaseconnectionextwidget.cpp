@@ -21,6 +21,12 @@ void CDatabaseConnectionExtWidget::processConnecting()
 
 	QSqlDatabase db = QSqlDatabase::addDatabase(connectingToServer ? "QMYSQL" : "QSQLITE", mConnectionName);
 
+	if(db.isValid() == false)
+	{
+		QMessageBox::critical(this, tr("Ошибка"), tr("Не найден драйвер базы данных."));
+		return;
+	}
+
 	if(connectingToServer)
 	{
 		db.setHostName(ui->cbxDbHost->currentText());

@@ -288,7 +288,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 			else if(mEditType == Select)
 			{
 				CSeatItem *item = (CSeatItem*)mScene.itemAt(ui->gvScheme->mapToScene(mouseEvent->pos()));
-				if(item)
+				if(item && item->data(0).toString() == CSeatItem::itemName())
 				{
 					if(mSelectedItem == 0)
 					{
@@ -327,7 +327,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 			if(mEditType == Move)
 			{
 				QGraphicsItem *item = mScene.itemAt(pos);
-				if(item)
+				if(item && item->data(0).toString() == CSeatItem::itemName())
 				{
 					offset = item->pos() - pos;
 					item->setSelected(true);
@@ -355,20 +355,17 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 			{
 				static CSeatItem *itemAtCursor = 0;
 				CSeatItem *item = (CSeatItem*)mScene.itemAt(ui->gvScheme->mapToScene(mouseEvent->pos()));
-				if(item)
+				if(item && item->data(0).toString() == CSeatItem::itemName())
 				{
-					if(item->data(0).toString() == CSeatItem::itemName())
+					if(itemAtCursor && itemAtCursor != item)
 					{
-						if(itemAtCursor && itemAtCursor != item)
-						{
-							itemAtCursor->setPenColorAnimated(QColor(70, 70, 70));
-							itemAtCursor = 0;
-						}
-						if(itemAtCursor == 0)
-						{
-							itemAtCursor = item;
-							itemAtCursor->setPenColorAnimated(QColor(100, 200, 50));
-						}
+						itemAtCursor->setPenColorAnimated(QColor(70, 70, 70));
+						itemAtCursor = 0;
+					}
+					if(itemAtCursor == 0)
+					{
+						itemAtCursor = item;
+						itemAtCursor->setPenColorAnimated(QColor(100, 200, 50));
 					}
 				}
 				else if(itemAtCursor)
@@ -400,7 +397,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 		{
 			static CSeatItem *itemAtCursor = 0;
 			CSeatItem *item = (CSeatItem*)mScene.itemAt(ui->gvScheme->mapToScene(mouseEvent->pos()));
-			if(item)
+			if(item && item->data(0).toString() == CSeatItem::itemName())
 			{
 				if(item->data(0).toString() == CSeatItem::itemName())
 				{
@@ -426,7 +423,7 @@ bool CPlaceSchemeDialog::eventFilter(QObject *obj, QEvent *event)
 		{
 			static CSeatItem *hoveredItem = 0;
 			CSeatItem *item = (CSeatItem*)mScene.itemAt(ui->gvScheme->mapToScene(mouseEvent->pos()));
-			if(item)
+			if(item && item->data(0).toString() == CSeatItem::itemName())
 			{
 				if(hoveredItem == 0)
 				{
