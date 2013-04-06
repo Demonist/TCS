@@ -9,10 +9,14 @@ CControlUpdateDBase::CControlUpdateDBase(QWidget *parent) :
 	ui(new Ui::CControlUpdateDBase)
 {
 	ui->setupUi(this);
+
 	ui->wConnection->setConnectionType(CDataBaseConnectionWidget::ConnectionServer);
 	ui->wConnection->setConnectionChoiceEnable(false);
-	ui->stackedWidget->setCurrentIndex(0);
+	ui->wConnection->setCloseButtonVisible(false);
 	connect(ui->wConnection, SIGNAL(connectedToDatabase(QString)), this, SLOT(connected(QString)));
+
+	ui->stackedWidget->setCurrentIndex(0);
+
 	ui->twSelectAction->clear();
 	ui->twSelectAction->hideColumn(1);
 }
@@ -70,19 +74,18 @@ void CControlUpdateDBase::on_pbnExport_clicked()
 	{
 		if(QMessageBox::Yes == QMessageBox::question(this, tr("Запрос подтверждения"), tr("Вы действительно хотите экспортировать базу?"), QMessageBox::Yes, QMessageBox::No))
 		{
-			QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия "), QDir::currentPath(), tr("Файл базы данных(.db)"));
-			if(!pth.isEmpty())
+			QString path = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия "), QDir::currentPath(), tr("Файл базы данных(.db)"));
+			if(!path.isEmpty())
 			{
-				Uploading *upl = new Uploading(mConnectionName, pth, ui->twSelectAction->currentItem()->text(ID));
-				if(upl->openConnection())
+				Uploading upl(mConnectionName);
+				if(upl.openConnection(path))
 				{
-					upl->uploadingProcess();
+					upl.uploadingProcess(ui->twSelectAction->currentItem()->text(ID));
 					QMessageBox::information(this, tr("Выгрузка успешно завершена"), tr("Выгрузка в файл ") + tr(" успешно завершена\nБаза валидна."));
 				}
 				else
-				{
 					QMessageBox::critical(this, tr("Не удалось открыть базу данных!"), tr("Не удалось открть базу данных."));
-				}
+
 			}
 		}
 	}

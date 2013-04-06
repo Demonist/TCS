@@ -22,8 +22,8 @@ public:
     
 private:
     Ui::CUploadingWidget *ui;
-    QString tDate;
-    QString tActionName;
+	QString mDate;
+	QString mActionName;
     void createDBScheme();
     bool openConnection();
     bool validateDataBase();

@@ -1,16 +1,16 @@
 #include "uploading.h"
 
-Uploading::Uploading(QString mCon, QString pth, QString id_action, QObject *parent) :
+#define UPLOADING "uploadingConnection"
+
+Uploading::Uploading(QString mCon, QObject *parent) :
 	QObject(parent)
 {
 	mConnection = mCon;
-	mPath = pth;
-	mIDAction = id_action;
 }
 
 void Uploading::createDBScheme()
 {
-	QSqlDatabase db = QSqlDatabase::database("uploadingConnection");
+	QSqlDatabase db = QSqlDatabase::database(UPLOADING);
 	QSqlQuery createDBQuery(db);
 	if(!createDBQuery.exec(
 				"CREATE TABLE IF NOT EXISTS Actions( "
@@ -53,133 +53,131 @@ void Uploading::createDBScheme()
 		qDebug(qPrintable(createDBQuery.lastError().text()));
 }
 
-bool Uploading::openConnection()
+bool Uploading::openConnection(const QString &databasefileName)
 {
-	//if(validateDataBase())
-	//{
-		//имя подключения в define
-		QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "uploadingConnection");
-		db.setDatabaseName(mPath);
-		if(db.open())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	/*}
-	else
-	{
-		return false;
-	}*/
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", UPLOADING);
+	db.setDatabaseName(databasefileName);
+	if(db.isValid() && db.open())
+		return true;
+	return false;
 }
 
-/*bool Uploading::validateDataBase()
-{
-	QSqlQuery vQuery(QSqlDatabase::database(mConnection));
-	vQuery.exec("SELECT COUNT(id) AS mCount FROM Tickets WHERE id_action = " + mIDAction + " GROUP BY identifier ORDER BY mCount DESC");
-	vQuery.first();
-	if(vQuery.value(0).toInt() > 1)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-
-}*/
-
-void Uploading::uploadingProcess()
+void Uploading::uploadingProcess(const QString &actionId)
 {
 	{
-		QProgressDialog dlg;
-		dlg.setWindowTitle(tr("Выгрузка базы данных"));
-		dlg.setLabelText(tr("Процесс выгрузки базы данных"));
-		dlg.setCancelButton(0);
-		dlg.setMinimumDuration(0);
-		dlg.setMaximum(3);
-		dlg.show();
-		QSqlDatabase db = QSqlDatabase::database("uploadingConnection");
+		QProgressDialog progressDialog;
+		progressDialog.setWindowModality(Qt::WindowModal);
+		progressDialog.setWindowTitle(tr("Выгрузка базы данных"));
+		progressDialog.setLabelText(tr("Процесс выгрузки базы данных"));
+		progressDialog.setCancelButton(0);
+		progressDialog.setMinimumDuration(0);
+		progressDialog.setMaximum(6);
+		progressDialog.setValue(0);
+
+		QSqlDatabase db = QSqlDatabase::database(UPLOADING);
 		createDBScheme();
+
+		progressDialog.setValue(1);
+
 		QSqlQuery selectDataQuery(QSqlDatabase::database(mConnection));
-		if(selectDataQuery.exec("SELECT id, title, performer FROM Actions WHERE id = " + mIDAction))
+		QSqlQuery insertDataQuery(db);
+
+		if(selectDataQuery.exec("SELECT id, title, performer FROM Actions WHERE id = " + actionId))
 		{
-			QSqlQuery insertDataQuery(db);
-			insertDataQuery.exec("INSERT INTO Actions VALUES(:id, :title, :performer);");
+			insertDataQuery.prepare("INSERT INTO Actions VALUES(:id, :title, :performer);");
 			while(selectDataQuery.next())
 			{
-				insertDataQuery.bindValue(":id", selectDataQuery.value(0).toString());
-				insertDataQuery.bindValue(":title", selectDataQuery.value(1).toString());
-				insertDataQuery.bindValue(":performer", selectDataQuery.value(2).toString());
+				insertDataQuery.bindValue(":id", selectDataQuery.value(0));
+				insertDataQuery.bindValue(":title", selectDataQuery.value(1));
+				insertDataQuery.bindValue(":performer", selectDataQuery.value(2));
 				insertDataQuery.exec();
 
 			}
 		}
-		dlg.setValue(1);
-		if(selectDataQuery.exec("SELECT id, id_action, id_placeScheme, id_client, identifier FROM Tickets WHERE id_action = " + mIDAction))
+
+		progressDialog.setValue(2);
+
+		QList<int> placeSchemeIds;
+		QList<int> clientIds;
+
+		if(selectDataQuery.exec("SELECT id, id_action, id_placeScheme, id_client, identifier FROM Tickets WHERE id_action = " + actionId))
 		{
-			QSqlQuery insertDataQuery(db);
-			insertDataQuery.exec("INSERT INTO Tickets VALUES(NULL, :id_action, :id_placeScheme, :id_client, :identifier, :passedFlag);");
+			insertDataQuery.prepare("INSERT INTO Tickets VALUES(NULL, :id_action, :id_placeScheme, :id_client, :identifier, :passedFlag);");
 			while(selectDataQuery.next())
 			{
-				insertDataQuery.bindValue(":id_action", selectDataQuery.value(1).toString());
-				insertDataQuery.bindValue(":id_placeScheme", selectDataQuery.value(2).toString());
-				insertDataQuery.bindValue(":id_client", selectDataQuery.value(3).toString());
-				insertDataQuery.bindValue(":identifier", selectDataQuery.value(4).toString());
+				insertDataQuery.bindValue(":id_action", selectDataQuery.value(1));
+				insertDataQuery.bindValue(":id_placeScheme", selectDataQuery.value(2));
+				insertDataQuery.bindValue(":id_client", selectDataQuery.value(3));
+				insertDataQuery.bindValue(":identifier", selectDataQuery.value(4));
 				insertDataQuery.bindValue(":passedFlag", "false");
 				insertDataQuery.exec();
 
-				QSqlQuery placeScheme(QSqlDatabase::database(mConnection));
-				if(placeScheme.exec("SELECT id, seatNumber, row FROM PlaceSchemes WHERE id = " + selectDataQuery.value(2).toString()))
-				{
-					QSqlQuery insertScheme(db);
-					insertScheme.exec("INSERT INTO PlaceSchemes VALUES(:id, :seatNumber, :row)");
-					while(placeScheme.next())
-					{
-						insertScheme.bindValue(":id", placeScheme.value(0).toString());
-						insertScheme.bindValue(":seatNumber", placeScheme.value(1).toString());
-						insertScheme.bindValue(":row", placeScheme.value(2).toString());
-						insertScheme.exec();
-					}
-				}
+				if(selectDataQuery.isNull(2) == false)
+					placeSchemeIds.append(selectDataQuery.value(2).toInt());
 
-				if(!selectDataQuery.value(3).isNull())
+				if(selectDataQuery.isNull(3) == false)
+					clientIds.append(selectDataQuery.value(4).toInt());
+			}
+		}
+
+		progressDialog.setValue(3);
+
+		if(placeSchemeIds.isEmpty() == false)
+		{
+			if(selectDataQuery.exec("SELECT id, seatNumber, row FROM PlaceSchemes"))
+			{
+				insertDataQuery.prepare("INSERT INTO PlaceSchemes VALUES(:id, :seatNumber, :row)");
+				while(selectDataQuery.next())
 				{
-					QSqlQuery selectDataClients(QSqlDatabase::database(mConnection));
-					if(selectDataClients.exec("SELECT id, name, login FROM Clients WHERE id = " + selectDataQuery.value(3).toString()))
+					if(placeSchemeIds.contains( selectDataQuery.value(0).toInt()) )
 					{
-						QSqlQuery insertDataClients(db);
-						insertDataClients.exec("INSERT INTO Clients VALUES(:id, :name, :login)");
-						while(selectDataClients.next())
-						{
-							insertDataClients.bindValue(":id", selectDataClients.value(0).toString());
-							insertDataClients.bindValue(":name", selectDataClients.value(1).toString());
-							insertDataClients.bindValue(":login", selectDataClients.value(2).toString());
-							insertDataClients.exec();
-						}
+						insertDataQuery.bindValue(":id", selectDataQuery.value(0));
+						insertDataQuery.bindValue(":seatNumber", selectDataQuery.value(1));
+						insertDataQuery.bindValue(":row", selectDataQuery.value(2));
+						insertDataQuery.exec();
 					}
 				}
 			}
 		}
-		dlg.setValue(2);
-		if(selectDataQuery.exec("SELECT id, id_client, identifier FROM ReturnedTickets WHERE id_action = " + mIDAction))
+
+		progressDialog.setValue(4);
+
+		if(clientIds.isEmpty() == false)
 		{
-			QSqlQuery insertDataQuery(db);
-			insertDataQuery.exec("INSERT INTO ReturnedTickets VALUES(NULL, :id_client, :identifier);");
+			if(selectDataQuery.exec("SELECT id, name, login FROM Clients"))
+			{
+				insertDataQuery.prepare("INSERT INTO Clients VALUES(:id, :name, :login)");
+				while(selectDataQuery.next())
+				{
+					if(clientIds.contains( selectDataQuery.value(0).toInt() ))
+					{
+						insertDataQuery.bindValue(":id", selectDataQuery.value(0));
+						insertDataQuery.bindValue(":name", selectDataQuery.value(1));
+						insertDataQuery.bindValue(":login", selectDataQuery.value(2));
+						insertDataQuery.exec();
+					}
+				}
+			}
+		}
+
+		progressDialog.setValue(5);
+
+		if(selectDataQuery.exec("SELECT id, id_client, identifier FROM ReturnedTickets WHERE id_action = " + actionId))
+		{
+			insertDataQuery.prepare("INSERT INTO ReturnedTickets VALUES(NULL, :id_client, :identifier);");
 			while(selectDataQuery.next())
 			{
-				insertDataQuery.bindValue(":id_client", selectDataQuery.value(1).toString());
-				insertDataQuery.bindValue(":identifier", selectDataQuery.value(2).toString());
+				insertDataQuery.bindValue(":id_client", selectDataQuery.value(1));
+				insertDataQuery.bindValue(":identifier", selectDataQuery.value(2));
 				insertDataQuery.exec();
 			}
 		}
-		dlg.setValue(3);
-		dlg.close();
+
+		progressDialog.setValue(6);
+		progressDialog.close();
 		db.close();
 	}
-	QSqlDatabase::removeDatabase("uploadingConnection");
+	QSqlDatabase::removeDatabase(UPLOADING);
 }
 
 

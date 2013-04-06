@@ -51,11 +51,11 @@ void CUploadingWidget::on_twActions_itemSelectionChanged()
 	QTreeWidgetItem *selectedItem = ui->twActions->currentItem();
 	if(selectedItem)
 	{
-		tActionName = selectedItem->text(NAME);
+		mActionName = selectedItem->text(NAME);
 
 		QString text = tr("Выгрузка мероприятия: ")+selectedItem->text(NAME);
-		if(tDate.isEmpty() == false)
-			text += tr(", начиная с ") + tDate;
+		if(mDate.isEmpty() == false)
+			text += tr(", начиная с ") + mDate;
 		ui->lInfo->setText(text);
 	}
 }
@@ -68,16 +68,16 @@ void CUploadingWidget::on_tbnSelectDate_clicked()
 	dateDialog.exec();
 	if(dateDialog.result())
 	{
-		if(tActionName == "")
+		if(mActionName == "")
 		{
-			tDate = dateDialog.selectedDate().toString("dd.MM.yyyy");
+			mDate = dateDialog.selectedDate().toString("dd.MM.yyyy");
 			ui->leDate->setText(dateDialog.selectedDate().toString("dd.MM.yyyy"));
 		}
 		else
 		{
-			tDate = dateDialog.selectedDate().toString("dd.MM.yyyy");
+			mDate = dateDialog.selectedDate().toString("dd.MM.yyyy");
 			ui->leDate->setText(dateDialog.selectedDate().toString("dd.MM.yyyy"));
-			ui->lInfo->setText(tr("Выгрузка мероприятия: ")+ tActionName + tr(", начиная с ") + tDate);
+			ui->lInfo->setText(tr("Выгрузка мероприятия: ")+ mActionName + tr(", начиная с ") + mDate);
 		}
 
 	}
@@ -85,9 +85,9 @@ void CUploadingWidget::on_tbnSelectDate_clicked()
 
 void CUploadingWidget::on_tbClearDate_clicked()
 {
-	tDate = "";
-	ui->leDate->setText("");
-	ui->lInfo->setText(tr("Выгрузка мероприятия: ")+tActionName);
+	mDate.clear();
+	ui->leDate->clear();
+	ui->lInfo->setText(tr("Выгрузка мероприятия: ") + mActionName);
 }
 
 void CUploadingWidget::on_pbnUploading_clicked()
@@ -95,22 +95,30 @@ void CUploadingWidget::on_pbnUploading_clicked()
 	QTreeWidgetItem *selectedItem = ui->twActions->currentItem();
 	if(selectedItem)
 	{
+		static QString exportPath;
+		if(exportPath.isEmpty())
+			exportPath = Global::currentPath() + tr("/export/Контроль");
+		QDir().mkpath(exportPath);
 
-		QString pth = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия ") + tActionName, QDir::currentPath(), tr("Файл базы данных(.db)"));
-		Uploading upl(mConnectionName, pth, ui->twActions->currentItem()->text(ID));
-		if(upl.openConnection())
+		QString path = QFileDialog::getSaveFileName(this, tr("Сохранение базы мероприятия ") + mActionName, exportPath + '/' + mActionName + QDateTime::currentDateTime().toString("(yyyy_MM_dd hh-mm)") + ".db", tr("Файл базы данных(.db)"));
+		if(path.isEmpty() == false)
 		{
-			upl.uploadingProcess();
-			QMessageBox::information(this, tr("Выгрузка успешно завершена"), tr("Выгрузка в файл ") + tr(" успешно завершена\nБаза валидна."));
-		}
-		else
-		{
-			QMessageBox::critical(this, tr("Не удалось открыть базу данных!"), tr("Не удалось открыть базу данных."));
+			QFileInfo fileInfo(path);
+			if(fileInfo.completeSuffix() != "db")
+				path = fileInfo.absolutePath() + '/' + fileInfo.baseName() + ".db";
+			Uploading upl(mConnectionName);
+			if(upl.openConnection(path))
+			{
+				upl.uploadingProcess(ui->twActions->currentItem()->text(ID));
+				QMessageBox::information(this, tr("Успех"), tr("Выгрузка мероприятия успешно завершена."));
+			}
+			else
+				QMessageBox::warning(this, tr("Внимание"), tr("Не удалось открыть базу данных."));
 		}
 	}
 	else
 	{
-		QMessageBox::critical(this, tr("Ошибка выгрузки"), tr("Не выбрано мероприятие."));
+		QMessageBox::warning(this, tr("Внимание"), tr("Не выбрано мероприятие для выгрузки."));
 	}
 }
 

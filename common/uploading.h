@@ -8,22 +8,16 @@
 class Uploading : public QObject
 {
 	Q_OBJECT
+
 public:
-	explicit Uploading(QString mCon, QString pth, QString id_action, QObject *parent = 0);
+	explicit Uploading(QString mCon, QObject *parent = 0);
+
 	void createDBScheme();
-	bool openConnection();
-	void uploadingProcess();
-signals:
-	
-public slots:
+	bool openConnection(const QString &databasefileName);
+	void uploadingProcess(const QString &actionId);
 
 private:
 	QString mConnection;
-	QString mPath;
-	QString mIDAction;
-	//bool validateDataBase();
-
-	
 };
 
 #endif // UPLOADING_H

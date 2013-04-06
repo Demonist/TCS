@@ -273,12 +273,17 @@ void CAccountingWidget::on_pbnExport_clicked()
 		return;
 	}
 
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Укажите имя файла для сохранения"), "", tr("Файлы CSV (*.csv)"));
+	static QString exportPath;
+	if(exportPath.isEmpty())
+		exportPath = Global::currentPath() + tr("/export/Отчеты");
+	QDir().mkpath(exportPath);
+
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Укажите имя файла для сохранения"), exportPath + QDateTime::currentDateTime().toString("/yyyy_MM_dd hh-mm.csv"), tr("Файлы CSV (*.csv)"));
 	if(fileName.isEmpty() == false)
 	{
 		QFileInfo fileInfo(fileName);
 		if(fileInfo.completeSuffix() != "csv")
-			fileName = fileInfo.absolutePath() + fileInfo.baseName() + ".csv";
+			fileName = fileInfo.absolutePath() + '/' + fileInfo.baseName() + ".csv";
 		QFile file(fileName);
 		if(file.open(QFile::WriteOnly))
 		{

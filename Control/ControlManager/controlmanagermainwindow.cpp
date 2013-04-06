@@ -6,34 +6,56 @@
 #define IDENT	2
 #define INFO	3
 
+void ControlManagerMainWindow::addItem(QTreeWidgetItem *item, const QColor &color)
+{
+	item->setBackgroundColor(SEAT, color);
+	item->setBackgroundColor(ROW, color);
+	item->setBackgroundColor(IDENT, color);
+	item->setBackgroundColor(INFO, color);
+	ui->twBarcodeControl->addTopLevelItem(item);
+	ui->twBarcodeControl->scrollToBottom();
+}
+
 ControlManagerMainWindow::ControlManagerMainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::ControlManagerMainWindow)
 {
 	ui->setupUi(this);
+	ui->stackedWidget->setCurrentIndex(0);
+	ui->leGetBarcode->setValidator(new QRegExpValidator(QRegExp("\\d+")));
+
 	ui->wConnection->setConnectionType(CDataBaseConnectionWidget::ConnectionFile);
 	ui->wConnection->setConnectionChoiceEnable(false);
+
 	connect(ui->aExit, SIGNAL(activated()), this, SLOT(close()));
 	connect(ui->wConnection, SIGNAL(connectedToDatabase(QString)), this, SLOT(connected(QString)));
 	connect(ui->wConnection, SIGNAL(closed()), this, SLOT(close()));
 	connect(ui->aImportDB, SIGNAL(activated()), this, SLOT(importDataBase()));
 	connect(ui->aLogFileWrite, SIGNAL(activated()), this, SLOT(writeLogFile()));
-	ui->stackedWidget->setCurrentIndex(0);
-	ui->leGetBarcode->setValidator(new QRegExpValidator(QRegExp("\\d+")));
+
+	mLabelColorAnimation.setTargetObject(this);
+	mLabelColorAnimation.setPropertyName("labelColor");
+	mLabelColorAnimation.setEasingCurve(QEasingCurve::Linear);
 }
 
 ControlManagerMainWindow::~ControlManagerMainWindow()
 {
+	mLabelColorAnimation.stop();
 	delete ui;
 }
 
 void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 {
+	const static QColor treeColorCorrect(131, 255, 131);
+	const static QColor treeColorWrong(255, 131, 131);
+	const static QColor widgetColorCorrect(0, 200, 0);
+	const static QColor widgetColorWrong(255, 50, 50);
+
 	QSqlDatabase db = QSqlDatabase::database(mConnectionName);
 	if(db.isOpen() && db.isValid())
 	{
-		CTicketIdentifier *ticketIdentifier = new CTicketIdentifier(ui->leGetBarcode->text());
-		QString identifier = ticketIdentifier->identifier();
+		CTicketIdentifier ticketIdentifier(ui->leGetBarcode->text());
+		QString identifier = ticketIdentifier.identifier();
 		QSqlQuery query(db);
 		query.prepare("SELECT id, id_placeScheme FROM Tickets WHERE identifier = :identifier AND passedFlag = 'false'");
 		query.bindValue(":identifier", identifier);
@@ -41,18 +63,17 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 		{
 			if(query.first())
 			{
-				ui->wOutResult->setStyleSheet("background: green");
+				setLabelColorAlbescent(widgetColorCorrect);
 				QTreeWidgetItem *item = new QTreeWidgetItem;
 				if(item)
 				{
 					QSqlQuery selectScheme(db);
 					selectScheme.prepare("SELECT seatNumber, row FROM PlaceSchemes WHERE id = :id");
-					selectScheme.bindValue(":id", query.value(1).toString());
+					selectScheme.bindValue(":id", query.value(1));
 					if(selectScheme.exec())
 					{
 						if(selectScheme.first())
 						{
-
 							item->setText(SEAT, selectScheme.value(0).toString());
 							item->setText(ROW, selectScheme.value(1).toString());
 						}
@@ -63,12 +84,8 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 						}
 						item->setText(IDENT, ui->leGetBarcode->text());
 						item->setText(INFO, tr("Билет валиден"));
-						item->setBackgroundColor(SEAT, QColor(131, 255, 131));
-						item->setBackgroundColor(ROW, QColor(131, 255, 131));
-						item->setBackgroundColor(IDENT, QColor(131, 255, 131));
-						item->setBackgroundColor(INFO, QColor(131, 255, 131));
-						ui->twBarcodeControl->addTopLevelItem(item);
-						ui->twBarcodeControl->scrollToBottom();
+						addItem(item, treeColorCorrect);
+
 						QSqlQuery setTrueFlag(db);
 						setTrueFlag.exec("UPDATE Tickets SET passedFlag = 'true' WHERE id = " + query.value(0).toString());
 					}
@@ -82,16 +99,16 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 				{
 					if(query.first())
 					{
-						ui->wOutResult->setStyleSheet("background: red");
+						setLabelColorAlbescent(widgetColorWrong);
 						QTreeWidgetItem *item = new QTreeWidgetItem;
 						if(item)
 						{
 							QSqlQuery selectScheme(db);
 							selectScheme.prepare("SELECT seatNumber, row FROM PlaceSchemes WHERE id = :id");
-							selectScheme.bindValue(":id", query.value(1).toString());
+							selectScheme.bindValue(":id", query.value(1));
 							if(selectScheme.exec())
 							{
-								if(query.value(2).toString() == "0")
+								if(query.isNull(2) || query.value(2).toInt() == 0)
 								{
 									if(selectScheme.first())
 									{
@@ -105,18 +122,13 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 									}
 									item->setText(IDENT, ui->leGetBarcode->text());
 									item->setText(INFO, tr("Попытка повторного прохода"));
-									item->setBackgroundColor(SEAT, QColor(255, 131, 131));
-									item->setBackgroundColor(ROW, QColor(255, 131, 131));
-									item->setBackgroundColor(IDENT, QColor(255, 131, 131));
-									item->setBackgroundColor(INFO, QColor(255, 131, 131));
-									ui->twBarcodeControl->addTopLevelItem(item);
-									ui->twBarcodeControl->scrollToBottom();
+									addItem(item, treeColorWrong);
 								}
 								else
 								{
 									QSqlQuery clientsquery(db);
 									clientsquery.prepare("SELECT login, name FROM Clients WHERE id = :id");
-									clientsquery.bindValue(":id", query.value(2).toString());
+									clientsquery.bindValue(":id", query.value(2));
 									if(clientsquery.exec() && clientsquery.first())
 									{
 										if(selectScheme.first())
@@ -131,12 +143,7 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 										}
 										item->setText(IDENT, ui->leGetBarcode->text());
 										item->setText(INFO, tr("Попытка повторного прохода. Билет приобретен клиентом ") + clientsquery.value(1).toString() + tr(", его логин - ") + clientsquery.value(0).toString());
-										item->setBackgroundColor(SEAT, QColor(255, 131, 131));
-										item->setBackgroundColor(ROW, QColor(255, 131, 131));
-										item->setBackgroundColor(IDENT, QColor(255, 131, 131));
-										item->setBackgroundColor(INFO, QColor(255, 131, 131));
-										ui->twBarcodeControl->addTopLevelItem(item);
-										ui->twBarcodeControl->scrollToBottom();
+										addItem(item, treeColorWrong);
 									}
 								}
 							}
@@ -150,15 +157,15 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 						if(query1.exec() && query1.first())
 						{
 
-							if(query1.value(0).toInt() == 1)
+							if(query1.value(0).toInt() >= 1)
 							{
-								ui->wOutResult->setStyleSheet("background: red");
+								setLabelColorAlbescent(widgetColorWrong);
 								QTreeWidgetItem *item = new QTreeWidgetItem;
 								if(item)
 								{
 									item->setText(SEAT, tr("Внимание"));
 									item->setText(ROW, tr("Внимание"));
-									if(query1.value(2).toString() == "0")
+									if(query1.isNull(2) || query1.value(2).toInt() == 0)
 									{
 										item->setText(IDENT, ui->leGetBarcode->text());
 										item->setText(INFO, tr("Попытка пройти по сданному билету"));
@@ -167,24 +174,19 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 									{
 										QSqlQuery clientsquery(db);
 										clientsquery.prepare("SELECT login, name FROM Clients WHERE id = :id");
-										clientsquery.bindValue(":id", query1.value(2).toString());
+										clientsquery.bindValue(":id", query1.value(2));
 										if(clientsquery.exec() && clientsquery.first())
 										{
 											item->setText(IDENT, ui->leGetBarcode->text());
 											item->setText(INFO, tr("Попытка пройти по сданному билету. Билет приобретен клиентом ") + clientsquery.value(1).toString() + tr(", его логин - ") + clientsquery.value(0).toString());
 										}
 									}
-									item->setBackgroundColor(SEAT, QColor(255, 131, 131));
-									item->setBackgroundColor(ROW, QColor(255, 131, 131));
-									item->setBackgroundColor(IDENT, QColor(255, 131, 131));
-									item->setBackgroundColor(INFO, QColor(255, 131, 131));
-									ui->twBarcodeControl->addTopLevelItem(item);
-									ui->twBarcodeControl->scrollToBottom();
+									addItem(item, treeColorWrong);
 								}
 							}
 							else
 							{
-								ui->wOutResult->setStyleSheet("background: red");
+								setLabelColorAlbescent(widgetColorWrong);
 								QTreeWidgetItem *item = new QTreeWidgetItem;
 								if(item)
 								{
@@ -192,12 +194,7 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 									item->setText(ROW, tr("Внимание"));
 									item->setText(IDENT, ui->leGetBarcode->text());
 									item->setText(INFO, tr("Попытка пройти по несуществующему билету"));
-									item->setBackgroundColor(SEAT, QColor(255, 131, 131));
-									item->setBackgroundColor(ROW, QColor(255, 131, 131));
-									item->setBackgroundColor(IDENT, QColor(255, 131, 131));
-									item->setBackgroundColor(INFO, QColor(255, 131, 131));
-									ui->twBarcodeControl->addTopLevelItem(item);
-									ui->twBarcodeControl->scrollToBottom();
+									addItem(item, treeColorWrong);
 								}
 							}
 						}
@@ -263,5 +260,46 @@ void ControlManagerMainWindow::writeLogFile()
 
 		file.close();
 	}
+}
 
+//public slots:
+
+void ControlManagerMainWindow::setLabelColor(const QColor &color)
+{
+	ui->wOutResult->setStyleSheet(QString("QWidget{border: 1px solid qrgba(255, 255, 255, 0);\nborder-radius: 5px;\nbackground: %1;};").arg(color.name()));
+}
+
+void ControlManagerMainWindow::setLabelColorAlbescent(const QColor &color, const int duration)
+{
+	mLabelColorAnimation.stop();
+
+	QColor endValue(200, 200, 200);
+	int r = color.red(), g = color.green(), b = color.blue();
+	if(r != g || g != b)
+	{
+		if(r >= g && r >= b)
+		{
+			r = 255;
+			g = 170;
+			b = 170;
+		}
+		else if(g >= r && g >= b)
+		{
+			r = 170;
+			g = 255;
+			b = 170;
+		}
+		else if(b >= r && b >= g)
+		{
+			r = 170;
+			g = 170;
+			b = 255;
+		}
+		endValue = QColor(r, g, b);
+	}
+
+	mLabelColorAnimation.setStartValue(color);
+	mLabelColorAnimation.setEndValue(endValue);
+	mLabelColorAnimation.setDuration(duration);
+	mLabelColorAnimation.start();
 }
