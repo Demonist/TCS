@@ -92,3 +92,7 @@ RESOURCES += \
     ../../common/connectionWidget/connectionwidget_res.qrc \
     clinet_res.qrc \
     ../../Admin/MainManager/main_res.qrc
+
+win32 {
+	RC_FILE = AppIcon.rc
+}

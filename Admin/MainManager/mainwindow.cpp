@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	ui->swSettings->setCurrentIndex(0);
 
+	setWindowIcon(QIcon(":/AppIcon.ico"));
+
 	ui->sSettings->setCollapsible(0, true);
 	ui->sSettings->setStretchFactor(0, 1);
 	ui->sSettings->setStretchFactor(1, 100);

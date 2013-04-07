@@ -55,6 +55,7 @@ CDatabaseManager::CDatabaseManager(QWidget *parent) :
 	ui(new Ui::CDatabaseManager)
 {
 	ui->setupUi(this);
+	setWindowIcon(QIcon(":/AppIcon.ico"));
 	mConnectionName = "databaseManager";
 	ui->stackedWidget->setCurrentIndex(0);
 	ui->wConnectingWidget->setConnectionName(mConnectionName);

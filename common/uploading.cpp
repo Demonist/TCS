@@ -78,6 +78,7 @@ void Uploading::uploadingProcess(const QString &actionId)
 		createDBScheme();
 
 		progressDialog.setValue(1);
+		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
 		QSqlQuery selectDataQuery(QSqlDatabase::database(mConnection));
 		QSqlQuery insertDataQuery(db);
@@ -91,7 +92,6 @@ void Uploading::uploadingProcess(const QString &actionId)
 				insertDataQuery.bindValue(":title", selectDataQuery.value(1));
 				insertDataQuery.bindValue(":performer", selectDataQuery.value(2));
 				insertDataQuery.exec();
-
 			}
 		}
 

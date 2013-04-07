@@ -35,6 +35,8 @@ CClientMainWindow::CClientMainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	ui->stackedWidget->setCurrentIndex(0);
 
+	setWindowIcon(QIcon(":/AppIcon.ico"));
+
 	connect(ui->wActions, SIGNAL(hideLeftPanel()), this, SLOT(hideLeftPanel()));
 	connect(ui->wActions, SIGNAL(showLeftPanel()), this, SLOT(showLeftPanel()));
 

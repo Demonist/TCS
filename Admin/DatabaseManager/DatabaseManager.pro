@@ -30,4 +30,9 @@ FORMS    += cdatabasemanager.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui
 
 RESOURCES += \
-    ../../common/connectionWidget/connectionwidget_res.qrc
+    ../../common/connectionWidget/connectionwidget_res.qrc \
+    main_res.qrc
+
+win32 {
+	RC_FILE = AppIcon.rc
+}

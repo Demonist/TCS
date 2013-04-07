@@ -16,5 +16,6 @@
         <file>images/search.png</file>
         <file>images/categoriesImages/imAdvertisements.png</file>
         <file>images/export.png</file>
+        <file>AppIcon.ico</file>
     </qresource>
 </RCC>

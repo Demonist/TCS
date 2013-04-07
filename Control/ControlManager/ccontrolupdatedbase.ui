@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>504</width>
-    <height>346</height>
+    <width>438</width>
+    <height>259</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,6 +37,11 @@
          </column>
          <column>
           <property name="text">
+           <string>Мероприятия</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
            <string>ID</string>
           </property>
          </column>
@@ -58,9 +63,9 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pbnExport">
+          <widget class="QPushButton" name="pbnImport">
            <property name="text">
-            <string>Экспорт базы</string>
+            <string>Импорт мероприятия</string>
            </property>
           </widget>
          </item>

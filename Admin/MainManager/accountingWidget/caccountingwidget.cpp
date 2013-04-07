@@ -278,7 +278,7 @@ void CAccountingWidget::on_pbnExport_clicked()
 		exportPath = Global::currentPath() + tr("/export/Отчеты");
 	QDir().mkpath(exportPath);
 
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Укажите имя файла для сохранения"), exportPath + QDateTime::currentDateTime().toString("/yyyy_MM_dd hh-mm.csv"), tr("Файлы CSV (*.csv)"));
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Укажите имя файла для сохранения"), exportPath + QDateTime::currentDateTime().toString("/yyyy_MM_dd hh-mm") + ".csv", tr("Файлы CSV (*.csv)"));
 	if(fileName.isEmpty() == false)
 	{
 		QFileInfo fileInfo(fileName);

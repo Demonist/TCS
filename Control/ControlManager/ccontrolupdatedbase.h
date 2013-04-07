@@ -22,7 +22,7 @@ private:
 
 private slots:
 	void connected(QString connectionName);
-	void on_pbnExport_clicked();
+	void on_pbnImport_clicked();
 };
 
 #endif // CCONTROLUPDATEDBASE_H

@@ -148,3 +148,7 @@ RESOURCES += \
     placesWidget/placeWidget_res.qrc \
     actionsWidget/actionWidget_res.qrc \
     ../../common/aboutDialog/aboutDialog_res.qrc
+
+win32 {
+	RC_FILE = AppIcon.rc
+}

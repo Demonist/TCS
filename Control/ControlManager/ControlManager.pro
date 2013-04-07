@@ -13,7 +13,7 @@ INCLUDEPATH += ../../common/ \
                 ../../common/ticketIdentifier/ \
                 ../../common/commonWidget/ \
                 ../../common/connectionWidget/ \
-				../../common/uploading/ \
+				../../common/uploading/
 
 SOURCES += main.cpp\
         controlmanagermainwindow.cpp \
@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     ../../common/connectionWidget/cdatabaseconnectionwidget.cpp \
     ccontrolupdatedbase.cpp \
     ../../common/canimatedstackedwidget.cpp \
-    ../../common/uploading.cpp
+    ../../common/uploading.cpp \
+    ccontrolconnectionwidget.cpp
 
 HEADERS  += controlmanagermainwindow.h \
     ../../common/global.h \
@@ -32,11 +33,17 @@ HEADERS  += controlmanagermainwindow.h \
     ../../common/connectionWidget/cdatabaseconnectionwidget.h \
     ccontrolupdatedbase.h \
     ../../common/canimatedstackedwidget.h \
-    ../../common/uploading.h
+    ../../common/uploading.h \
+    ccontrolconnectionwidget.h
 
 FORMS    += controlmanagermainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
     ccontrolupdatedbase.ui
 
 RESOURCES += \
-    ../../common/connectionWidget/connectionwidget_res.qrc
+    ../../common/connectionWidget/connectionwidget_res.qrc \
+    main_res.qrc
+
+win32 {
+	RC_FILE = AppIcon.rc
+}

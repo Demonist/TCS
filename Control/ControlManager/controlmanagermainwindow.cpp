@@ -12,8 +12,8 @@ void ControlManagerMainWindow::addItem(QTreeWidgetItem *item, const QColor &colo
 	item->setBackgroundColor(ROW, color);
 	item->setBackgroundColor(IDENT, color);
 	item->setBackgroundColor(INFO, color);
-	ui->twBarcodeControl->addTopLevelItem(item);
-	ui->twBarcodeControl->scrollToBottom();
+	ui->twBarcodeControl->insertTopLevelItem(0, item);
+	ui->twBarcodeControl->scrollToTop();
 }
 
 ControlManagerMainWindow::ControlManagerMainWindow(QWidget *parent) :
@@ -23,6 +23,8 @@ ControlManagerMainWindow::ControlManagerMainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	ui->stackedWidget->setCurrentIndex(0);
 	ui->leGetBarcode->setValidator(new QRegExpValidator(QRegExp("\\d+")));
+
+	setWindowIcon(QIcon(":/AppIcon.ico"));
 
 	ui->wConnection->setConnectionType(CDataBaseConnectionWidget::ConnectionFile);
 	ui->wConnection->setConnectionChoiceEnable(false);
@@ -48,6 +50,9 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 {
 	const static QColor treeColorCorrect(131, 255, 131);
 	const static QColor treeColorWrong(255, 131, 131);
+	const static QColor treeColorWrongRepeat(255, 70, 70);
+	const static QColor treeColorReturned(200, 30, 30);
+
 	const static QColor widgetColorCorrect(0, 200, 0);
 	const static QColor widgetColorWrong(255, 50, 50);
 
@@ -122,7 +127,7 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 									}
 									item->setText(IDENT, ui->leGetBarcode->text());
 									item->setText(INFO, tr("Попытка повторного прохода"));
-									addItem(item, treeColorWrong);
+									addItem(item, treeColorWrongRepeat);
 								}
 								else
 								{
@@ -143,7 +148,7 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 										}
 										item->setText(IDENT, ui->leGetBarcode->text());
 										item->setText(INFO, tr("Попытка повторного прохода. Билет приобретен клиентом ") + clientsquery.value(1).toString() + tr(", его логин - ") + clientsquery.value(0).toString());
-										addItem(item, treeColorWrong);
+										addItem(item, treeColorWrongRepeat);
 									}
 								}
 							}
@@ -181,7 +186,7 @@ void ControlManagerMainWindow::on_leGetBarcode_returnPressed()
 											item->setText(INFO, tr("Попытка пройти по сданному билету. Билет приобретен клиентом ") + clientsquery.value(1).toString() + tr(", его логин - ") + clientsquery.value(0).toString());
 										}
 									}
-									addItem(item, treeColorWrong);
+									addItem(item, treeColorReturned);
 								}
 							}
 							else
@@ -246,19 +251,38 @@ void ControlManagerMainWindow::importDataBase()
 
 void ControlManagerMainWindow::writeLogFile()
 {
-	QString logp = QFileDialog::getSaveFileName(this, tr("Записать лог"), QDir::currentPath(), tr("Файл лога(.txt)"));
-	if(!logp.isEmpty())
+	if(ui->twBarcodeControl->topLevelItemCount() == 0)
 	{
-		QFile file(logp);
-		file.open(QIODevice::Append | QIODevice::Text);
-		QTextStream out(&file);
+		QMessageBox::warning(this, tr("Внимание"), tr("Нет данных для записи."));
+		return;
+	}
 
-		for(int i = 0; i < ui->twBarcodeControl->topLevelItemCount(); i++)
+	static QString exportPath;
+	if(exportPath.isEmpty())
+		exportPath = Global::currentPath() + "/export";
+	QDir().mkpath(exportPath);
+
+
+	QString logFilename = QFileDialog::getSaveFileName(this, tr("Выберите файл для сохранения лога"), exportPath + QDateTime::currentDateTime().toString("/yyyy_MM_dd hh-mm") + ".txt", tr("Файл лога(.txt)"));
+	if(logFilename.isEmpty() == false)
+	{
+		QFileInfo fileInfo(logFilename);
+		if(fileInfo.completeSuffix() != "txt")
+			logFilename = fileInfo.absolutePath() + '/' + fileInfo.baseName() + ".txt";
+
+		QFile file(logFilename);
+		if(file.open(QIODevice::WriteOnly))
 		{
-			out << ui->twBarcodeControl->topLevelItem(i)->text(SEAT) << ui->twBarcodeControl->topLevelItem(i)->text(ROW) <<  ui->twBarcodeControl->topLevelItem(i)->text(IDENT) <<  ui->twBarcodeControl->topLevelItem(i)->text(INFO) <<"\n";
+			file.write(tr("Место Ряд Идентификатор Информация\n").toLocal8Bit());
+			for(int i = 0; i < ui->twBarcodeControl->topLevelItemCount(); i++)
+				file.write(tr("%1 %2 %3 %4\n")
+						   .arg(ui->twBarcodeControl->topLevelItem(i)->text(SEAT))
+						   .arg(ui->twBarcodeControl->topLevelItem(i)->text(ROW))
+						   .arg(ui->twBarcodeControl->topLevelItem(i)->text(IDENT))
+						   .arg(ui->twBarcodeControl->topLevelItem(i)->text(INFO))
+						   .toLocal8Bit());
+			file.close();
 		}
-
-		file.close();
 	}
 }
 

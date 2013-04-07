@@ -9,5 +9,6 @@
         <file>clientImages/categoriesImages/imReturn.png</file>
         <file>clientImages/shield.png</file>
         <file>clientImages/background.png</file>
+        <file>AppIcon.ico</file>
     </qresource>
 </RCC>

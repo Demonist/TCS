@@ -111,6 +111,7 @@ void CUploadingWidget::on_pbnUploading_clicked()
 			{
 				upl.uploadingProcess(ui->twActions->currentItem()->text(ID));
 				QMessageBox::information(this, tr("Успех"), tr("Выгрузка мероприятия успешно завершена."));
+				close();
 			}
 			else
 				QMessageBox::warning(this, tr("Внимание"), tr("Не удалось открыть базу данных."));
