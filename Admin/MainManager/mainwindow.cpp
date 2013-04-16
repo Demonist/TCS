@@ -65,3 +65,9 @@ void MainWindow::on_lwSettings_currentRowChanged(int currentRow)
 
 	ui->swSettings->setCurrentIndexAnimatedVertical(currentRow);
 }
+
+void MainWindow::on_pbnAbout_clicked()
+{
+	CAboutDialog aboutDialog(this);
+	aboutDialog.exec();
+}

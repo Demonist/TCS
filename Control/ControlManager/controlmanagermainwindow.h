@@ -5,6 +5,7 @@
 #include <QtSql>
 #include "cticketidentifier.h"
 #include "ccontrolupdatedbase.h"
+#include "caboutdialog.h"
 
 namespace Ui {
 class ControlManagerMainWindow;
@@ -32,6 +33,7 @@ private slots:
     void connected(QString connectionName);
 	void importDataBase();
 	void writeLogFile();
+	void about();
 
 private:
     Ui::ControlManagerMainWindow *ui;

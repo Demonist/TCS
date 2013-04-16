@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>TCS - Программа администратора v0.7</string>
+   <string>TCS - Программа администратора v0.8</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -20,112 +20,138 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <property name="childrenCollapsible">
-       <bool>false</bool>
-      </property>
-      <widget class="QListWidget" name="lwSettings">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>200</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::NoSelection</enum>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <item>
-        <property name="text">
-         <string>Пользователи</string>
-        </property>
-        <property name="icon">
-         <iconset resource="main_res.qrc">
-          <normaloff>:/images/categoriesImages/imUsers.png</normaloff>:/images/categoriesImages/imUsers.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Категории</string>
-        </property>
-        <property name="icon">
-         <iconset resource="main_res.qrc">
-          <normaloff>:/images/categoriesImages/imCategories.png</normaloff>:/images/categoriesImages/imCategories.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Концертные площадки</string>
-        </property>
-        <property name="icon">
-         <iconset resource="main_res.qrc">
-          <normaloff>:/images/categoriesImages/imAreas.png</normaloff>:/images/categoriesImages/imAreas.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Клиенты</string>
-        </property>
-        <property name="icon">
-         <iconset resource="main_res.qrc">
-          <normaloff>:/images/categoriesImages/imClients.png</normaloff>:/images/categoriesImages/imClients.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Мероприятия</string>
-        </property>
-        <property name="icon">
-         <iconset resource="main_res.qrc">
-          <normaloff>:/images/categoriesImages/imActions.png</normaloff>:/images/categoriesImages/imActions.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Торговые точки</string>
-        </property>
-        <property name="icon">
-         <iconset resource="main_res.qrc">
-          <normaloff>:/images/categoriesImages/imShops.png</normaloff>:/images/categoriesImages/imShops.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Отчеты</string>
-        </property>
-        <property name="icon">
-         <iconset resource="main_res.qrc">
-          <normaloff>:/images/categoriesImages/imReport.png</normaloff>:/images/categoriesImages/imReport.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Выгрузка базы</string>
-        </property>
-        <property name="icon">
-         <iconset resource="main_res.qrc">
-          <normaloff>:/images/categoriesImages/imUploading.png</normaloff>:/images/categoriesImages/imUploading.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Реклама</string>
-        </property>
-        <property name="icon">
-         <iconset resource="main_res.qrc">
-          <normaloff>:/images/categoriesImages/imAdvertisements.png</normaloff>:/images/categoriesImages/imAdvertisements.png</iconset>
-        </property>
-       </item>
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QListWidget" name="lwSettings">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::NoSelection</enum>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>22</width>
+            <height>22</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Пользователи</string>
+           </property>
+           <property name="icon">
+            <iconset resource="main_res.qrc">
+             <normaloff>:/images/categoriesImages/imUsers.png</normaloff>:/images/categoriesImages/imUsers.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Категории</string>
+           </property>
+           <property name="icon">
+            <iconset resource="main_res.qrc">
+             <normaloff>:/images/categoriesImages/imCategories.png</normaloff>:/images/categoriesImages/imCategories.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Концертные площадки</string>
+           </property>
+           <property name="icon">
+            <iconset resource="main_res.qrc">
+             <normaloff>:/images/categoriesImages/imAreas.png</normaloff>:/images/categoriesImages/imAreas.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Клиенты</string>
+           </property>
+           <property name="icon">
+            <iconset resource="main_res.qrc">
+             <normaloff>:/images/categoriesImages/imClients.png</normaloff>:/images/categoriesImages/imClients.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Мероприятия</string>
+           </property>
+           <property name="icon">
+            <iconset resource="main_res.qrc">
+             <normaloff>:/images/categoriesImages/imActions.png</normaloff>:/images/categoriesImages/imActions.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Торговые точки</string>
+           </property>
+           <property name="icon">
+            <iconset resource="main_res.qrc">
+             <normaloff>:/images/categoriesImages/imShops.png</normaloff>:/images/categoriesImages/imShops.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Отчеты</string>
+           </property>
+           <property name="icon">
+            <iconset resource="main_res.qrc">
+             <normaloff>:/images/categoriesImages/imReport.png</normaloff>:/images/categoriesImages/imReport.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Выгрузка базы</string>
+           </property>
+           <property name="icon">
+            <iconset resource="main_res.qrc">
+             <normaloff>:/images/categoriesImages/imUploading.png</normaloff>:/images/categoriesImages/imUploading.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Реклама</string>
+           </property>
+           <property name="icon">
+            <iconset resource="main_res.qrc">
+             <normaloff>:/images/categoriesImages/imAdvertisements.png</normaloff>:/images/categoriesImages/imAdvertisements.png</iconset>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbnAbout">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>О программе</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../../common/aboutDialog/aboutDialog_res.qrc">
+            <normaloff>:/images/about.png</normaloff>:/images/about.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="CAnimatedStackedWidget" name="swSettings">
        <property name="sizePolicy">
@@ -135,7 +161,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>8</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="page_users">
         <layout class="QGridLayout" name="gridLayout_3">
@@ -298,7 +324,9 @@
  </customwidgets>
  <resources>
   <include location="main_res.qrc"/>
+  <include location="../../common/aboutDialog/aboutDialog_res.qrc"/>
   <include location="main_res.qrc"/>
+  <include location="../../common/aboutDialog/aboutDialog_res.qrc"/>
  </resources>
  <connections/>
 </ui>

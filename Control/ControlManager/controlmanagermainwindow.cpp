@@ -34,6 +34,7 @@ ControlManagerMainWindow::ControlManagerMainWindow(QWidget *parent) :
 	connect(ui->wConnection, SIGNAL(closed()), this, SLOT(close()));
 	connect(ui->aImportDB, SIGNAL(activated()), this, SLOT(importDataBase()));
 	connect(ui->aLogFileWrite, SIGNAL(activated()), this, SLOT(writeLogFile()));
+	connect(ui->aAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
 
 	mLabelColorAnimation.setTargetObject(this);
 	mLabelColorAnimation.setPropertyName("labelColor");
@@ -326,4 +327,10 @@ void ControlManagerMainWindow::setLabelColorAlbescent(const QColor &color, const
 	mLabelColorAnimation.setEndValue(endValue);
 	mLabelColorAnimation.setDuration(duration);
 	mLabelColorAnimation.start();
+}
+
+void ControlManagerMainWindow::about()
+{
+	CAboutDialog aboutDialog(this);
+	aboutDialog.exec();
 }

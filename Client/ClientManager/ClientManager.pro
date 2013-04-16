@@ -15,6 +15,7 @@ INCLUDEPATH += ../../common/ \
 		../../common/graphics/ \
 		../../common/dateDialog/ \
 		../../common/ticketIdentifier/ \
+		../../common/aboutDialog/ \
 		startingDialog/ \
 		clientActionsWidget/ \
 		clientRegistrationWidget/ \
@@ -47,7 +48,8 @@ SOURCES += main.cpp\
     clientReservationWidget/cclientreservationwidget.cpp \
     startingDialog/cstartingdialog.cpp \
     clientActionsWidget/cadvertisementitem.cpp \
-    ../../common/ccachechecker.cpp
+    ../../common/ccachechecker.cpp \
+    ../../common/aboutDialog/caboutdialog.cpp
 
 
 HEADERS  += cclientmainwindow.h \
@@ -75,7 +77,8 @@ HEADERS  += cclientmainwindow.h \
     clientReservationWidget/cclientreservationwidget.h \
     startingDialog/cstartingdialog.h \
     clientActionsWidget/cadvertisementitem.h \
-    ../../common/ccachechecker.h
+    ../../common/ccachechecker.h \
+    ../../common/aboutDialog/caboutdialog.h
 
 
 FORMS    += cclientmainwindow.ui \
@@ -86,12 +89,14 @@ FORMS    += cclientmainwindow.ui \
     clientActionsWidget/cclientactiondialog.ui \
     returnTicketWidget/creturnticketwidget.ui \
     clientReservationWidget/cclientreservationwidget.ui \
-    startingDialog/cstartingdialog.ui
+    startingDialog/cstartingdialog.ui \
+    ../../common/aboutDialog/caboutdialog.ui
 
 RESOURCES += \
     ../../common/connectionWidget/connectionwidget_res.qrc \
     clinet_res.qrc \
-    ../../Admin/MainManager/main_res.qrc
+    ../../Admin/MainManager/main_res.qrc \
+    ../../common/aboutDialog/aboutDialog_res.qrc
 
 win32 {
 	RC_FILE = AppIcon.rc

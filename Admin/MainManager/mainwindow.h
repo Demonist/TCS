@@ -5,6 +5,7 @@
 #include "cabstractcommonwidget.h"
 #include "cimages.h"
 #include "cadminstartingdialog.h"
+#include "caboutdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,6 +25,7 @@ public:
 
 private slots:
 	void on_lwSettings_currentRowChanged(int currentRow);
+	void on_pbnAbout_clicked();
 };
 
 #endif // MAINWINDOW_H

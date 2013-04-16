@@ -8,6 +8,7 @@
 #include "cstatistics.h"
 #include "cclientactiondialog.h"
 #include "cmarket.h"
+#include "caboutdialog.h"
 
 namespace Ui {
 	class CClientMainWindow;
@@ -31,6 +32,7 @@ private slots:
 	void on_listWidget_currentRowChanged(int currentRow);
 	void on_pbnChangeUser_clicked();
 	void updateAdvertisement();
+	void on_pbnAbout_clicked();
 
 private:
 	Ui::CClientMainWindow *ui;

@@ -6,6 +6,9 @@ CAboutDialog::CAboutDialog(QWidget *parent) :
 	ui(new Ui::CAboutDialog)
 {
 	ui->setupUi(this);
+	setWindowIcon(QIcon(":/images/about.png"));
+	setFixedSize(size());
+	setWindowFlags(windowFlags() & ~Qt::WindowMinMaxButtonsHint);
 }
 
 CAboutDialog::~CAboutDialog()

@@ -93,12 +93,14 @@ void CClientMainWindow::hideLeftPanel()
 {
 	ui->gbxUser->hide();
 	ui->listWidget->hide();
+	ui->pbnAbout->hide();
 }
 
 void CClientMainWindow::showLeftPanel()
 {
 	ui->listWidget->show();
 	ui->gbxUser->show();
+	ui->pbnAbout->show();
 }
 
 void CClientMainWindow::on_listWidget_currentRowChanged(int currentRow)
@@ -130,4 +132,10 @@ void CClientMainWindow::updateAdvertisement()
 {
 	mActionDialog.updateAdvertisements(mConnectionName);
 	ui->wActions->updateData();
+}
+
+void CClientMainWindow::on_pbnAbout_clicked()
+{
+	CAboutDialog aboutDialog(this);
+	aboutDialog.exec();
 }

@@ -13,7 +13,8 @@ INCLUDEPATH += ../../common/ \
                 ../../common/ticketIdentifier/ \
                 ../../common/commonWidget/ \
                 ../../common/connectionWidget/ \
-				../../common/uploading/
+				../../common/uploading/ \
+				../../common/aboutDialog/
 
 SOURCES += main.cpp\
         controlmanagermainwindow.cpp \
@@ -24,7 +25,8 @@ SOURCES += main.cpp\
     ccontrolupdatedbase.cpp \
     ../../common/canimatedstackedwidget.cpp \
     ../../common/uploading.cpp \
-    ccontrolconnectionwidget.cpp
+    ccontrolconnectionwidget.cpp \
+    ../../common/aboutDialog/caboutdialog.cpp
 
 HEADERS  += controlmanagermainwindow.h \
     ../../common/global.h \
@@ -34,15 +36,18 @@ HEADERS  += controlmanagermainwindow.h \
     ccontrolupdatedbase.h \
     ../../common/canimatedstackedwidget.h \
     ../../common/uploading.h \
-    ccontrolconnectionwidget.h
+    ccontrolconnectionwidget.h \
+    ../../common/aboutDialog/caboutdialog.h
 
 FORMS    += controlmanagermainwindow.ui \
     ../../common/connectionWidget/cdatabaseconnectionwidget.ui \
-    ccontrolupdatedbase.ui
+    ccontrolupdatedbase.ui \
+    ../../common/aboutDialog/caboutdialog.ui
 
 RESOURCES += \
     ../../common/connectionWidget/connectionwidget_res.qrc \
-    main_res.qrc
+    main_res.qrc \
+    ../../common/aboutDialog/aboutDialog_res.qrc
 
 win32 {
 	RC_FILE = AppIcon.rc

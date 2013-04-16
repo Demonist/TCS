@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Программа контроля билетов</string>
+   <string>TCS - Программа контроля билетов v0.8</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -137,7 +137,14 @@
     <addaction name="aLogFileWrite"/>
     <addaction name="aExit"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>О программе</string>
+    </property>
+    <addaction name="aAbout"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <action name="aOpenNewDB">
    <property name="text">
@@ -165,13 +172,22 @@
     <string>Записать лог-файл</string>
    </property>
   </action>
+  <action name="aAbout">
+   <property name="icon">
+    <iconset resource="../../common/aboutDialog/aboutDialog_res.qrc">
+     <normaloff>:/images/about.png</normaloff>:/images/about.png</iconset>
+   </property>
+   <property name="text">
+    <string>О программе</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>CAnimatedStackedWidget</class>
    <extends>QStackedWidget</extends>
-   <header location="global">canimatedstackedwidget.h</header>
+   <header>canimatedstackedwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -181,6 +197,10 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../common/aboutDialog/aboutDialog_res.qrc"/>
+  <include location="../../common/aboutDialog/aboutDialog_res.qrc"/>
+  <include location="../../common/aboutDialog/aboutDialog_res.qrc"/>
+ </resources>
  <connections/>
 </ui>
